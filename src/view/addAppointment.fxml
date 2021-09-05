@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="767.0"
+      xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointment">
+   <children>
+      <Button fx:id="backBttn" layoutX="573.0" layoutY="559.0" mnemonicParsing="false" onAction="#onActionBack" text="Back" />
+      <Button fx:id="mainMenuBttn" layoutX="662.0" layoutY="559.0" mnemonicParsing="false" onAction="#onActionMainMenu" text="Main Menu" />
+   </children>
+</Pane>
