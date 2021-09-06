@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.AllReports"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="806.0" prefWidth="717.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AllReports">
+   <children>
+      <Label layoutX="29.0" layoutY="14.0" text="Reports">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="22.0" layoutY="72.0" prefHeight="25.0" prefWidth="262.0" promptText=" Select report type" />
+      <Button layoutX="298.0" layoutY="72.0" mnemonicParsing="false" onAction="#onActionFilterReports" text="Filter Reports" />
+      <TextArea layoutX="28.0" layoutY="137.0" prefHeight="200.0" prefWidth="676.0" />
+      <TextArea layoutX="28.0" layoutY="373.0" prefHeight="200.0" prefWidth="676.0" />
+      <TextArea layoutX="28.0" layoutY="606.0" prefHeight="200.0" prefWidth="676.0" />
+      <Label layoutX="29.0" layoutY="120.0" prefHeight="17.0" prefWidth="676.0" text="Number of appointments by month">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Label fx:id="filterReportsBttn" layoutX="29.0" layoutY="356.0" prefHeight="17.0" prefWidth="676.0" text="Schedule of each customer">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Label layoutX="29.0" layoutY="589.0" prefHeight="17.0" prefWidth="676.0" text="Total number appoinments this year">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Button fx:id="mainMenuBttn" layoutX="611.0" layoutY="72.0" mnemonicParsing="false" onAction="#onActionMainMenu" text="Main Menu" />
+   </children>
 </AnchorPane>

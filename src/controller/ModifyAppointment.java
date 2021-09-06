@@ -4,12 +4,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AddAppointment {
+public class ModifyAppointment {
+
+    //FXML Variables
     public Button backBttn;
     public Button mainMenuBttn;
     public TextField assignedContractTxtFld;
@@ -22,14 +27,14 @@ public class AddAppointment {
     public ComboBox descriptionComboBox;
     public DatePicker dateDatePicker;
     public Button saveAppointmentBtn;
-    public TableView currentAppointmentTblView;
 
+    //Variables
     Parent scene;
     Stage stage;
 
     //Created this to remove code redundancy
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
-        //Resource Example: "/view/mainMenu.fxml"
+        //Resources example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource(resourcesString));
         stage.setScene(new Scene(scene));
@@ -57,7 +62,7 @@ public class AddAppointment {
     }
 
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException {
-        System.out.println("Saved appointment");
+        System.out.println("Appointment saved");
         buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
     }
 }

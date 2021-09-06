@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,7 +13,15 @@ public class AppointmentScreen {
 
     //FXML Variables
     public Button mainMenuBttn;
-
+    public TableView calendarSortComboBox;
+    public RadioButton byMonthRadBttn;
+    public RadioButton byWeekRadBttn;
+    public ComboBox calendarSort;
+    public Button searchBttn;
+    public ToggleGroup appointmentRadBtnTgglGrp;
+    public Button addAppointmentBttn;
+    public Button deleteAppointmentBttn;
+    public Button modifyAppointmentBttn;
 
 
     //Variables
@@ -34,4 +42,22 @@ public class AppointmentScreen {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
     }
 
+    public void onActionSearch(ActionEvent actionEvent) {
+    }
+
+    public void onSort(SortEvent<TableView> tableViewSortEvent) {
+        //need to mess with this
+    }
+
+    public void onActionAddAppointment(ActionEvent actionEvent) throws IOException {
+        buttonChanging(actionEvent, "/view/addAppointment.fxml");
+    }
+
+    public void onActionDeleteAppointment(ActionEvent actionEvent) {
+        System.out.println("Deleted Appointement");
+    }
+
+    public void onActionModifyAppointment(ActionEvent actionEvent) throws IOException {
+        buttonChanging(actionEvent, "/view/modifyAppointment.fxml");
+    }
 }

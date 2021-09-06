@@ -26,11 +26,16 @@ public class Controller implements Initializable {
     public Button loginButton;
 
     public Label zoneID;
+    public Button exitBttn;
 
     //Variables
     Parent scene;
     Stage stage;
 
+    public void attemptLogin() {
+        //we need to handle SQL and Incorrect password exceptions.
+        //WE need to test the username and password via the datebase.
+    }
 
     public void onActionLogin(ActionEvent actionEvent) throws IOException {
         //Switches screen when login button is pressed
@@ -43,5 +48,9 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //We need to add the zone label to auto to whatever language the OS has selected and change the language
+    }
+
+    public void onActionExit(ActionEvent actionEvent) {
+        System.exit(0);
     }
 }

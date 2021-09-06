@@ -25,7 +25,6 @@ public class CustomersTable {
     public Button addBttn;
     public Button modifyBttn;
     public Button deleteBtnn;
-    public Button addAppointmentBttn;
     public Button mainMenuBttn;
 
     //Variables
@@ -41,17 +40,15 @@ public class CustomersTable {
         stage.show();
     }
 
-    public void onActionAdd(ActionEvent actionEvent) {
+    public void onActionAdd(ActionEvent actionEvent) throws IOException {
+        buttonChanging(actionEvent, "/view/addCustomer.fxml");
     }
 
-    public void onActionModify(ActionEvent actionEvent) {
+    public void onActionModify(ActionEvent actionEvent) throws IOException {
+        buttonChanging(actionEvent, "/view/modifyCustomer.fxml");
     }
 
     public void onActionDelete(ActionEvent actionEvent) {
-    }
-
-    public void onActionAddAppointment(ActionEvent actionEvent) throws IOException {
-        buttonChanging(actionEvent, "/view/addAppointment.fxml");
     }
 
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
