@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import util.DBConnection;
+import util.LoginAttemptTracker;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -43,12 +45,17 @@ public class Controller implements Initializable {
         getPassword(password);
 
         if (getUsername(username) && getPassword(password)) {
+            //This should log all log in attempts
+            LoginAttemptTracker.logAttempt(username, true, "Login Attempt");
+
             //Go to the main menu
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
         } else {
+            //This should log all log in attempts
+            LoginAttemptTracker.logAttempt(username, false, "Login Attempt");
             Alert alert = new Alert((Alert.AlertType.ERROR));
             alert.setTitle("Invalid Credentials");
             alert.setHeaderText("Incorrect username and/or password");
