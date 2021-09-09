@@ -16,7 +16,7 @@ public class LoginAttemptTracker {
          try (FileWriter fileWriter = new FileWriter(FILE_NAME, true);
               BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
               PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
-             printWriter.println("Username: " + username + " was a" + (loggedIn ? " success" : " failure") + " " + message + " " + Instant.now().toString());
+             printWriter.println("Username " + username + " was a" + (loggedIn ? " success!" : " failure.") + " " + message + " " + Instant.now().toString());
          } catch (IOException e) {
              System.out.println("Log In Error: " + e.getMessage());
          }

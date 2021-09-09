@@ -46,7 +46,7 @@ public class Controller implements Initializable {
 
         if (getUsername(username) && getPassword(password)) {
             //This should log all log in attempts
-            LoginAttemptTracker.logAttempt(username, true, "Login Attempt");
+            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
 
             //Go to the main menu
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -55,7 +55,7 @@ public class Controller implements Initializable {
             stage.show();
         } else {
             //This should log all log in attempts
-            LoginAttemptTracker.logAttempt(username, false, "Login Attempt");
+            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
             Alert alert = new Alert((Alert.AlertType.ERROR));
             alert.setTitle("Invalid Credentials");
             alert.setHeaderText("Incorrect username and/or password");
