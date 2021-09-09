@@ -77,6 +77,7 @@ public class Controller implements Initializable {
                 return true;
             }
         }
+        statement.close();
         return false;
     }
 
@@ -93,6 +94,7 @@ public class Controller implements Initializable {
                 return true;
             }
         }
+        statement.close();
         return false;
     }
 

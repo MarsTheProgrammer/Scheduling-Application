@@ -2,26 +2,32 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Customer;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class CustomersTable {
+public class CustomersTable implements Initializable {
 
     //FXML Variables
-    public TableView customersTblView;
-    public TableColumn customersTblID;
-    public TableColumn customersTblName;
-    public TableColumn customersTblAddress;
-    public TableColumn customersTblCity;
-    public TableColumn customersTblCountry;
-    public TableColumn customersTblPostalCode;
-    public TableColumn customersTblPhone;
+    public TableView<Customer> customersTblView;
+    public TableColumn<Customer, Integer> customersTblID;
+    public TableColumn<Customer, String> customersTblName;
+    public TableColumn<Customer, String> customersTblAddress;
+    public TableColumn<Customer, String> customersTblCity;
+    public TableColumn<Customer, String> customersTblCountry;
+    public TableColumn<Customer, String> customersTblPostalCode;
+    public TableColumn<Customer, String> customersTblPhone;
     public Button addBttn;
     public Button modifyBttn;
     public Button deleteBtnn;
@@ -30,6 +36,7 @@ public class CustomersTable {
     //Variables
     Parent scene;
     Stage stage;
+    private Customer highlightedCustomer;
 
     //Created this to remove code redundancy
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
@@ -53,5 +60,24 @@ public class CustomersTable {
 
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            customersTblView.setItems(Customer.getGetAllCustomers());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        customersTblID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customersTblName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customersTblAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customersTblCity.setCellValueFactory(new PropertyValueFactory<>("city"));
+        customersTblCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        customersTblPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        customersTblPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+
+
     }
 }
