@@ -19,8 +19,12 @@ public class Customer {
     private String phoneNumber;
     private String country;
 
+
+
     //List
-    private static ObservableList<Customer> allCustomersList = FXCollections.observableArrayList();
+    //public static ObservableList<Customer> allCustomersTableList = FXCollections.observableArrayList();
+    public static ObservableList<Customer> allCustomersList = FXCollections.observableArrayList();
+
 
     //Basic constructor
     public Customer(int customerID, String customerName, String address, String city, String postal_Code, String phoneNumber, String country) {
@@ -90,13 +94,16 @@ public class Customer {
         this.country = country;
     }
 
+//    public static ObservableList<Customer> getAllCustomersTableList() {
+//        return allCustomersTableList;
+//    }
+
     //Getter for all customers list
     public static ObservableList<Customer> getGetAllCustomers() throws SQLException {
+
         Statement statement = DBConnection.getConnection().createStatement();
 
-        //Getting an error here for some reason
-        //INNER JOIN first_level_divisions ON customers.Division_ID = first_level_division' at line 1
-        String customerInfoSQL = "SELECT customers.Customer_ID, customers.Customer_Name, customers.Address, customers.Postal_Code, customers.Phone, countries.Country, first_level_divisions.Division" +
+        String customerInfoSQL = "SELECT customers.Customer_ID, customers.Customer_Name, customers.Address, customers.Postal_Code, customers.Phone, countries.Country, first_level_divisions.*" +
                                     "FROM customers " +
                                     "INNER JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID " +
                                     "INNER JOIN countries ON first_level_divisions.COUNTRY_ID = countries.Country_ID";

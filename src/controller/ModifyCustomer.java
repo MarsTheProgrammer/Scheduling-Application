@@ -2,6 +2,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,9 +12,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
-public class ModifyCustomer {
+public class ModifyCustomer implements Initializable {
 
     //FXML Variables
 
@@ -49,5 +52,12 @@ public class ModifyCustomer {
     public void onActionCancel(ActionEvent actionEvent)  throws IOException {
         System.out.println("Cancelled saving customers information");
         buttonChanging(actionEvent, "/view/customersTable.fxml");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //highlightedCustomer = CustomersTable.getHighlightedCustomer();
+
+        //nameTxtFld = highlightedCustomer.getCustomerName();
     }
 }

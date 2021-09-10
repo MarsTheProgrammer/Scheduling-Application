@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,7 +37,22 @@ public class CustomersTable implements Initializable {
     //Variables
     Parent scene;
     Stage stage;
-    private Customer highlightedCustomer;
+    private static Customer highlightedCustomer;
+    private static int uniqueCustomerID = 0;
+
+
+    public static int getUniqueCustomerID() {
+        return uniqueCustomerID;
+    }
+
+
+
+    //Getter for highlightedCustomer
+    public static Customer getHighlightedCustomer() {
+        return highlightedCustomer;
+    }
+
+
 
     //Created this to remove code redundancy
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
@@ -55,7 +71,16 @@ public class CustomersTable implements Initializable {
         buttonChanging(actionEvent, "/view/modifyCustomer.fxml");
     }
 
-    public void onActionDelete(ActionEvent actionEvent) {
+    public void onActionDelete(ActionEvent actionEvent) throws SQLException {
+        //This will get the highlighted customer
+        Customer highlightedCustomer = customersTblView.getSelectionModel().getSelectedItem();
+
+        if(highlightedCustomer == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Customer was not highlighted");
+            alert.showAndWait();
+        }
+
     }
 
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
@@ -64,7 +89,10 @@ public class CustomersTable implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        //added this clear in order to make sure no duplicates are present in CustomerTableView
         try {
+            Customer.getGetAllCustomers().clear();
             customersTblView.setItems(Customer.getGetAllCustomers());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
