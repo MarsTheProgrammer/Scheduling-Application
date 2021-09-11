@@ -51,12 +51,12 @@
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font></Label>
-                <Label fx:id="countryLabel" text="Select City above to set the coutry" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label fx:id="countryLabel" text="U.S" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="nameTxtFld" GridPane.columnIndex="1" />
                 <TextField fx:id="addressTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="postalCodeTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <TextField fx:id="phoneTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                <ComboBox fx:id="cityComboBox" prefWidth="150.0" promptText="Select a City" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <ComboBox fx:id="cityComboBox" onAction="#onActionCityComboBox" prefWidth="150.0" promptText="Select a City" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
         <Label layoutX="14.0" layoutY="44.0" text="Modify customer by changing the fields below" />
