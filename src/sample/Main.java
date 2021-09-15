@@ -5,7 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import util.CustomerQuery;
 import util.DBConnection;
+
+import java.sql.SQLException;
 
 public class Main extends Application {
 
@@ -17,8 +20,9 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         DBConnection.startConnection();
+        //CustomerQuery.insert("asdf","sdf 234", "115-519651","65464", 3);
         launch(args);
         DBConnection.closeConnection();
     }

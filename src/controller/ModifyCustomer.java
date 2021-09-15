@@ -10,13 +10,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
+import util.CustomerQuery;
+
 import util.DBConnection;
+import util.DataProvider;
+
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -33,12 +38,14 @@ public class ModifyCustomer implements Initializable {
     public TextField phoneTxtFld;
     public ComboBox<String> cityComboBox;
     ObservableList<String> citiesList = FXCollections.observableArrayList();
+    ObservableList<String> city = FXCollections.observableArrayList();
 
     //Variables
     Parent scene;
     Stage stage;
     Customer highlightedCustomer;
     private int customerID;
+    public int divisionIDFromCity;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,7 +64,7 @@ public class ModifyCustomer implements Initializable {
         addressTxtFld.setText(highlightedCustomer.getAddress());
         postalCodeTxtFld.setText(highlightedCustomer.getPostalCode());
         phoneTxtFld.setText(highlightedCustomer.getPhoneNumber());
-        String city = cityComboBox.getSelectionModel().getSelectedItem();
+        cityComboBox.setValue(highlightedCustomer.getCity());
 
 
     }
@@ -70,30 +77,33 @@ public class ModifyCustomer implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
-
     public void onActionSaveCustomer(ActionEvent actionEvent) throws IOException, SQLException {
 
+        String customerName = nameTxtFld.getText();
+        String customerA = addressTxtFld.getText();
+        String customerPC = postalCodeTxtFld.getText();
+        String customerP = phoneTxtFld.getText();
 
 
-        Statement statement = DBConnection.getConnection().createStatement();
-        String modifyCustomerSQL = "UPDATE customers SET Customer_ID=" + customerID + ", Customer_Name='" + nameTxtFld.getText() + "', Address='" + addressTxtFld.getText() + "', Phone='" + phoneTxtFld.getText() + "'";
-        int result = statement.executeUpdate(modifyCustomerSQL);
+        CustomerQuery.updateToCustomersTable(highlightedCustomer.getCustomerID(), customerName, customerA, customerPC, customerP, DataProvider.divisionID);
 
-        if(result == 1) {
-            Alert alertForModification = new Alert(Alert.AlertType.INFORMATION);
-            alertForModification.setHeaderText("Customers information updated successfully");
-            alertForModification.setContentText("Customers information updated successfully");
-            alertForModification.showAndWait();
-            buttonChanging(actionEvent, "/view/customersTable.fxml");
-        }
-
+        buttonChanging(actionEvent, "/view/customersTable.fxml");
 
     }
 
     public void onActionCancel(ActionEvent actionEvent)  throws IOException {
-        System.out.println("Cancelled saving customers information");
-        buttonChanging(actionEvent, "/view/customersTable.fxml");
+
+        //ERROR HERE. SOMETHING TO DO WITH THE CITY COMBO BOX NOT UPDATING WHEN PULLING CUSTOMERS INFORMATION
+        Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
+        alertForCancel.setTitle("Cancel");
+        alertForCancel.setHeaderText("Are you sure you want to cancel?");
+        alertForCancel.setContentText("This will not change any information");
+        Optional<ButtonType> cancelSelection = alertForCancel.showAndWait();
+
+        if(cancelSelection.isPresent() && cancelSelection.get() == ButtonType.OK) {
+            buttonChanging(actionEvent, "/view/customersTable.fxml");
+        }
+        //buttonChanging(actionEvent, "/view/customersTable.fxml");
     }
 
 
@@ -113,7 +123,7 @@ public class ModifyCustomer implements Initializable {
 
     }
 
-    public void onActionCityComboBox(ActionEvent actionEvent) {
+    public void onActionCityComboBox(ActionEvent actionEvent) throws SQLException {
 
         String citySelected = cityComboBox.getSelectionModel().getSelectedItem();
 
@@ -127,5 +137,24 @@ public class ModifyCustomer implements Initializable {
         } else {
             countryLabel.setText("U.S");
         }
+        getAllCitiesDivisionID(citySelected);
+        DataProvider.divisionID = divisionIDFromCity;
     }
+
+    public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
+
+        Statement state = DBConnection.getConnection().createStatement();
+
+        String getAllCitiesDivisionIDSQL = "SELECT Division_ID FROM first_level_divisions WHERE Division='" + comboBoxSelection + "'";
+
+        ResultSet result = state.executeQuery(getAllCitiesDivisionIDSQL);
+
+        while(result.next()) {
+            divisionIDFromCity = result.getInt("Division_ID");
+        }
+
+
+    }
+
+
 }

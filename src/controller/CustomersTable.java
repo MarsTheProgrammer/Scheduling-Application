@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,14 +8,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Alerts;
 import model.Customer;
-import util.DBConnection;
+//import util.DBConnection;
+import util.CustomerQuery;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -41,12 +40,10 @@ public class CustomersTable implements Initializable {
     Stage stage;
     private static Customer highlightedCustomer;
 
-    private static int uniqueCustomerID = 0;
-
-
-    public static int getUniqueCustomerID() {
-        return uniqueCustomerID;
-    }
+    //private static int uniqueCustomerID = 0;
+//    public static int getUniqueCustomerID() {
+//        return uniqueCustomerID;
+//    }
 
 
 
@@ -72,6 +69,7 @@ public class CustomersTable implements Initializable {
 
     public void onActionModify(ActionEvent actionEvent) throws IOException {
 
+        //Grabs highlighted customer and pushes to modify table
         highlightedCustomer = customersTblView.getSelectionModel().getSelectedItem();
 
         if(highlightedCustomer == null) {
@@ -82,19 +80,14 @@ public class CustomersTable implements Initializable {
         } else {
             buttonChanging(actionEvent, "/view/modifyCustomer.fxml");
         }
-
     }
 
     public void onActionDelete(ActionEvent actionEvent) throws SQLException, IOException {
         Customer highlightedCustomer = customersTblView.getSelectionModel().getSelectedItem();
 
-
         if(highlightedCustomer == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Customer was not highlighted");
-            alert.showAndWait();
+            Alerts.alertDisplays(9);
         } else {
-
             Alert alertForDelete = new Alert(Alert.AlertType.CONFIRMATION);
             alertForDelete.setHeaderText("Are you sure you want to delete this customer?");
             alertForDelete.setContentText("Deleting the customer will remove them and their appointments");
@@ -102,20 +95,12 @@ public class CustomersTable implements Initializable {
 
             if(deleteResult.isPresent() && deleteResult.get() == ButtonType.OK) {
 
-                Statement statement = DBConnection.getConnection().createStatement();
+                CustomerQuery.deleteFromCustomersTable(highlightedCustomer.getCustomerID());
 
-
-                String deleteCustomerSQL = "DELETE FROM customers WHERE Customer_ID="+highlightedCustomer.getCustomerID();
-                System.out.println(highlightedCustomer.getCustomerID());
-                int resultSet = statement.executeUpdate(deleteCustomerSQL);
-
-                if(resultSet==1) {
-                    Alert alertForDeletion = new Alert(Alert.AlertType.INFORMATION);
-                    alertForDeletion.setHeaderText("Customer was deleted from the the database successfully.");
-                    alertForDeletion.setContentText("All customer information and appointments were deleted.");
-                    alertForDeletion.showAndWait();
-                }
-                statement.close();
+                Alert alertForDeletion = new Alert(Alert.AlertType.INFORMATION);
+                alertForDeletion.setHeaderText("Customer was deleted from the the database successfully.");
+                alertForDeletion.setContentText("All customer information and appointments were deleted.");
+                alertForDeletion.showAndWait();
 
                 buttonChanging(actionEvent, "/view/CustomersTable.fxml");
             }

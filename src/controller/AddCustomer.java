@@ -9,10 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Alerts;
 import model.Customer;
-import util.DBConnection;
+import util.CustomerQuery;
 
-import javax.xml.transform.Result;
+import util.DBConnection;
+import util.DataProvider;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
@@ -83,34 +86,8 @@ public class AddCustomer implements Initializable {
         String customerCity = cityComboBox.getSelectionModel().getSelectedItem();
         String customerCountry = countryLabel.getText();
 
-        Statement statement = DBConnection.getConnection().createStatement();
-
-        //Should return the highest Customer ID and increase it to make it the next highest before adding new customer
-        ResultSet customerIDMax = statement.executeQuery("SELECT MAX(Customer_ID) FROM customers");
-        if(customerIDMax.next()) {
-            customerID = customerIDMax.getInt(1);
-            customerID++;
-        }
-
-        //WHAT'S GOING IN HERE IS WE CANNOT ADD THIS IN WITHOUT GETTING THE DIVISION_ID TO WORK
-        //CAN'T FIGURE OUT A WAY TO GET THE DIVISION_ID TO UPDATE
-        //CAN'T UPDATE A FOREIGN KEY CONSTRAINT
-
-        String addCustomerSQL = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
-                "VALUES (Customer_ID=" + customerID + ", Customer_Name='" + customerName + "', Address='" +
-                customerAddress + "', Postal_Code='" + customerPostalCode + "', Phone='" + customerPhoneNumber + "', Division_ID=" + divisionIDFromCity + ")";
-
-        int result = statement.executeUpdate(addCustomerSQL);
-
-
-        Statement cityStatement = DBConnection.getConnection().createStatement();
-        String addCustomerCity = "INSERT INTO first_level_divisions VALUES Division='" + customerCity + "'";
-        int innerResult = cityStatement.executeUpdate(addCustomerCity);
-
-        Statement countryStatement = DBConnection.getConnection().createStatement();
-        String addCustomerCountry = "INSERT INTO countries VALUES Country='" + customerCountry + "'";
-        int innerInnerResult = countryStatement.executeUpdate(addCustomerCountry);
-
+        //Customer_ID is auto incremented
+        CustomerQuery.insertIntoCustomersTable(customerName, customerAddress,customerPhoneNumber, customerPostalCode, DataProvider.divisionID);
 
         //If all fields are filled and selected, add the customer to the customers list.
         if (nameNotNull(customerName) && addressNotNull(customerAddress) && postalCodeNotNull(customerPostalCode) && phoneNotNull(customerPhoneNumber) && cityNotNull(customerCity)) {
@@ -119,15 +96,11 @@ public class AddCustomer implements Initializable {
             Customer.allCustomersList.add(customer);
 
             //Displays an informative box telling user the customer was saved
-            alertDisplays(6);
+            Alerts.alertDisplays(6);
 
             //Goes back to the customer table screen
             buttonChanging(actionEvent, "/view/customersTable.fxml");
         }
-
-        statement.close();
-        cityStatement.close();
-        countryStatement.close();
     }
 
     @Override
@@ -139,8 +112,6 @@ public class AddCustomer implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-
     }
 
     //When a city is select, it will update the country label to the appropriate country
@@ -159,11 +130,10 @@ public class AddCustomer implements Initializable {
         }
         getAllCitiesDivisionID(citySelected);
         System.out.println(divisionIDFromCity);
+        DataProvider.divisionID = divisionIDFromCity;
     }
 
-
-    //override with division as parameter and get the divison id from DB
-
+    //Get the cities division ID and assigns it to the DataProvider class variable named: divisionIDFromCity
     public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
 
         Statement state = DBConnection.getConnection().createStatement();
@@ -200,7 +170,7 @@ public class AddCustomer implements Initializable {
     //The 5 below handles empty text fields
     public boolean nameNotNull(String name) {
         if (nameTxtFld.getText().isEmpty()) {
-            alertDisplays(1);
+            Alerts.alertDisplays(1);
             return false;
         }
         return true;
@@ -208,7 +178,7 @@ public class AddCustomer implements Initializable {
 
     public boolean addressNotNull(String address) {
         if (addressTxtFld.getText().isEmpty()) {
-            alertDisplays(2);
+            Alerts.alertDisplays(2);
             return false;
         }
         return true;
@@ -216,7 +186,7 @@ public class AddCustomer implements Initializable {
 
     public boolean postalCodeNotNull(String postalCode) {
         if (postalCodeTxtFld.getText().isEmpty()) {
-            alertDisplays(4);
+            Alerts.alertDisplays(4);
             return false;
         }
         return true;
@@ -224,7 +194,7 @@ public class AddCustomer implements Initializable {
 
     public boolean phoneNotNull(String phone) {
         if (phoneTxtFld.getText().isEmpty()) {
-            alertDisplays(5);
+            Alerts.alertDisplays(5);
             return false;
         }
         return true;
@@ -232,59 +202,60 @@ public class AddCustomer implements Initializable {
 
     public boolean cityNotNull(String city) {
         if (cityComboBox.getSelectionModel().getSelectedItem() == null) {
-            alertDisplays(3);
+            Alerts.alertDisplays(3);
             return false;
         }
         return true;
     }
 
 
-    //Copied for my project for SW1
-    private void alertDisplays(int alertType) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        Alert alertForSave = new Alert(Alert.AlertType.INFORMATION);
-        Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
+//    //Copied for my project for SW1
+//    private void alertDisplays(int alertType) {
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        Alert alertForSave = new Alert(Alert.AlertType.INFORMATION);
+//        Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
+//
+//        switch (alertType) {
+//            case 1:
+//                alert.setTitle("Error");
+//                alert.setHeaderText("All Fields Required");
+//                alert.setContentText("Customer name field is empty.");
+//                alert.showAndWait();
+//                break;
+//            case 2:
+//                alert.setTitle("Error");
+//                alert.setHeaderText("All Fields Required");
+//                alert.setContentText("Customer address field is empty.");
+//                alert.showAndWait();
+//                break;
+//            case 3:
+//                alert.setTitle("Error");
+//                alert.setHeaderText("All Fields Required");
+//                alert.setContentText("Customer city must be selected.");
+//                alert.showAndWait();
+//                break;
+//            case 4:
+//                alert.setTitle("Error");
+//                alert.setHeaderText("All Fields Required");
+//                alert.setContentText("Customer postal code field is empty.");
+//                alert.showAndWait();
+//                break;
+//            case 5:
+//                alert.setTitle("Error");
+//                alert.setHeaderText("All Fields Required");
+//                alert.setContentText("Customer phone number field is empty.");
+//                alert.showAndWait();
+//                break;
+//            case 6:
+//                alertForSave.setTitle("Save");
+//                alertForSave.setHeaderText("Customer Saved");
+//                alertForSave.setContentText("New customer hasCustomer Saved been saved");
+//                alertForSave.showAndWait();
+//                break;
+//
+//        }
+//    }
 
-        switch (alertType) {
-            case 1:
-                alert.setTitle("Error");
-                alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer name field is empty.");
-                alert.showAndWait();
-                break;
-            case 2:
-                alert.setTitle("Error");
-                alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer address field is empty.");
-                alert.showAndWait();
-                break;
-            case 3:
-                alert.setTitle("Error");
-                alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer city must be selected.");
-                alert.showAndWait();
-                break;
-            case 4:
-                alert.setTitle("Error");
-                alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer postal code field is empty.");
-                alert.showAndWait();
-                break;
-            case 5:
-                alert.setTitle("Error");
-                alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer phone number field is empty.");
-                alert.showAndWait();
-                break;
-            case 6:
-                alertForSave.setTitle("Save");
-                alertForSave.setHeaderText("Customer Saved");
-                alertForSave.setContentText("New customer hasCustomer Saved been saved");
-                alertForSave.showAndWait();
-                break;
-
-        }
-    }
 }
 
 
