@@ -64,6 +64,12 @@ public class Alerts {
                 alert.setContentText("Please highlight a customer");
                 alert.showAndWait();
                 break;
+            case 10:
+                alert.setTitle("No Country Selected");
+                alert.setHeaderText("Country field cannot me empty");
+                alert.setContentText("Please select a country");
+                alert.showAndWait();
+                break;
 
 
 

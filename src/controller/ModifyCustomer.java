@@ -11,11 +11,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
 import util.CustomerQuery;
-
 import util.DBConnection;
 import util.DataProvider;
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -28,45 +25,39 @@ import java.util.ResourceBundle;
 public class ModifyCustomer implements Initializable {
 
     //FXML Variables
-
     public Button saveCustomerBttn;
     public Button cancelBttn;
-    public Label countryLabel;
     public TextField nameTxtFld;
     public TextField addressTxtFld;
     public TextField postalCodeTxtFld;
     public TextField phoneTxtFld;
     public ComboBox<String> cityComboBox;
+    public ComboBox<String> countryComboBox;
+    public TextField customerIdTextFld;
     ObservableList<String> citiesList = FXCollections.observableArrayList();
-    ObservableList<String> city = FXCollections.observableArrayList();
+    ObservableList<String> countriesList = FXCollections.observableArrayList("U.S", "Canada", "UK");
 
     //Variables
     Parent scene;
     Stage stage;
     Customer highlightedCustomer;
-    private int customerID;
     public int divisionIDFromCity;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        //Populates the cities combo box
-        try {
-            getAllCities();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        //Populate the country combo box
+        countryComboBox.setItems(countriesList);
+        highlightedCustomer = CustomersTable.getHighlightedCustomer();//grabs the highlighted customer
 
-        highlightedCustomer = CustomersTable.getHighlightedCustomer();
-
-        int customerID = highlightedCustomer.getCustomerID();
+        //Sets the text field values based on highlighted customer
+        customerIdTextFld.setText(String.valueOf(highlightedCustomer.getCustomerID()));
         nameTxtFld.setText(highlightedCustomer.getCustomerName());
         addressTxtFld.setText(highlightedCustomer.getAddress());
         postalCodeTxtFld.setText(highlightedCustomer.getPostalCode());
         phoneTxtFld.setText(highlightedCustomer.getPhoneNumber());
+        countryComboBox.setValue(highlightedCustomer.getCountry());
         cityComboBox.setValue(highlightedCustomer.getCity());
-
-
     }
 
     //Created this to remove code redundancy
@@ -77,15 +68,15 @@ public class ModifyCustomer implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
     public void onActionSaveCustomer(ActionEvent actionEvent) throws IOException, SQLException {
 
         String customerName = nameTxtFld.getText();
-        String customerA = addressTxtFld.getText();
-        String customerPC = postalCodeTxtFld.getText();
-        String customerP = phoneTxtFld.getText();
+        String customerAddress = addressTxtFld.getText();
+        String customerPostalCode = postalCodeTxtFld.getText();
+        String customerPhone = phoneTxtFld.getText();
 
-
-        CustomerQuery.updateToCustomersTable(highlightedCustomer.getCustomerID(), customerName, customerA, customerPC, customerP, DataProvider.divisionID);
+        CustomerQuery.updateToCustomersTable(highlightedCustomer.getCustomerID(), customerName, customerAddress, customerPostalCode, customerPhone, DataProvider.divisionID);
 
         buttonChanging(actionEvent, "/view/customersTable.fxml");
 
@@ -93,7 +84,6 @@ public class ModifyCustomer implements Initializable {
 
     public void onActionCancel(ActionEvent actionEvent)  throws IOException {
 
-        //ERROR HERE. SOMETHING TO DO WITH THE CITY COMBO BOX NOT UPDATING WHEN PULLING CUSTOMERS INFORMATION
         Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
         alertForCancel.setTitle("Cancel");
         alertForCancel.setHeaderText("Are you sure you want to cancel?");
@@ -103,40 +93,10 @@ public class ModifyCustomer implements Initializable {
         if(cancelSelection.isPresent() && cancelSelection.get() == ButtonType.OK) {
             buttonChanging(actionEvent, "/view/customersTable.fxml");
         }
-        //buttonChanging(actionEvent, "/view/customersTable.fxml");
-    }
-
-
-    //This will populate the combo box with all the cities in the table
-    public void getAllCities() throws SQLException {
-
-        Statement statement = DBConnection.getConnection().createStatement();
-        String getAllCitiesSQL = "SELECT * FROM first_level_divisions";
-        ResultSet cityResults = statement.executeQuery(getAllCitiesSQL);
-
-        while (cityResults.next()) {
-            String city = cityResults.getString("Division");
-            citiesList.add(city);
-            cityComboBox.setItems(citiesList);
-        }
-        statement.close();
-
     }
 
     public void onActionCityComboBox(ActionEvent actionEvent) throws SQLException {
-
         String citySelected = cityComboBox.getSelectionModel().getSelectedItem();
-
-        if (citySelected.equals("Alberta") || citySelected.equals("Northwest Territories") || citySelected.equals("British Columbia") || citySelected.equals("Manitoba") ||
-                citySelected.equals("New Brunswick") || citySelected.equals("Nova Scotia") || citySelected.equals("Prince Edward Island") ||
-                citySelected.equals("Ontario") || citySelected.equals("Québec") || citySelected.equals("Saskatchewan") ||
-                citySelected.equals("Nunavut") || citySelected.equals("Yukon") || citySelected.equals("Newfoundland and Labrador")) {
-            countryLabel.setText("Canada");
-        } else if (citySelected.equals("England") || citySelected.equals("Wales") || citySelected.equals("Scotland") || citySelected.equals("Northern Ireland")) {
-            countryLabel.setText("UK");
-        } else {
-            countryLabel.setText("U.S");
-        }
         getAllCitiesDivisionID(citySelected);
         DataProvider.divisionID = divisionIDFromCity;
     }
@@ -152,9 +112,48 @@ public class ModifyCustomer implements Initializable {
         while(result.next()) {
             divisionIDFromCity = result.getInt("Division_ID");
         }
-
-
     }
 
+    //Filters the city combo box based upon the city selection
+    public void onActionComboBox(ActionEvent actionEvent) throws SQLException {
 
+        String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
+
+        if(countrySelected.equals("U.S")) {
+            Statement statement = DBConnection.getConnection().createStatement();
+            String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 1";
+            ResultSet usCityResults = statement.executeQuery(getAllCitiesSQL);
+
+            while (usCityResults.next()) {
+                String city = usCityResults.getString("Division");
+                citiesList.add(city);
+                cityComboBox.setItems(citiesList);
+            }
+            statement.close();
+
+        } else if(countrySelected.equals("UK")) {
+            Statement statement = DBConnection.getConnection().createStatement();
+            String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 2";
+            ResultSet ukCityResults = statement.executeQuery(getAllCitiesSQL);
+
+            while (ukCityResults.next()) {
+                String city = ukCityResults.getString("Division");
+                citiesList.add(city);
+                cityComboBox.setItems(citiesList);
+            }
+            statement.close();
+
+        } else {
+            Statement statement = DBConnection.getConnection().createStatement();
+            String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 3";
+            ResultSet canadaCityResults = statement.executeQuery(getAllCitiesSQL);
+
+            while (canadaCityResults.next()) {
+                String city = canadaCityResults.getString("Division");
+                citiesList.add(city);
+                cityComboBox.setItems(citiesList);
+            }
+            statement.close();
+        }
+    }
 }

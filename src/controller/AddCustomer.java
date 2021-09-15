@@ -32,17 +32,16 @@ public class AddCustomer implements Initializable {
     public TextField postalCodeTxtFld;
     public TextField phoneTxtFld;
     public ComboBox<String> cityComboBox;
-    //public ComboBox<String> addCustomerCountryComboBox;
     public Label countryLabel;
     public int divisionIDFromCity;
+    public TextField customerIdTextFld;
+    public ComboBox<String> countryComboBox;
 
     //Variables
     Parent scene;
     Stage stage;
     Customer highlightedCustomer;
 
-    //ASK CI IF WE NEED ALL THE CITIES AND COUNTRIES FROM DB FOR THESE LISTS. SHOULD I QUERY FOR THE CITY?
-    //ObservableList<String> citiesList = FXCollections.observableArrayList("Montreal, Canada", "Phoenix, Arizona", "White Plains, New York", "London, England");
     ObservableList<String> citiesList = FXCollections.observableArrayList();
     ObservableList<String> countriesList = FXCollections.observableArrayList("U.S", "Canada", "UK");
 
@@ -69,9 +68,56 @@ public class AddCustomer implements Initializable {
         }
     }
 
+    public void onActionCountryComboBox(ActionEvent actionEvent) throws SQLException {
+        String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
+
+        if(countrySelected.equals("U.S")) {
+
+            Statement statement = DBConnection.getConnection().createStatement();
+
+            String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 1";
+
+            ResultSet usCityResults = statement.executeQuery(getAllCitiesSQL);
+
+            while (usCityResults.next()) {
+                String city = usCityResults.getString("Division");
+                citiesList.add(city);
+                cityComboBox.setItems(citiesList);
+            }
+            statement.close();
+
+        } else if(countrySelected.equals("UK")) {
+            Statement statement = DBConnection.getConnection().createStatement();
+
+            String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 2";
+
+            ResultSet ukCityResults = statement.executeQuery(getAllCitiesSQL);
+
+            while (ukCityResults.next()) {
+                String city = ukCityResults.getString("Division");
+                citiesList.add(city);
+                cityComboBox.setItems(citiesList);
+            }
+            statement.close();
+        } else {
+            Statement statement = DBConnection.getConnection().createStatement();
+
+            String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 3";
+
+            ResultSet canadaCityResults = statement.executeQuery(getAllCitiesSQL);
+
+            while (canadaCityResults.next()) {
+                String city = canadaCityResults.getString("Division");
+                citiesList.add(city);
+                cityComboBox.setItems(citiesList);
+            }
+            statement.close();
+        }
+
+    }
+
     public void onActionSaveCustomer(ActionEvent actionEvent) throws IOException, SQLException {
 
-        //This block is to get the customerID to the highest number from all customers. This is for unique customerID
         int customerID = 0;
         for (Customer customer : Customer.getGetAllCustomers()) {
             if (customer.getCustomerID() > customerID) {
@@ -84,13 +130,15 @@ public class AddCustomer implements Initializable {
         String customerPostalCode = postalCodeTxtFld.getText();
         String customerPhoneNumber = phoneTxtFld.getText();
         String customerCity = cityComboBox.getSelectionModel().getSelectedItem();
-        String customerCountry = countryLabel.getText();
+        String customerCountry = countryComboBox.getSelectionModel().getSelectedItem();
 
-        //Customer_ID is auto incremented
-        CustomerQuery.insertIntoCustomersTable(customerName, customerAddress,customerPhoneNumber, customerPostalCode, DataProvider.divisionID);
+
 
         //If all fields are filled and selected, add the customer to the customers list.
-        if (nameNotNull(customerName) && addressNotNull(customerAddress) && postalCodeNotNull(customerPostalCode) && phoneNotNull(customerPhoneNumber) && cityNotNull(customerCity)) {
+        if (nameNotNull(customerName) && addressNotNull(customerAddress) && postalCodeNotNull(customerPostalCode) && phoneNotNull(customerPhoneNumber) && countryNotNull(customerCountry) && cityNotNull(customerCity)) {
+
+            //Customer_ID is auto incremented
+            CustomerQuery.insertIntoCustomersTable(customerName, customerAddress,customerPhoneNumber, customerPostalCode, DataProvider.divisionID);
 
             Customer customer = new Customer(customerID, customerName, customerAddress, customerCity, customerPostalCode, customerPhoneNumber, customerCountry);
             Customer.allCustomersList.add(customer);
@@ -106,31 +154,18 @@ public class AddCustomer implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        //Initializes the cities list for the city combo box
-        try {
-            getAllCities();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        countryComboBox.setItems(countriesList);
+
     }
 
     //When a city is select, it will update the country label to the appropriate country
     public void onActionCityComboBox(ActionEvent actionEvent) throws SQLException {
+
        String citySelected = cityComboBox.getSelectionModel().getSelectedItem();
 
-        if (citySelected.equals("Alberta") || citySelected.equals("Northwest Territories") || citySelected.equals("British Columbia") || citySelected.equals("Manitoba") ||
-                citySelected.equals("New Brunswick") || citySelected.equals("Nova Scotia") || citySelected.equals("Prince Edward Island") ||
-                citySelected.equals("Ontario") || citySelected.equals("Québec") || citySelected.equals("Saskatchewan") ||
-                citySelected.equals("Nunavut") || citySelected.equals("Yukon") || citySelected.equals("Newfoundland and Labrador")) {
-            countryLabel.setText("Canada");
-        } else if (citySelected.equals("England") || citySelected.equals("Wales") || citySelected.equals("Scotland") || citySelected.equals("Northern Ireland")) {
-            countryLabel.setText("UK");
-        } else {
-            countryLabel.setText("U.S");
-        }
         getAllCitiesDivisionID(citySelected);
-        System.out.println(divisionIDFromCity);
         DataProvider.divisionID = divisionIDFromCity;
+        System.out.println(divisionIDFromCity);
     }
 
     //Get the cities division ID and assigns it to the DataProvider class variable named: divisionIDFromCity
@@ -199,6 +234,13 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+    public boolean countryNotNull(String country) {
+        if (countryComboBox.getSelectionModel().getSelectedItem() == null) {
+            Alerts.alertDisplays(10);
+            return false;
+        }
+        return true;
+    }
 
     public boolean cityNotNull(String city) {
         if (cityComboBox.getSelectionModel().getSelectedItem() == null) {
@@ -207,6 +249,8 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+
+
 
 
 //    //Copied for my project for SW1
