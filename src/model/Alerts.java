@@ -70,8 +70,12 @@ public class Alerts {
                 alert.setContentText("Please select a country");
                 alert.showAndWait();
                 break;
-
-
+            case 11:
+                alert.setTitle("Customer Deleted");
+                alert.setHeaderText("Customer was deleted from the the database successfully.");
+                alert.setContentText("All customer information and appointments were deleted.");
+                alert.showAndWait();
+                break;
 
         }
     }

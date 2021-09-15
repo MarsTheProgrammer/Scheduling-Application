@@ -10,9 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Alerts;
 import model.Customer;
-//import util.DBConnection;
 import util.CustomerQuery;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -40,19 +38,10 @@ public class CustomersTable implements Initializable {
     Stage stage;
     private static Customer highlightedCustomer;
 
-    //private static int uniqueCustomerID = 0;
-//    public static int getUniqueCustomerID() {
-//        return uniqueCustomerID;
-//    }
-
-
-
     //Getter for highlightedCustomer
     public static Customer getHighlightedCustomer() {
         return highlightedCustomer;
     }
-
-
 
     //Created this to remove code redundancy
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
@@ -97,10 +86,7 @@ public class CustomersTable implements Initializable {
 
                 CustomerQuery.deleteFromCustomersTable(highlightedCustomer.getCustomerID());
 
-                Alert alertForDeletion = new Alert(Alert.AlertType.INFORMATION);
-                alertForDeletion.setHeaderText("Customer was deleted from the the database successfully.");
-                alertForDeletion.setContentText("All customer information and appointments were deleted.");
-                alertForDeletion.showAndWait();
+                Alerts.alertDisplays(11);
 
                 buttonChanging(actionEvent, "/view/CustomersTable.fxml");
             }
@@ -123,7 +109,6 @@ public class CustomersTable implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         customersTblID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         customersTblName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customersTblAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -131,7 +116,5 @@ public class CustomersTable implements Initializable {
         customersTblCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         customersTblPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customersTblPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-
-
     }
 }
