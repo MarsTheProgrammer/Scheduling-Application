@@ -21,22 +21,14 @@ public class CustomerQuery {
 
         int rowsAffected = ps.executeUpdate();
 
-//        if (rowsAffected == 1) {
-//            Alerts.alertDisplays(6);
-//        }
         return rowsAffected;
     }
-//String modifyCustomerSQL = "UPDATE customers SET Customer_Name='" + nameTxtFld.getText() + "', Address='" + addressTxtFld.getText() + "Postal_Code='" +
-// postalCodeTxtFld.getText() + "', Phone='" + phoneTxtFld.getText() + "'";
 
     public static int updateToCustomersTable(int customerID, String customerName, String address, String postalCode, String Phone, int divisionID) throws SQLException {
 
         String modifySQL = "UPDATE customers SET Customer_Name=?, Address=?, Phone=?, Postal_Code=?, Division_ID=? WHERE Customer_ID=?";
 
         PreparedStatement preparedStatement = DBConnection.getConnection().prepareStatement(modifySQL);
-
-
-        //WE MESSED UP THE DATABASE AND NEED TO RESET IT
 
         preparedStatement.setInt(6, customerID);
         preparedStatement.setString(1, customerName);
@@ -63,12 +55,46 @@ public class CustomerQuery {
         preparedStatement.setInt(1, customerID);
 
         int rowsDeleted = preparedStatement.executeUpdate();
-//
-//        if (rowsDeleted == 1) {
-//            Alerts.alertDisplays(8);
-//        }
 
         return rowsDeleted;
     }
 
+    public static int deleteFromAppointmentsTable(int appointmentId) throws SQLException {
+
+        String deleteAppointmentSQL = "DELETE FROM appointments WHERE Appointment_ID = ?";
+
+        PreparedStatement preparedStatement = DBConnection.getConnection().prepareStatement(deleteAppointmentSQL);
+
+        preparedStatement.setInt(1, appointmentId);
+
+        int rowsDeletedForAppointments = preparedStatement.executeUpdate();
+
+        return rowsDeletedForAppointments;
+    }
+
+//    INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)
+//    VALUES (5,'title', 'description', 'location', 'type', '2020-05-28 12:00:00', '2020-05-28 12:00:00', 3, 3, 4)
+
+    public static int insertIntoAppointmentsTable(int appointmentId, String title, String description, String location, String type, String start, String end, int CustomerId,
+                                                  int userId, int ContactId) throws SQLException {
+        String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
+                    " VALUES(?,?,?,?,?,?,?,?,?,?)";
+
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+
+        ps.setInt(1, appointmentId );
+        ps.setString(2, title);
+        ps.setString(3, description);
+        ps.setString(4,location );
+        ps.setString(5, type);
+        ps.setString(6,start);
+        ps.setString(7, end);
+        ps.setInt(8,CustomerId );
+        ps.setInt(9, userId);
+        ps.setInt(10, ContactId);
+
+        int rowsAffectedAppointmentInsert = ps.executeUpdate();
+
+        return rowsAffectedAppointmentInsert;
+    }
 }

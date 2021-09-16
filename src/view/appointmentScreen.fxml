@@ -6,16 +6,18 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentScreen">
    <children>
-      <TableView fx:id="calendarSortComboBox" layoutX="14.0" layoutY="109.0" onSort="#onSort" prefHeight="353.0" prefWidth="903.0">
+      <TableView fx:id="appointmentTblView" layoutX="14.0" layoutY="109.0" onSort="#onSort" prefHeight="353.0" prefWidth="903.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Customer Name" />
-          <TableColumn prefWidth="75.0" text="Assigned Contract" />
-            <TableColumn prefWidth="75.0" text="Title" />
-            <TableColumn prefWidth="75.0" text="Type" />
-            <TableColumn prefWidth="75.0" text="Location" />
-            <TableColumn prefWidth="75.0" text="Description" />
-            <TableColumn prefWidth="75.0" text="Start" />
-            <TableColumn prefWidth="75.0" text="End" />
+          <TableColumn fx:id="appointmentIdTblCol" prefWidth="75.0" text="Appointment_ID" />
+          <TableColumn fx:id="titleTblCol" prefWidth="75.0" text="Title" />
+            <TableColumn fx:id="descriptionTblCol" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="locationTblCol" prefWidth="75.0" text="Location" />
+            <TableColumn fx:id="contactTblCol" prefWidth="75.0" text="Contact" />
+            <TableColumn fx:id="typeTblCol" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="startTblCol" prefWidth="75.0" text="Start" />
+            <TableColumn fx:id="endTblCol" prefWidth="75.0" text="End" />
+            <TableColumn fx:id="customerIdTblCol" prefWidth="75.0" text="Customer_ID" />
+            <TableColumn fx:id="userIdTblCol" prefWidth="75.0" text="User_ID" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -35,7 +37,7 @@
       <RadioButton fx:id="byWeekRadBttn" layoutX="394.0" layoutY="55.0" mnemonicParsing="false" text="Appointments by week" toggleGroup="$appointmentRadBtnTgglGrp" />
       <Label layoutX="14.0" layoutY="511.0" text="View by:" />
       <Button fx:id="mainMenuBttn" layoutX="901.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionMainMenu" text="Main Menu" />
-      <ComboBox fx:id="calendarSort" layoutX="67.0" layoutY="507.0" prefHeight="25.0" prefWidth="226.0" promptText="Select a value to sort the calendar" />
+      <ComboBox fx:id="viewBySelectionComboBox" layoutX="67.0" layoutY="507.0" prefHeight="25.0" prefWidth="226.0" promptText="Select a value to sort the calendar" />
       <Button fx:id="searchBttn" layoutX="325.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionSearch" text="Search" />
       <Button fx:id="addAppointmentBttn" layoutX="554.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionAddAppointment" text="Add" />
       <Button fx:id="deleteAppointmentBttn" layoutX="687.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionDeleteAppointment" text="Delete" />

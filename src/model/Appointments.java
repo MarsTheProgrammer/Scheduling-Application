@@ -1,6 +1,12 @@
 package model;
 
-import java.time.LocalTime;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import util.DBConnection;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Appointments {
 
@@ -13,7 +19,9 @@ public class Appointments {
     private String end;
     private int customerId;
     private int userId;
-    private String contactId;
+    private String contactName;
+
+    public static ObservableList<Appointments> allAppointmentsList = FXCollections.observableArrayList();
 
     //private String customerName;
     //private LocalTime time;
@@ -22,8 +30,8 @@ public class Appointments {
     public Appointments() {}
 
     //Constructor
-    public Appointments(int appointmentId, String title, String description, String location, String type,
-                        String start, String end, int customerId, int userId, String contactId) {
+    public Appointments(int appointmentId, String title, String description, String location, String contactId, String type,
+                        String start, String end, int customerId, int userId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -33,7 +41,7 @@ public class Appointments {
         this.end = end;
         this.customerId = customerId;
         this.userId = userId;
-        this.contactId = contactId;
+        this.contactName = contactId;
     }
 
     //Getters and Setters
@@ -109,11 +117,30 @@ public class Appointments {
         this.userId = userId;
     }
 
-    public String getContactId() {
-        return contactId;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setContactId(String contactId) {
-        this.contactId = contactId;
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
+
+    public static ObservableList<Appointments> getGetAllAppointments() throws SQLException {
+
+        Statement statement = DBConnection.getConnection().createStatement();
+
+        String appointmentInfoSQL = "SELECT appointments.*, contacts.* FROM appointments INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
+
+        ResultSet appointmentInfoResults = statement.executeQuery(appointmentInfoSQL);
+
+        while(appointmentInfoResults.next()) {
+            Appointments appointments = new Appointments(appointmentInfoResults.getInt("Appointment_ID"),appointmentInfoResults.getString("Title"),
+                    appointmentInfoResults.getString("Description"),appointmentInfoResults.getString("Location"),
+                    appointmentInfoResults.getString("Contact_Name"), appointmentInfoResults.getString("Type"), appointmentInfoResults.getString("Start"),
+                    appointmentInfoResults.getString("End"), appointmentInfoResults.getInt("Customer_ID"), appointmentInfoResults.getInt("User_ID"));
+            allAppointmentsList.add(appointments);
+        }
+        return allAppointmentsList;
+    }
+
 }
