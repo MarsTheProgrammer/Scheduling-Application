@@ -21,6 +21,7 @@ public class CustomerQuery {
 
         int rowsAffected = ps.executeUpdate();
 
+        ps.close();
         return rowsAffected;
     }
 
@@ -43,6 +44,7 @@ public class CustomerQuery {
         if (rowsUpdates == 1) {
             Alerts.alertDisplays(7);
         }
+        preparedStatement.close();
         return rowsUpdates;
     }
 
@@ -56,6 +58,7 @@ public class CustomerQuery {
 
         int rowsDeleted = preparedStatement.executeUpdate();
 
+        preparedStatement.close();
         return rowsDeleted;
     }
 
@@ -69,6 +72,7 @@ public class CustomerQuery {
 
         int rowsDeletedForAppointments = preparedStatement.executeUpdate();
 
+        preparedStatement.close();
         return rowsDeletedForAppointments;
     }
 
@@ -96,6 +100,20 @@ public class CustomerQuery {
 
         int rowsAffectedAppointmentInsert = ps.executeUpdate();
 
+        ps.close();
         return rowsAffectedAppointmentInsert;
     }
+//    public static int populateExistingCustomersComboBox(String customerName) throws SQLException {
+//        String sql = "SELECT * FROM customers";
+//
+//        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+//
+//        ps.setString(1, customerName);
+//
+//
+//        int rowsAffectedAppointmentInsert = ps.executeUpdate();
+//
+//        ps.close();
+//        return rowsAffectedAppointmentInsert;
+//    }
 }

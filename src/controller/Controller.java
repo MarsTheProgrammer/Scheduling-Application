@@ -1,7 +1,6 @@
 package controller;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -11,17 +10,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import model.Alerts;
 import util.DBConnection;
 import util.LoginAttemptTracker;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+import model.User;
+
+
+
 
 public class Controller implements Initializable {
 
@@ -44,6 +45,8 @@ public class Controller implements Initializable {
 
         String username = usernameTxtField.getText();
         String password = passwordTxtField.getText();
+        User.username = username;
+
 
         getUsername(username);
         getPassword(password);
