@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import model.Alerts;
 import util.DBConnection;
 import util.LoginAttemptTracker;
 
@@ -41,35 +42,37 @@ public class Controller implements Initializable {
 
         //Commenting this out now to save time
 
-//        String username = usernameTxtField.getText();
-//        String password = passwordTxtField.getText();
-//
-//        getUsername(username);
-//        getPassword(password);
-//
-//        if (getUsername(username) && getPassword(password)) {
-//            //This should log all log in attempts
-//            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
-//
-//            //Go to the main menu
-//            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-//            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
-//            stage.setScene(new Scene(scene));
-//            stage.show();
-//        } else {
-//            //This should log all log in attempts
-//            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
-//            Alert alert = new Alert((Alert.AlertType.ERROR));
-//            alert.setTitle("Invalid Credentials");
-//            alert.setHeaderText("Incorrect username and/or password");
-//            alert.setContentText("Please enter a valid username and password");
-//            alert.showAndWait();
-//        }
-        //Go to the main menu
+        String username = usernameTxtField.getText();
+        String password = passwordTxtField.getText();
+
+        getUsername(username);
+        getPassword(password);
+
+        if (getUsername(username) && getPassword(password)) {
+            //This should log all log in attempts
+            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
+
+            getUserIdFromUsername(username);
+
+            //Go to the main menu
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
+        } else {
+            //This should log all log in attempts
+            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
+            Alert alert = new Alert((Alert.AlertType.ERROR));
+            alert.setTitle("Invalid Credentials");
+            alert.setHeaderText("Incorrect username and/or password");
+            alert.setContentText("Please enter a valid username and password");
+            alert.showAndWait();
+        }
+        //Go to the main menu
+//            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+//            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
+//            stage.setScene(new Scene(scene));
+//            stage.show();
     }
 
     //Gets the password from the database
@@ -104,6 +107,24 @@ public class Controller implements Initializable {
         }
         statement.close();
         return false;
+    }
+
+    public static int getUserIdFromUsername(String username) throws SQLException {
+
+        Statement statement = DBConnection.getConnection().createStatement();
+        String sqlUsername = "SELECT User_ID, User_Name FROM users WHERE User_Name ='" + username + "'";
+        ResultSet results = statement.executeQuery(sqlUsername);
+
+        //Gets the username from the results
+        while(results.next()) {
+            if(results.getString("User_Name").equals(username)) {
+                System.out.println(results.getInt("User_ID"));
+                return results.getInt("User_ID");
+            }
+        }
+        statement.close();
+        Alerts.alertDisplays(12);
+        return -1;
     }
 
     @Override

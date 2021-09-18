@@ -72,8 +72,9 @@ public class CustomerQuery {
         return rowsDeletedForAppointments;
     }
 
+//
 //    INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)
-//    VALUES (5,'title', 'description', 'location', 'type', '2020-05-28 12:00:00', '2020-05-28 12:00:00', 3, 3, 4)
+//    VALUES (5,'title', 'description', 'location', 'type', '2020-05-28 12:00:00', '2020-05-28 12:00:00', 2, 2, 2)
 
     public static int insertIntoAppointmentsTable(int appointmentId, String title, String description, String location, String type, String start, String end, int CustomerId,
                                                   int userId, int ContactId) throws SQLException {

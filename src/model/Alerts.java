@@ -76,6 +76,12 @@ public class Alerts {
                 alert.setContentText("All customer information and appointments were deleted.");
                 alert.showAndWait();
                 break;
+            case 12:
+                alert.setTitle("User Id Not Found");
+                alert.setHeaderText("Couldn't find User_Id from that username");
+                alert.setContentText("Please enter a valid username");
+                alert.showAndWait();
+                break;
 
         }
     }
