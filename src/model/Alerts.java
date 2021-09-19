@@ -13,31 +13,31 @@ public class Alerts {
             case 1:
                 alert.setTitle("Error");
                 alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer name field is empty.");
+                alert.setContentText("Name field is empty.");
                 alert.showAndWait();
                 break;
             case 2:
                 alert.setTitle("Error");
                 alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer address field is empty.");
+                alert.setContentText("Address field is empty.");
                 alert.showAndWait();
                 break;
             case 3:
                 alert.setTitle("Error");
                 alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer city must be selected.");
+                alert.setContentText("City must be selected.");
                 alert.showAndWait();
                 break;
             case 4:
                 alert.setTitle("Error");
                 alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer postal code field is empty.");
+                alert.setContentText("Postal code field is empty.");
                 alert.showAndWait();
                 break;
             case 5:
                 alert.setTitle("Error");
                 alert.setHeaderText("All Fields Required");
-                alert.setContentText("Customer phone number field is empty.");
+                alert.setContentText("Phone number field is empty.");
                 alert.showAndWait();
                 break;
             case 6:
@@ -82,6 +82,73 @@ public class Alerts {
                 alert.setContentText("Please enter a valid username");
                 alert.showAndWait();
                 break;
+            case 13:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Title field is empty.");
+                alert.showAndWait();
+                break;
+            case 14:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Description field is empty.");
+                alert.showAndWait();
+                break;
+            case 15:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Location field is empty.");
+                alert.showAndWait();
+                break;
+            case 16:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Type field is empty.");
+                alert.showAndWait();
+                break;
+            case 17:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Date picker is empty.");
+                alert.showAndWait();
+                break;
+            case 18:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Start time field is empty.");
+                alert.showAndWait();
+                break;
+            case 19:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("End time field is empty.");
+                alert.showAndWait();
+                break;
+            case 20:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Existing customer field is empty.");
+                alert.showAndWait();
+                break;
+            case 21:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("User ID field is empty.");
+                alert.showAndWait();
+                break;
+            case 22:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Contact is empty.");
+                alert.showAndWait();
+                break;
+            case 23:
+                alertForSave.setTitle("Saved Appointment");
+                alertForSave.setHeaderText("Appointment Saved to the Database");
+                alertForSave.setContentText("New Appointment has been saved");
+                alertForSave.showAndWait();
+                break;
+
 
         }
     }

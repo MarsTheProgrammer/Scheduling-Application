@@ -63,9 +63,9 @@
             <TextField fx:id="assignedContractTxtFld" disable="true" text="Auto-Generated" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="titleTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="typeTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <ComboBox fx:id="endTimeComboBox" onAction="#onActionEndTimeCmbBox" prefHeight="25.0" prefWidth="207.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <ComboBox fx:id="startTimeComboBox" onAction="#onActionStartTimeCmbBox" prefHeight="25.0" prefWidth="216.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <DatePicker fx:id="dateDatePicker" onAction="#onActionDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ComboBox fx:id="endTimeComboBox" prefHeight="25.0" prefWidth="207.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="startTimeComboBox" prefHeight="25.0" prefWidth="216.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <DatePicker fx:id="dateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label text="Existing Customer">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -102,6 +102,11 @@
       <Label layoutX="28.0" layoutY="49.0" text="Add appointment by filling out the information below" />
       <Button fx:id="saveAppointmentBtn" layoutX="40.0" layoutY="725.0" mnemonicParsing="false" onAction="#onActionSaveAppointment" text="Save" />
       <Label layoutX="28.0" layoutY="79.0" prefHeight="17.0" prefWidth="544.0" text="Please choose an existing customer before filling out the fields">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="312.0" layoutY="21.0" prefHeight="21.0" prefWidth="244.0" text="Business Hours: 8:00 - 22:00 EST">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

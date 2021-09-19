@@ -7,6 +7,8 @@ import util.DBConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Appointments {
 
@@ -15,8 +17,8 @@ public class Appointments {
     private String description;
     private String location;
     private String type;
-    private String start;
-    private String end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int customerId;
     private int userId;
     private String contactName;
@@ -31,7 +33,7 @@ public class Appointments {
 
     //Constructor
     public Appointments(int appointmentId, String title, String description, String location, String contactId, String type,
-                        String start, String end, int customerId, int userId) {
+                        LocalDateTime start, LocalDateTime end, int customerId, int userId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -85,19 +87,15 @@ public class Appointments {
         this.type = type;
     }
 
-    public String getStart() {
-        return start;
-    }
+    public LocalDateTime getStart() {return start;}
 
-    public void setStart(String start) {
-        this.start = start;
-    }
+    public void setStart(LocalDateTime start) {this.start = start;}
 
-    public String getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
@@ -131,13 +129,19 @@ public class Appointments {
 
         String appointmentInfoSQL = "SELECT appointments.*, contacts.* FROM appointments INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
 
-        ResultSet appointmentInfoResults = statement.executeQuery(appointmentInfoSQL);
+        ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
 
-        while(appointmentInfoResults.next()) {
-            Appointments appointments = new Appointments(appointmentInfoResults.getInt("Appointment_ID"),appointmentInfoResults.getString("Title"),
-                    appointmentInfoResults.getString("Description"),appointmentInfoResults.getString("Location"),
-                    appointmentInfoResults.getString("Contact_Name"), appointmentInfoResults.getString("Type"), appointmentInfoResults.getString("Start"),
-                    appointmentInfoResults.getString("End"), appointmentInfoResults.getInt("Customer_ID"), appointmentInfoResults.getInt("User_ID"));
+        while(appointmentResults.next()) {
+            Appointments appointments = new Appointments(appointmentResults.getInt("Appointment_ID"),
+                                                        appointmentResults.getString("Title"),
+                                                        appointmentResults.getString("Description"),
+                                                        appointmentResults.getString("Location"),
+                                                        appointmentResults.getString("Contact_Name"),
+                                                        appointmentResults.getString("Type"),
+                                                        appointmentResults.getTimestamp("Start").toLocalDateTime(),
+                                                        appointmentResults.getTimestamp("End").toLocalDateTime(),
+                                                        appointmentResults.getInt("Customer_ID"),
+                                                        appointmentResults.getInt("User_ID"));
             allAppointmentsList.add(appointments);
         }
         return allAppointmentsList;

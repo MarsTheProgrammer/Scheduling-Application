@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
-import util.CustomerQuery;
+import util.DataBaseQueries;
 import util.DBConnection;
 import util.DataProvider;
 import java.io.IOException;
@@ -76,7 +76,7 @@ public class ModifyCustomer implements Initializable {
         String customerPostalCode = postalCodeTxtFld.getText();
         String customerPhone = phoneTxtFld.getText();
 
-        CustomerQuery.updateToCustomersTable(highlightedCustomer.getCustomerID(), customerName, customerAddress, customerPostalCode, customerPhone, DataProvider.divisionID);
+        DataBaseQueries.updateToCustomersTable(highlightedCustomer.getCustomerID(), customerName, customerAddress, customerPostalCode, customerPhone, DataProvider.divisionID);
 
         buttonChanging(actionEvent, "/view/customersTable.fxml");
 

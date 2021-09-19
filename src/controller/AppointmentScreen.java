@@ -10,12 +10,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Alerts;
 import model.Appointments;
-import model.Customer;
-import util.CustomerQuery;
+import util.DataBaseQueries;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -38,8 +38,8 @@ public class AppointmentScreen implements Initializable {
     public TableColumn<Appointments, String> locationTblCol;
     public TableColumn<Appointments, String> contactTblCol;
     public TableColumn<Appointments, String> typeTblCol;
-    public TableColumn<Appointments, String> startTblCol;
-    public TableColumn<Appointments, String> endTblCol;
+    public TableColumn<Appointments, LocalDateTime> startTblCol;
+    public TableColumn<Appointments, LocalDateTime> endTblCol;
     public TableColumn<Appointments, Integer> customerIdTblCol;
     public TableColumn<Appointments, Integer> userIdTblCol;
 
@@ -110,7 +110,7 @@ public class AppointmentScreen implements Initializable {
 
             if(deleteResult.isPresent() && deleteResult.get() == ButtonType.OK) {
 
-                CustomerQuery.deleteFromAppointmentsTable(highlightedAppointment.getAppointmentId());
+                DataBaseQueries.deleteFromAppointmentsTable(highlightedAppointment.getAppointmentId());
 
                 Alerts.alertDisplays(11);
 

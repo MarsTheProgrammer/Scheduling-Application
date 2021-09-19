@@ -10,7 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Alerts;
 import model.Customer;
-import util.CustomerQuery;
+import util.DataBaseQueries;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -84,7 +84,7 @@ public class CustomersTable implements Initializable {
 
             if(deleteResult.isPresent() && deleteResult.get() == ButtonType.OK) {
 
-                CustomerQuery.deleteFromCustomersTable(highlightedCustomer.getCustomerID());
+                DataBaseQueries.deleteFromCustomersTable(highlightedCustomer.getCustomerID());
 
                 Alerts.alertDisplays(11);
 
