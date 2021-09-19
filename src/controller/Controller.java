@@ -48,34 +48,34 @@ public class Controller implements Initializable {
         User.username = username;
 
 
-        getUsername(username);
-        getPassword(password);
-
-        if (getUsername(username) && getPassword(password)) {
-            //This should log all log in attempts
-            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
-
-            getUserIdFromUsername(username);
-
-            //Go to the main menu
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
-        } else {
-            //This should log all log in attempts
-            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
-            Alert alert = new Alert((Alert.AlertType.ERROR));
-            alert.setTitle("Invalid Credentials");
-            alert.setHeaderText("Incorrect username and/or password");
-            alert.setContentText("Please enter a valid username and password");
-            alert.showAndWait();
-        }
-        //Go to the main menu
+//        getUsername(username);
+//        getPassword(password);
+//
+//        if (getUsername(username) && getPassword(password)) {
+//            //This should log all log in attempts
+//            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
+//
+//            getUserIdFromUsername(username);
+//
+//            //Go to the main menu
 //            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
 //            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
 //            stage.setScene(new Scene(scene));
 //            stage.show();
+//        } else {
+//            //This should log all log in attempts
+//            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
+//            Alert alert = new Alert((Alert.AlertType.ERROR));
+//            alert.setTitle("Invalid Credentials");
+//            alert.setHeaderText("Incorrect username and/or password");
+//            alert.setContentText("Please enter a valid username and password");
+//            alert.showAndWait();
+//        }
+        //Go to the main menu
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
     }
 
     //Gets the password from the database

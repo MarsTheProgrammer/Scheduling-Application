@@ -1,6 +1,5 @@
 package controller;
 
-import com.sun.glass.ui.EventLoop;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +12,6 @@ import javafx.stage.Stage;
 import model.Customer;
 import model.User;
 import util.DBConnection;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -27,7 +25,6 @@ public class AddAppointment implements Initializable {
     public TextField assignedContractTxtFld;
     public TextField titleTxtFld;
     public TextField typeTxtFld;
-    public ComboBox<String> locationComboBox;
     public ComboBox<String> endTimeComboBox;
     public ComboBox<String> startTimeComboBox;
     public DatePicker dateDatePicker;
@@ -35,6 +32,8 @@ public class AddAppointment implements Initializable {
     public ComboBox<String> existingCustomerComboBox;
     public TextField descriptionTxtFld;
     public ComboBox<String> contactComboBox;
+    public ComboBox<Integer> userIdCombo;
+    public TextField locationTextFld;
     private int contactId;
 
     public int getContactId() {
@@ -47,21 +46,26 @@ public class AddAppointment implements Initializable {
 
     public static ObservableList<String> existingCustList = FXCollections.observableArrayList();
     public static ObservableList<String> contactNameList = FXCollections.observableArrayList();
+    public static ObservableList<Integer> userIdList = FXCollections.observableArrayList();
+    public static ObservableList<String> appointmentTimesList = FXCollections.observableArrayList("08:00:00", "09:00:00", "10:00:00", "11:00:00","12:00:00","13:00:00",
+             "14:00:00", "15:00:00","16:00:00", "17:00:00", "18:00:00", "19:00:00", "20:00:00","21:00:00","22:00:00");
+
     public TextField customerIdTextFld;
-    public TextField userIdTextFld;
 
     Parent scene;
     Stage stage;
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        startTimeComboBox.setItems(appointmentTimesList);
+        endTimeComboBox.setItems(appointmentTimesList);
+        //Populates combo boxes from DB
         try {
+            //Populates the existing customers combo box
             Statement st = DBConnection.getConnection().createStatement();
             String sqlStatement = "SELECT * FROM customers";
-
             ResultSet result = st.executeQuery(sqlStatement);
 
             while(result.next()) {
@@ -70,9 +74,9 @@ public class AddAppointment implements Initializable {
             }
             st.close();
 
+            //This populates the contact name combo box
             Statement contactStatement = DBConnection.getConnection().createStatement();
             String sqlContactStatement = "SELECT * FROM contacts";
-
             ResultSet contactResult = contactStatement.executeQuery(sqlContactStatement);
 
             while(contactResult.next()) {
@@ -80,6 +84,18 @@ public class AddAppointment implements Initializable {
                 contactComboBox.setItems(contactNameList);
             }
             contactStatement.close();
+
+            //This will populate the User ID combo box
+            Statement userIdStatement = DBConnection.getConnection().createStatement();
+            String sqlUserIdStatement = "SELECT * FROM users";
+            ResultSet userIdResult = userIdStatement.executeQuery(sqlUserIdStatement);
+
+            while(userIdResult.next()) {
+                userIdList.add(userIdResult.getInt("User_ID"));
+                userIdCombo.setItems(userIdList);
+            }
+            userIdStatement.close();
+
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -96,10 +112,7 @@ public class AddAppointment implements Initializable {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
     }
 
-    public void onActionLocationCmbBox(ActionEvent actionEvent) {
-        //waiting to see if we need to populate this with something
-    }
-
+    //NOT SURE IF I NEED THESE??????????
     public void onActionEndTimeCmbBox(ActionEvent actionEvent) {
     }
 
@@ -107,13 +120,15 @@ public class AddAppointment implements Initializable {
     }
 
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException {
-        System.out.println("Saved appointment");
+        //Here's the long one. WE need to make sure we check the time for start and end. End cannot be the same time or less than the start time
+        //We also need to move the time to the users current time. We can store in DB the UTC time but display based on system default
+
         buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
     }
 
     public void onActionExistingCustomer(ActionEvent actionEvent) throws SQLException {
         String customerName = existingCustomerComboBox.getSelectionModel().getSelectedItem();
-        userIdTextFld.setText(String.valueOf(Controller.getUserIdFromUsername(User.username)));
+        //userIdTextFld.setText(String.valueOf(Controller.getUserIdFromUsername(User.username)));
 
         Statement st = DBConnection.getConnection().createStatement();
         String sql = "SELECT Customer_ID FROM customers WHERE Customer_Name='" + customerName + "'";
