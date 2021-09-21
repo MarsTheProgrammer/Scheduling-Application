@@ -12,6 +12,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Appointments;
+import model.Customer;
 import util.DBConnection;
 
 import java.io.IOException;
@@ -26,13 +28,9 @@ public class ModifyAppointment implements Initializable {
     //FXML Variables
     public Button backBttn;
     public Button mainMenuBttn;
-    public TextField assignedContractTxtFld;
-    public TextField titleTxtFld;
     public TextField typeTxtFld;
-    public TextField urlTxtFld;
-    public ComboBox<String> locationComboBox;
-    public ComboBox endTimeComboBox;
-    public ComboBox startTimeComboBox;
+    public ComboBox<String> endTimeComboBox;
+    public ComboBox<String> startTimeComboBox;
     public DatePicker dateDatePicker;
     public Button saveAppointmentBtn;
     public TextField appointmentTxtFld;
@@ -43,7 +41,9 @@ public class ModifyAppointment implements Initializable {
     public TextField titleTextFld;
     public ComboBox<String> contactNameCombo;
     public TextField customerIdTextFld;
+    public TextField typeTextFld;
     private int contactId;
+    private static Appointments highlightedAppointment;
 
     public int getContactId() {
         return contactId;
@@ -101,6 +101,38 @@ public class ModifyAppointment implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        highlightedAppointment = AppointmentScreen.getHighlightedAppointment();
+
+
+        appointmentTxtFld.setText(String.valueOf(highlightedAppointment.getAppointmentId()));
+        titleTextFld.setText(highlightedAppointment.getTitle());
+        locationTextFld.setText(highlightedAppointment.getLocation());
+        descriptionTextFld.setText(highlightedAppointment.getDescription());
+        typeTextFld.setText(highlightedAppointment.getType());
+        contactNameCombo.setValue(highlightedAppointment.getContactName());
+        dateDatePicker.setValue(highlightedAppointment.getStart().toLocalDate());
+        startTimeComboBox.setValue(String.valueOf(highlightedAppointment.getStart()));
+        endTimeComboBox.setValue(String.valueOf(highlightedAppointment.getEnd()));
+        customerIdTextFld.setText(String.valueOf(highlightedAppointment.getCustomerId()));
+        userIdCombo.setValue(highlightedAppointment.getUserId());
+        //We need to use the customerID to get the customer name
+
+        try {
+            Statement st = DBConnection.getConnection().createStatement();
+            String sql = "SELECT Customer_Name FROM customers WHERE CustomerID=" + highlightedAppointment.getCustomerId() + "";
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()) {
+                customerComboBox.setValue(rs.getString("Customer_Name"));
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
         try {
             //Populates the existing customers combo box
             Statement st = DBConnection.getConnection().createStatement();

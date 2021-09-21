@@ -47,6 +47,16 @@ public class AppointmentScreen implements Initializable {
     //Variables
     Parent scene;
     Stage stage;
+     public static Appointments highlightedAppointment;
+
+
+    public static Appointments getHighlightedAppointment() {
+        return highlightedAppointment;
+    }
+
+//    public static void setHighlightedAppointment(Appointments highlightedAppointment) {
+//        highlightedAppointment = highlightedAppointment;
+//    }
 
 
     //Created this to remove code redundancy
@@ -121,7 +131,18 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void onActionModifyAppointment(ActionEvent actionEvent) throws IOException {
-        buttonChanging(actionEvent, "/view/modifyAppointment.fxml");
+
+        highlightedAppointment = appointmentTblView.getSelectionModel().getSelectedItem();
+
+        if(highlightedAppointment == null) {
+            Alert alertForModify = new Alert(Alert.AlertType.ERROR);
+            alertForModify.setHeaderText("No appointment highlighted");
+            alertForModify.setContentText("Please select an appointment to modify");
+            alertForModify.showAndWait();
+        } else {
+            buttonChanging(actionEvent, "/view/modifyAppointment.fxml");
+        }
+
     }
 
 }

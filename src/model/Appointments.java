@@ -83,9 +83,9 @@ public class Appointments {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    //public void setType(String type) {
+//        this.type = type;
+//    }
 
     public LocalDateTime getStart() {return start;}
 

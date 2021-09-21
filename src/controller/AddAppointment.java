@@ -14,20 +14,18 @@ import model.Customer;
 import model.User;
 import util.DBConnection;
 import util.DataBaseQueries;
+import util.TimeManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.sql.*;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class AddAppointment implements Initializable {
     public Button backBttn;
@@ -35,8 +33,8 @@ public class AddAppointment implements Initializable {
     public TextField assignedContractTxtFld;
     public TextField titleTxtFld;
     public TextField typeTxtFld;
-    public ComboBox<String> endTimeComboBox;
-    public ComboBox<String> startTimeComboBox;
+    public ComboBox<LocalTime> endTimeComboBox;
+    public ComboBox<LocalTime> startTimeComboBox;
     public DatePicker dateDatePicker;
     public Button saveAppointmentBtn;
     public ComboBox<String> existingCustomerComboBox;
@@ -59,40 +57,41 @@ public class AddAppointment implements Initializable {
     public static ObservableList<String> existingCustList = FXCollections.observableArrayList();
     public static ObservableList<String> contactNameList = FXCollections.observableArrayList();
     public static ObservableList<Integer> userIdList = FXCollections.observableArrayList();
-    public static ObservableList<String> appointmentTimesList = FXCollections.observableArrayList("08:00:00", "08:15:00", "08:30:00", "08:45:00",
-                                                                                                    "09:00:00", "09:15:00", "09:30:00", "09:45:00",
-                                                                                                    "10:00:00", "10:15:00", "10:30:00", "10:45:00",
-                                                                                                    "11:00:00", "11:15:00", "11:30:00", "11:45:00",
-                                                                                                    "12:00:00", "12:15:00", "12:30:00", "12:45:00",
-                                                                                                    "13:00:00", "13:15:00", "13:30:00", "13:45:00",
-                                                                                                    "14:00:00", "14:15:00", "14:30:00", "14:45:00",
-                                                                                                    "15:00:00", "15:15:00", "15:30:00", "15:45:00",
-                                                                                                    "16:00:00", "16:15:00", "16:30:00", "16:45:00",
-                                                                                                    "17:00:00", "17:15:00", "17:30:00", "17:45:00",
-                                                                                                    "18:00:00", "18:15:00", "18:30:00", "18:45:00",
-                                                                                                    "19:00:00", "19:15:00", "19:30:00", "19:45:00",
-                                                                                                    "20:00:00", "20:15:00", "20:30:00", "20:45:00",
-                                                                                                    "21:00:00", "21:15:00", "21:30:00", "21:45:00",
-                                                                                                    "22:00:00");
-
+//    public static ObservableList<LocalTime> appointmentTimesList = FXCollections.observableArrayList();
+    public static ObservableList<LocalTime> appointmentTimesList = FXCollections.observableArrayList();
+    public static ObservableList<LocalTime> appointmentEndTimesList = FXCollections.observableArrayList();
+//public static ObservableList<String> appointmentTimesList = FXCollections.observableArrayList();
+//"00:00:00", "01:00:00", "02:00:00", "03:00:00", "04:00:00", "05:00:00", "06:00:00", "07:00:00",
+//        "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00", "16:00:00",
+//        "17:00:00", "18:00:00", "19:00:00", "20:00:00", "21:00:00", "22:00:00", "23:00:00"
 
     Parent scene;
     Stage stage;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+        LocalTime operationHours = LocalTime.of(8, 0);
+        //this just doesn't work
+//        do {
+//            appointmentTimesList.add(operationHours.format(timeFormat));
+//            //increment by 15 minute intervals as per CI's suggestion
+//            operationHours = operationHours.plusMinutes(15);
+//        } while(!operationHours.equals(LocalTime.of(22,0)));
 
-        //WE NEED TO DISPLAY THE TIMES IN LOCALE TIME
-//        for (String list : appointmentTimesList) {
-//            DateTimeFormatter dt = DateTimeFormatter.ofPattern("HH:mm:ss");
-//            LocalTime lT = LocalTime.parse(list, dt);
-//            appointmentTimesList.add(list);
-//            System.out.println(lT);
-//            System.out.println(appointmentTimesList.toString());
-//        }
-        startTimeComboBox.setItems(appointmentTimesList);
-        endTimeComboBox.setItems(appointmentTimesList);
+        TimeManager startTime = new TimeManager();
+        startTimeComboBox.setItems(startTime.generateTimeList());
+
+        startTimeComboBox.getSelectionModel().selectFirst();
+
+        TimeManager endTime = new TimeManager();
+        ObservableList<LocalTime> endTimeList = endTime.generateTimeList();
+        endTimeList.add(LocalTime.of(0, 0));
+
+
+        endTimeComboBox.setItems(endTimeList);
+        endTimeComboBox.getSelectionModel().selectFirst();
+
         //Populates combo boxes from DB
         try {
             //Populates the existing customers combo box
@@ -128,12 +127,9 @@ public class AddAppointment implements Initializable {
             }
             userIdStatement.close();
 
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-        //in here we need to grab the getUserId form the controller class. We also need to figure out how to get the username
     }
 
     public void onActionBack(ActionEvent actionEvent) throws IOException {
@@ -161,49 +157,85 @@ public class AddAppointment implements Initializable {
         }
     }
 
+    public boolean isValidAppointment(Timestamp start, Timestamp end) {
+
+        boolean endBeforeStart = end.before(start);
+        boolean endEqualsStart = end.equals(start);
+        //Timestamp startingHours = "8:00:00";
+
+        //WE need to validate time.
+        //if()
+        //timestampzonedatetime.valueof
+        LocalTime localTimeOfStart = startTimeComboBox.getSelectionModel().getSelectedItem();
+        ZoneId.of("America/New_York");
+        //SOMETHING LIKE TO CONVERT THE TIME TO EASTERN TO MAKE SURE THE TIMES ARE IN THE RANGE
+        //ZonedDateTime.
+//        ZonedDateTime.of(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
+        Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
+
+        if(endBeforeStart) {
+            Alerts.alertDisplays(24);
+            return false;
+        }
+        if(endEqualsStart) {
+            Alerts.alertDisplays(25);
+            return false;
+        }
+        try {
+            Statement validAppointmentStatement = DBConnection.getConnection().createStatement();
+            String validApptSQL = "SELECT * FROM appointments WHERE ('" + start + "' BETWEEN Start AND End OR '" + end + "' BETWEEN Start and End OR '" + start + "' > Start AND '" + end + "' < end)";
+            ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
+
+            if(checkApptValidation.next()) {
+                Alerts.alertDisplays(26);
+                return false;
+            }
+        } catch (SQLException se) {
+            se.getMessage();
+        }
+        return true;
+    }
+
 
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException, SQLException {
         //Here's the long one. WE need to make sure we check the time for start and end. End cannot be the same time or less than the start time
-        //We need to check the collides and end not being before start
 
-        //INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)
-        //VALUES ('title', 'description', 'location', 'type', '2021-09-20 08:00', '2021-09-20 09:00', 2, 1, 3)
-
-//        if(existingCustomerComboBox.getSelectionModel().getSelectedItem() == null) {
-//            Alerts.alertDisplays(20);
-//        }
-
-
-        //Big mess saying if everything is filled out,  add the appt in
-
+        //Should we make make a single thing to check?
         //UserId, customer Id, date, both times are not working if null
-        if(existingCustomerComboBox.getSelectionModel().getSelectedItem() != null && !titleTxtFld.getText().equals("") && !descriptionTxtFld.getText().equals("") && !locationTextFld.getText().equals("") && !typeTxtFld.getText().equals("") &&
-                contactComboBox.getSelectionModel().getSelectedItem() != null && startTimeComboBox.getSelectionModel().getSelectedItem() != null &&
-                endTimeComboBox.getSelectionModel().getSelectedItem() != null && dateDatePicker.getValue() != null &&
-                userIdCombo.getSelectionModel().getSelectedItem() != null) {
-
+        try {
             String titleInfo = titleTxtFld.getText();
             String descInfo = descriptionTxtFld.getText();
             String locationInfo = locationTextFld.getText();
             int contactInfo = contactId;
             String typeInfo = typeTxtFld.getText();
-            LocalDate date = dateDatePicker.getValue();
-            String start = startTimeComboBox.getSelectionModel().getSelectedItem();
-            String end = endTimeComboBox.getSelectionModel().getSelectedItem();
             int custID = Integer.parseInt(customerIdTextFld.getText());
             int userID = userIdCombo.getSelectionModel().getSelectedItem();
-            Timestamp startTimestamp = Timestamp.valueOf(date + " " +  start);
-            Timestamp endTimestamp = Timestamp.valueOf(date + " " +  end);
+            LocalDate date = dateDatePicker.getValue();
+            LocalTime start = startTimeComboBox.getSelectionModel().getSelectedItem();
+//            start = start.substring(0, start.length() - 2);
+            System.out.println(start);
+            LocalTime end = endTimeComboBox.getSelectionModel().getSelectedItem();
+            LocalDateTime.of(date, end);
+//            end = end.substring(0, end.length() - 2);
+            Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, start));
+            Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
-            Alerts.alertDisplays(23);
+            if(titleNotNull(titleInfo) && descriptionNotNull(descInfo) && typeNotNull(typeInfo) && locationNotNull(locationInfo) && startNotNull(startTimestamp) &&
+                    endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) && contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
 
-            DataBaseQueries.insertAppointment(titleInfo, descInfo, locationInfo, typeInfo, startTimestamp, endTimestamp, custID, userID, contactInfo);
+                Alerts.alertDisplays(23);
+                DataBaseQueries.insertAppointment(titleInfo, descInfo, locationInfo, typeInfo, startTimestamp, endTimestamp, custID, userID, contactInfo);
+                buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
 
-            buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
-        } else {
-            Alerts.alertDisplays(20);
+            }
+
+        } catch(Exception e) {
+            Alerts.alertDisplays(28);
         }
+
     }
+
+
 
     public void onActionExistingCustomer(ActionEvent actionEvent) throws SQLException {
         String customerName = existingCustomerComboBox.getSelectionModel().getSelectedItem();
@@ -250,77 +282,85 @@ public class AddAppointment implements Initializable {
     }
 
 
-//    //The below handles empty text fields
-//    public boolean titleNotNull(String title) {
-//        if (titleTxtFld.getText().isEmpty()) {
-//            Alerts.alertDisplays(13);
+//    public boolean boxesFilled() {
+//        if(titleNotNull() && descriptionNotNull() && typeNotNull() && locationNotNull() && startNotNull() &&
+//                endNotNull() && dateNotNull() && customerNotNull() && contactNotNull() && userIdNotNull() ) {
 //            return false;
 //        }
 //        return true;
 //    }
-//    public boolean descriptionNotNull(String des) {
-//        if (descriptionTxtFld.getText().isEmpty()) {
-//            Alerts.alertDisplays(14);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean typeNotNull(String type) {
-//        if (typeTxtFld.getText().isEmpty()) {
-//            Alerts.alertDisplays(16);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean locationNotNull(String location) {
-//        if (locationTextFld.getText().isEmpty()) {
-//            Alerts.alertDisplays(15);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean startNotNull(Timestamp start) {
-//        if (startTimeComboBox.getSelectionModel().getSelectedItem() == null) {
-//            Alerts.alertDisplays(18);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean endNotNull(Timestamp end) {
-//        if (endTimeComboBox.getSelectionModel().getSelectedItem() == null) {
-//            Alerts.alertDisplays(19);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean dateNotNull(LocalDate date) {
-//        if (dateDatePicker.getValue() == null) {
-//            Alerts.alertDisplays(17);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean customerNotNull(int customerId) {
-//        if (existingCustomerComboBox.getSelectionModel().getSelectedItem() == null) {
-//            Alerts.alertDisplays(20);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean userIdNotNull(int userId) {
-//        if (userIdCombo.getSelectionModel().getSelectedItem() == null) {
-//            Alerts.alertDisplays(21);
-//            return false;
-//        }
-//        return true;
-//    }
-//    public boolean contactNotNull(int contactId) {
-//        if (contactComboBox.getSelectionModel().getSelectedItem() == null) {
-//            Alerts.alertDisplays(22);
-//            return false;
-//        }
-//        return true;
-//    }
+
+    //The below handles empty text fields
+    public boolean titleNotNull(String title) {
+        if (titleTxtFld.getText().isEmpty()) {
+            Alerts.alertDisplays(13);
+            return false;
+        }
+        return true;
+    }
+    public boolean descriptionNotNull(String desc) {
+        if (descriptionTxtFld.getText().isEmpty()) {
+            Alerts.alertDisplays(14);
+            return false;
+        }
+        return true;
+    }
+    public boolean typeNotNull(String type) {
+        if (typeTxtFld.getText().isEmpty()) {
+            Alerts.alertDisplays(16);
+            return false;
+        }
+        return true;
+    }
+    public boolean locationNotNull(String location) {
+        if (locationTextFld.getText().isEmpty()) {
+            Alerts.alertDisplays(15);
+            return false;
+        }
+        return true;
+    }
+    public boolean startNotNull(Timestamp start) {
+        if (startTimeComboBox.getSelectionModel().getSelectedItem() == null) {
+            Alerts.alertDisplays(18);
+            return false;
+        }
+        return true;
+    }
+    public boolean endNotNull(Timestamp end) {
+        if (endTimeComboBox.getSelectionModel().getSelectedItem() == null) {
+            Alerts.alertDisplays(19);
+            return false;
+        }
+        return true;
+    }
+    public boolean dateNotNull(LocalDate date) {
+        if (dateDatePicker.getValue() == null) {
+            Alerts.alertDisplays(17);
+            return false;
+        }
+        return true;
+    }
+    public boolean customerNotNull(int customerId) {
+        if (existingCustomerComboBox.getSelectionModel().getSelectedItem() == null) {
+            Alerts.alertDisplays(20);
+            return false;
+        }
+        return true;
+    }
+    public boolean userIdNotNull(int userId) {
+        if (userIdCombo.getSelectionModel().getSelectedItem() == null) {
+            Alerts.alertDisplays(21);
+            return false;
+        }
+        return true;
+    }
+    public boolean contactNotNull(int contact) {
+        if (contactComboBox.getSelectionModel().getSelectedItem() == null) {
+            Alerts.alertDisplays(22);
+            return false;
+        }
+        return true;
+    }
 
 
 

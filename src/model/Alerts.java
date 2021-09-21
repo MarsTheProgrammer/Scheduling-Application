@@ -148,6 +148,30 @@ public class Alerts {
                 alertForSave.setContentText("New Appointment has been saved");
                 alertForSave.showAndWait();
                 break;
+            case 24:
+                alert.setTitle("Error");
+                alert.setHeaderText("Appointment Cannot End Before It Starts");
+                alert.setContentText("End time must be after start time.");
+                alert.showAndWait();
+                break;
+            case 25:
+                alert.setTitle("Error");
+                alert.setHeaderText("Appointment Cannot Start At the Same Time It Ends.");
+                alert.setContentText("Please select a end time that is after the start time.");
+                alert.showAndWait();
+                break;
+            case 26:
+                alert.setTitle("Error");
+                alert.setHeaderText("Appointment Collision");
+                alert.setContentText("A customer already has an appointment with this time. Please select another time.");
+                alert.showAndWait();
+                break;
+            case 28:
+                alert.setTitle("Error");
+                alert.setHeaderText("All Fields Required");
+                alert.setContentText("Fields cannot be empty");
+                alert.showAndWait();
+                break;
 
 
         }
