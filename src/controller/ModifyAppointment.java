@@ -7,10 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Alerts;
 import model.Appointments;
@@ -26,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.*;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ModifyAppointment implements Initializable {
@@ -76,23 +74,27 @@ public class ModifyAppointment implements Initializable {
     }
 
     public void onActionBack(ActionEvent actionEvent) throws IOException {
-        buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
+        Alert alertForBack = new Alert(Alert.AlertType.CONFIRMATION);
+        alertForBack.setTitle("Cancel");
+        alertForBack.setHeaderText("Are You Sure You Want To Go Back?");
+        alertForBack.setContentText("This will clear all text fields and your data will be lost");
+        Optional<ButtonType> backSelection = alertForBack.showAndWait();
+
+        if(backSelection.isPresent() && backSelection.get() == ButtonType.OK) {
+            buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
+        }
     }
 
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
-        buttonChanging(actionEvent, "/view/mainMenu.fxml");
-    }
+        Alert alertForMainMenu = new Alert(Alert.AlertType.CONFIRMATION);
+        alertForMainMenu.setTitle("Cancel");
+        alertForMainMenu.setHeaderText("Are You Sure You Want To Go the Main Menu?");
+        alertForMainMenu.setContentText("This will clear all text fields and your data will be lost");
+        Optional<ButtonType> MainMenuSelection = alertForMainMenu.showAndWait();
 
-    public void onActionLocationCmbBox(ActionEvent actionEvent) {
-    }
-
-    public void onActionEndTimeCmbBox(ActionEvent actionEvent) {
-    }
-
-    public void onActionStartTimeCmbBox(ActionEvent actionEvent) {
-    }
-
-    public void onActionDescriptionCmbBox(ActionEvent actionEvent) {
+        if(MainMenuSelection.isPresent() && MainMenuSelection.get() == ButtonType.OK) {
+            buttonChanging(actionEvent, "/view/mainMenu.fxml");
+        }
     }
 
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException {
@@ -134,7 +136,7 @@ public class ModifyAppointment implements Initializable {
             }
         }
 
-        buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
+//        buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
     }
 
     public void onActionCustomerCombo(ActionEvent actionEvent) throws SQLException {
