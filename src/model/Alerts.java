@@ -172,6 +172,12 @@ public class Alerts {
                 alert.setContentText("Fields cannot be empty");
                 alert.showAndWait();
                 break;
+            case 29:
+                alert.setTitle("Error");
+                alert.setHeaderText("Appointment Outside of Business Hours");
+                alert.setContentText("Appointment must be within business hours.");
+                alert.showAndWait();
+                break;
 
 
         }

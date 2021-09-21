@@ -57,37 +57,23 @@ public class AddAppointment implements Initializable {
     public static ObservableList<String> existingCustList = FXCollections.observableArrayList();
     public static ObservableList<String> contactNameList = FXCollections.observableArrayList();
     public static ObservableList<Integer> userIdList = FXCollections.observableArrayList();
-//    public static ObservableList<LocalTime> appointmentTimesList = FXCollections.observableArrayList();
     public static ObservableList<LocalTime> appointmentTimesList = FXCollections.observableArrayList();
     public static ObservableList<LocalTime> appointmentEndTimesList = FXCollections.observableArrayList();
-//public static ObservableList<String> appointmentTimesList = FXCollections.observableArrayList();
-//"00:00:00", "01:00:00", "02:00:00", "03:00:00", "04:00:00", "05:00:00", "06:00:00", "07:00:00",
-//        "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00", "16:00:00",
-//        "17:00:00", "18:00:00", "19:00:00", "20:00:00", "21:00:00", "22:00:00", "23:00:00"
 
     Parent scene;
     Stage stage;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        DateTimeFormatter timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
-        LocalTime operationHours = LocalTime.of(8, 0);
-        //this just doesn't work
-//        do {
-//            appointmentTimesList.add(operationHours.format(timeFormat));
-//            //increment by 15 minute intervals as per CI's suggestion
-//            operationHours = operationHours.plusMinutes(15);
-//        } while(!operationHours.equals(LocalTime.of(22,0)));
 
+        //Loads the time combo boxes
         TimeManager startTime = new TimeManager();
         startTimeComboBox.setItems(startTime.generateTimeList());
-
         startTimeComboBox.getSelectionModel().selectFirst();
 
         TimeManager endTime = new TimeManager();
         ObservableList<LocalTime> endTimeList = endTime.generateTimeList();
         endTimeList.add(LocalTime.of(0, 0));
-
 
         endTimeComboBox.setItems(endTimeList);
         endTimeComboBox.getSelectionModel().selectFirst();
@@ -161,17 +147,22 @@ public class AddAppointment implements Initializable {
 
         boolean endBeforeStart = end.before(start);
         boolean endEqualsStart = end.equals(start);
-        //Timestamp startingHours = "8:00:00";
 
-        //WE need to validate time.
-        //if()
-        //timestampzonedatetime.valueof
+        //These are for checking to make sure the time is within business hours
+        Timestamp startingHours = Timestamp.valueOf(dateDatePicker.getValue() + " 08:00:00");
+        Timestamp endingHours = Timestamp.valueOf(dateDatePicker.getValue() + " 22:00:00");
+
         LocalTime localTimeOfStart = startTimeComboBox.getSelectionModel().getSelectedItem();
-        ZoneId.of("America/New_York");
-        //SOMETHING LIKE TO CONVERT THE TIME TO EASTERN TO MAKE SURE THE TIMES ARE IN THE RANGE
-        //ZonedDateTime.
-//        ZonedDateTime.of(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
-        Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
+        LocalTime localTimeEnd = endTimeComboBox.getSelectionModel().getSelectedItem();
+
+        ZonedDateTime.of(dateDatePicker.getValue(), localTimeOfStart, ZoneId.of("America/New_York"));
+        Timestamp startLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
+        Timestamp endLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeEnd));
+
+        if(startLocal.before(startingHours) || endLocal.after(endingHours)) {
+            Alerts.alertDisplays(29);
+            return false;
+        }
 
         if(endBeforeStart) {
             Alerts.alertDisplays(24);
@@ -198,10 +189,7 @@ public class AddAppointment implements Initializable {
 
 
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException, SQLException {
-        //Here's the long one. WE need to make sure we check the time for start and end. End cannot be the same time or less than the start time
 
-        //Should we make make a single thing to check?
-        //UserId, customer Id, date, both times are not working if null
         try {
             String titleInfo = titleTxtFld.getText();
             String descInfo = descriptionTxtFld.getText();
@@ -212,11 +200,7 @@ public class AddAppointment implements Initializable {
             int userID = userIdCombo.getSelectionModel().getSelectedItem();
             LocalDate date = dateDatePicker.getValue();
             LocalTime start = startTimeComboBox.getSelectionModel().getSelectedItem();
-//            start = start.substring(0, start.length() - 2);
-            System.out.println(start);
             LocalTime end = endTimeComboBox.getSelectionModel().getSelectedItem();
-            LocalDateTime.of(date, end);
-//            end = end.substring(0, end.length() - 2);
             Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, start));
             Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
@@ -226,13 +210,22 @@ public class AddAppointment implements Initializable {
                 Alerts.alertDisplays(23);
                 DataBaseQueries.insertAppointment(titleInfo, descInfo, locationInfo, typeInfo, startTimestamp, endTimestamp, custID, userID, contactInfo);
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
-
             }
-
         } catch(Exception e) {
-            Alerts.alertDisplays(28);
+            if(customerIdTextFld.getText() == null) {
+                Alerts.alertDisplays(20);
+            } else if(userIdCombo.getSelectionModel().getSelectedItem() == null) {
+                Alerts.alertDisplays(21);
+            } else if(dateDatePicker.getValue() == null) {
+                Alerts.alertDisplays(17);
+            } else if(startTimeComboBox.getSelectionModel().getSelectedItem() == null) {
+                Alerts.alertDisplays(18);
+            } else if(endTimeComboBox.getValue() == null) {
+                Alerts.alertDisplays(19);
+            } else if(existingCustomerComboBox.getValue() == null) {
+                Alerts.alertDisplays(20);
+            }
         }
-
     }
 
 
