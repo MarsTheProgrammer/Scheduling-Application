@@ -54,11 +54,6 @@ public class AppointmentScreen implements Initializable {
         return highlightedAppointment;
     }
 
-//    public static void setHighlightedAppointment(Appointments highlightedAppointment) {
-//        highlightedAppointment = highlightedAppointment;
-//    }
-
-
     //Created this to remove code redundancy
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resources example: "/view/mainMenu.fxml"
@@ -89,6 +84,16 @@ public class AppointmentScreen implements Initializable {
         customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         userIdTblCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
+        //filterAppointments();
+    }
+
+    public void filterAppointments() {
+        if(byMonthRadBttn.isSelected()) {
+            System.out.println("appointments will be filtered here.");
+        }
+        if(byWeekRadBttn.isSelected()) {
+            System.out.println("by week");
+        }
     }
 
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {

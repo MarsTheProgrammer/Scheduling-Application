@@ -92,6 +92,8 @@ public class ModifyAppointment implements Initializable {
     }
 
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException {
+
+
         System.out.println("Appointment saved");
         buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
     }
@@ -116,18 +118,15 @@ public class ModifyAppointment implements Initializable {
         endTimeComboBox.setValue(String.valueOf(highlightedAppointment.getEnd()));
         customerIdTextFld.setText(String.valueOf(highlightedAppointment.getCustomerId()));
         userIdCombo.setValue(highlightedAppointment.getUserId());
-        //We need to use the customerID to get the customer name
 
         try {
             Statement st = DBConnection.getConnection().createStatement();
-            String sql = "SELECT Customer_Name FROM customers WHERE CustomerID=" + highlightedAppointment.getCustomerId() + "";
+            String sql = "SELECT * FROM customers WHERE Customer_ID=" + highlightedAppointment.getCustomerId();
             ResultSet rs = st.executeQuery(sql);
 
-            while(rs.next()) {
+            if(rs.next()) {
                 customerComboBox.setValue(rs.getString("Customer_Name"));
             }
-
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
