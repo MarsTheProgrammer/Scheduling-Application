@@ -67,8 +67,8 @@
                 <TextField fx:id="appointmentTxtFld" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="locationTextFld" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <TextField fx:id="descriptionTextFld" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <ComboBox fx:id="endTimeComboBox" onAction="#onActionEndTimeCmbBox" prefHeight="25.0" prefWidth="211.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                <ComboBox fx:id="startTimeComboBox" onAction="#onActionStartTimeCmbBox" prefHeight="25.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <ComboBox fx:id="endTimeComboBox" prefHeight="25.0" prefWidth="211.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                <ComboBox fx:id="startTimeComboBox" prefHeight="25.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                 <DatePicker fx:id="dateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <ComboBox fx:id="customerComboBox" onAction="#onActionCustomerCombo" prefHeight="25.0" prefWidth="242.0" GridPane.columnIndex="1" />
             <Label text="Customer_ID" GridPane.rowIndex="10">
@@ -83,7 +83,7 @@
             </Label>
             <ComboBox fx:id="userIdCombo" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <TextField fx:id="titleTextFld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox fx:id="contactNameCombo" prefHeight="25.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="contactNameCombo" onAction="#onActionContactComboBoc" prefHeight="25.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="customerIdTextFld" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
             <Label text="Type" GridPane.rowIndex="6">
                <font>

@@ -275,14 +275,6 @@ public class AddAppointment implements Initializable {
     }
 
 
-//    public boolean boxesFilled() {
-//        if(titleNotNull() && descriptionNotNull() && typeNotNull() && locationNotNull() && startNotNull() &&
-//                endNotNull() && dateNotNull() && customerNotNull() && contactNotNull() && userIdNotNull() ) {
-//            return false;
-//        }
-//        return true;
-//    }
-
     //The below handles empty text fields
     public boolean titleNotNull(String title) {
         if (titleTxtFld.getText().isEmpty()) {
