@@ -12,7 +12,7 @@ public class DataBaseQueries {
     public static int insertIntoCustomersTable(String customerName, String address, String Phone, String postalCode, int divisionID) throws SQLException {
         String sql = "INSERT INTO customers (Customer_Name, Address, Phone, Postal_Code, Division_ID) VALUES(?,?,?,?,?)";
 
-        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
         ps.setString(1, customerName);
         ps.setString(2, address);
@@ -30,7 +30,7 @@ public class DataBaseQueries {
 
         String modifySQL = "UPDATE customers SET Customer_Name=?, Address=?, Phone=?, Postal_Code=?, Division_ID=? WHERE Customer_ID=?";
 
-        PreparedStatement preparedStatement = DBConnection.getConnection().prepareStatement(modifySQL);
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(modifySQL);
 
         preparedStatement.setInt(6, customerID);
         preparedStatement.setString(1, customerName);
@@ -52,7 +52,7 @@ public class DataBaseQueries {
 
         String modifySQL = "DELETE FROM customers WHERE Customer_ID = ?";
 
-        PreparedStatement preparedStatement = DBConnection.getConnection().prepareStatement(modifySQL);
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(modifySQL);
         preparedStatement.setInt(1, customerID);
         int rowsDeleted = preparedStatement.executeUpdate();
 
@@ -63,7 +63,8 @@ public class DataBaseQueries {
     public static int deleteFromAppointmentsTable(int appointmentId) throws SQLException {
 
         String deleteAppointmentSQL = "DELETE FROM appointments WHERE Appointment_ID = ?";
-        PreparedStatement preparedStatement = DBConnection.getConnection().prepareStatement(deleteAppointmentSQL);
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(deleteAppointmentSQL);
+
         preparedStatement.setInt(1, appointmentId);
 
         int rowsDeletedForAppointments = preparedStatement.executeUpdate();
@@ -76,7 +77,7 @@ public class DataBaseQueries {
                                         Timestamp start, Timestamp end, int customerId, int userId, int contactId) throws SQLException {
         String insertApptSQL = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
                                "VALUES (?,?,?,?,?,?,?,?,?)";
-        PreparedStatement ps = DBConnection.getConnection().prepareStatement(insertApptSQL);
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(insertApptSQL);
 
         ps.setString(1, title);
         ps.setString(2, description);
@@ -97,10 +98,10 @@ public class DataBaseQueries {
     public static int updateAppointment(int appointmentID, String title, String description, String location, String type,
                                         Timestamp start, Timestamp end, int customerId, int userId, int contactId) throws SQLException {
 
-        String insertApptSQL = "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, " +
+        String updateApptSQL = "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, " +
                                 "Customer_ID=?, User_ID=?, Contact_ID=? WHERE Appointment_ID=?";
 
-        PreparedStatement ps = DBConnection.getConnection().prepareStatement(insertApptSQL);
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(updateApptSQL);
 
         ps.setInt(10, appointmentID);
         ps.setString(1, title);

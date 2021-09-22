@@ -2,7 +2,8 @@ package model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import util.DBConnection;
+import util.JDBC;
+
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -101,7 +102,7 @@ public class Customer {
     //Getter for all customers list
     public static ObservableList<Customer> getGetAllCustomers() throws SQLException {
 
-        Statement statement = DBConnection.getConnection().createStatement();
+        Statement statement = JDBC.getConnection().createStatement();
 
         String customerInfoSQL = "SELECT customers.Customer_ID, customers.Customer_Name, customers.Address, customers.Postal_Code, customers.Phone, countries.Country, first_level_divisions.*" +
                                     "FROM customers " +

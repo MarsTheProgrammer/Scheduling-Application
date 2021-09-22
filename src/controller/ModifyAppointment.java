@@ -12,8 +12,8 @@ import javafx.stage.Stage;
 import model.Alerts;
 import model.Appointments;
 import model.Customer;
-import util.DBConnection;
 import util.DataBaseQueries;
+import util.JDBC;
 import util.TimeManager;
 
 import java.io.IOException;
@@ -151,7 +151,7 @@ public class ModifyAppointment implements Initializable {
         String customerName = customerComboBox.getSelectionModel().getSelectedItem();
         //userIdTextFld.setText(String.valueOf(Controller.getUserIdFromUsername(User.username)));
 
-        Statement st = DBConnection.getConnection().createStatement();
+        Statement st = JDBC.getConnection().createStatement();
         String sql = "SELECT Customer_ID FROM customers WHERE Customer_Name='" + customerName + "'";
         ResultSet resultSet = st.executeQuery(sql);
 
@@ -190,7 +190,7 @@ public class ModifyAppointment implements Initializable {
         typeComboBox.setItems(typeList);
 
         try {
-            Statement st = DBConnection.getConnection().createStatement();
+            Statement st = JDBC.getConnection().createStatement();
             String sql = "SELECT * FROM customers WHERE Customer_ID=" + highlightedAppointment.getCustomerId();
             ResultSet rs = st.executeQuery(sql);
 
@@ -203,7 +203,7 @@ public class ModifyAppointment implements Initializable {
 
         try {
             //Populates the existing customers combo box
-            Statement st = DBConnection.getConnection().createStatement();
+            Statement st = JDBC.getConnection().createStatement();
             String sqlStatement = "SELECT * FROM customers";
             ResultSet result = st.executeQuery(sqlStatement);
 
@@ -214,7 +214,7 @@ public class ModifyAppointment implements Initializable {
             st.close();
 
             //This populates the contact name combo box
-            Statement contactStatement = DBConnection.getConnection().createStatement();
+            Statement contactStatement = JDBC.getConnection().createStatement();
             String sqlContactStatement = "SELECT * FROM contacts";
             ResultSet contactResult = contactStatement.executeQuery(sqlContactStatement);
 
@@ -225,7 +225,7 @@ public class ModifyAppointment implements Initializable {
             contactStatement.close();
 
             //This will populate the User ID combo box
-            Statement userIdStatement = DBConnection.getConnection().createStatement();
+            Statement userIdStatement = JDBC.getConnection().createStatement();
             String sqlUserIdStatement = "SELECT * FROM users";
             ResultSet userIdResult = userIdStatement.executeQuery(sqlUserIdStatement);
 
@@ -269,7 +269,7 @@ public class ModifyAppointment implements Initializable {
             return false;
         }
         try {
-            Statement validAppointmentStatement = DBConnection.getConnection().createStatement();
+            Statement validAppointmentStatement = JDBC.getConnection().createStatement();
             String validApptSQL = "SELECT * FROM appointments WHERE ('" + start + "' BETWEEN Start AND End OR '" + end + "' BETWEEN Start and End OR '" + start + "' > Start AND '" + end + "' < end)";
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
@@ -361,7 +361,7 @@ public class ModifyAppointment implements Initializable {
         String contactName = contactNameCombo.getSelectionModel().getSelectedItem();
 
         //query to get the contact id
-        Statement st = DBConnection.getConnection().createStatement();
+        Statement st = JDBC.getConnection().createStatement();
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
         ResultSet resultSet = st.executeQuery(sql);
 

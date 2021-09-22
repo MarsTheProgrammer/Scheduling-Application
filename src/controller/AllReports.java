@@ -10,7 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointments;
-import util.DBConnection;
+import util.JDBC;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,8 @@ public class AllReports implements Initializable {
     public TableView<Appointments> scheduleOfEachCustomerTblView;
     public ComboBox<String> customerComboBox;
     public TextField apptsPerCustomerTextFld;
+    public Button appointmentCountSearchBttn;
+    public Button scheduleBttn;
 
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
     private ObservableList<String> monthList = FXCollections.observableArrayList("January", "February", "March", "April", "May", "June", "July",
@@ -68,7 +71,7 @@ public class AllReports implements Initializable {
     public void onActionCustomerComboBox(ActionEvent actionEvent) throws SQLException {
 
         String customerName = customerComboBox.getSelectionModel().getSelectedItem();
-        Statement getCustomerCount = DBConnection.getConnection().createStatement();
+        Statement getCustomerCount = JDBC.getConnection().createStatement();
         String customerCountSQL = "SELECT COUNT(Customer_Name) AS 'Total' FROM appointments " +
                                 "INNER JOIN customers " +
                                 "ON appointments.Customer_ID = customers.Customer_ID " +
@@ -95,12 +98,18 @@ public class AllReports implements Initializable {
 
     public void loadCustomersList() throws SQLException {
 
-        Statement loadCustomersStatement = DBConnection.getConnection().createStatement();
+        Statement loadCustomersStatement = JDBC.getConnection().createStatement();
         String loadCustomerNameSQL = "SELECT * FROM customers";
         ResultSet loadCustomerResults = loadCustomersStatement.executeQuery(loadCustomerNameSQL);
 
         while(loadCustomerResults.next()) {
             customerList.add(loadCustomerResults.getString("Customer_Name"));
         }
+    }
+
+    public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) {
+    }
+
+    public void onActionGetSchedule(ActionEvent actionEvent) {
     }
 }

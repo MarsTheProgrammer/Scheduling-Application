@@ -2,7 +2,7 @@ package model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import util.DBConnection;
+import util.JDBC;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -125,7 +125,7 @@ public class Appointments {
 
     public static ObservableList<Appointments> getGetAllAppointments() throws SQLException {
 
-        Statement statement = DBConnection.getConnection().createStatement();
+        Statement statement = JDBC.getConnection().createStatement();
 
         String appointmentInfoSQL = "SELECT appointments.*, contacts.* FROM appointments INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
 

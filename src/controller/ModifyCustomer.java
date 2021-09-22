@@ -11,8 +11,10 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
 import util.DataBaseQueries;
-import util.DBConnection;
+
 import util.DataProvider;
+import util.JDBC;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -103,7 +105,7 @@ public class ModifyCustomer implements Initializable {
 
     public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
 
-        Statement state = DBConnection.getConnection().createStatement();
+        Statement state = JDBC.getConnection().createStatement();
         String getAllCitiesDivisionIDSQL = "SELECT Division_ID FROM first_level_divisions WHERE Division='" + comboBoxSelection + "'";
         ResultSet result = state.executeQuery(getAllCitiesDivisionIDSQL);
 
@@ -118,7 +120,7 @@ public class ModifyCustomer implements Initializable {
         String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
 
         if(countrySelected.equals("U.S")) {
-            Statement statement = DBConnection.getConnection().createStatement();
+            Statement statement = JDBC.getConnection().createStatement();
             String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 1";
             ResultSet usCityResults = statement.executeQuery(getAllCitiesSQL);
 
@@ -130,7 +132,7 @@ public class ModifyCustomer implements Initializable {
             statement.close();
 
         } else if(countrySelected.equals("UK")) {
-            Statement statement = DBConnection.getConnection().createStatement();
+            Statement statement = JDBC.getConnection().createStatement();
             String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 2";
             ResultSet ukCityResults = statement.executeQuery(getAllCitiesSQL);
 
@@ -142,7 +144,7 @@ public class ModifyCustomer implements Initializable {
             statement.close();
 
         } else {
-            Statement statement = DBConnection.getConnection().createStatement();
+            Statement statement = JDBC.getConnection().createStatement();
             String getAllCitiesSQL = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = 3";
             ResultSet canadaCityResults = statement.executeQuery(getAllCitiesSQL);
 

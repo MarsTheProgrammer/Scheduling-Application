@@ -11,7 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Alerts;
-import util.DBConnection;
+
+import util.JDBC;
 import util.LoginAttemptTracker;
 import java.io.IOException;
 import java.net.URL;
@@ -81,7 +82,7 @@ public class Controller implements Initializable {
     //Gets the password from the database
     private boolean getPassword(String password) throws SQLException {
 
-        Statement statement = DBConnection.getConnection().createStatement();
+        Statement statement = JDBC.getConnection().createStatement();
         String sqlPassword = "SELECT Password FROM users WHERE Password ='" + password + "'";
         ResultSet results = statement.executeQuery(sqlPassword);
 
@@ -98,7 +99,7 @@ public class Controller implements Initializable {
     //Gets the username from the database
     private boolean getUsername(String username) throws SQLException {
 
-        Statement statement = DBConnection.getConnection().createStatement();
+        Statement statement = JDBC.getConnection().createStatement();
         String sqlUsername = "SELECT User_Name FROM users WHERE User_Name ='" + username + "'";
         ResultSet results = statement.executeQuery(sqlUsername);
 
@@ -114,7 +115,7 @@ public class Controller implements Initializable {
 
     public static int getUserIdFromUsername(String username) throws SQLException {
 
-        Statement statement = DBConnection.getConnection().createStatement();
+        Statement statement = JDBC.getConnection().createStatement();
         String sqlUsername = "SELECT User_ID, User_Name FROM users WHERE User_Name ='" + username + "'";
         ResultSet results = statement.executeQuery(sqlUsername);
 
