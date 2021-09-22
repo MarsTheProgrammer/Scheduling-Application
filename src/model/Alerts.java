@@ -4,6 +4,8 @@ import javafx.scene.control.Alert;
 
 public class Alerts {
 
+
+
     public static void alertDisplays(int alertType) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Alert alertForSave = new Alert(Alert.AlertType.INFORMATION);

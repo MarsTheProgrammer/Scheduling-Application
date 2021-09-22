@@ -108,8 +108,11 @@ public class AllReports implements Initializable {
     }
 
     public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) {
+
     }
 
     public void onActionGetSchedule(ActionEvent actionEvent) {
+        //We need to load the appointments table that we made
+
     }
 }
