@@ -101,7 +101,7 @@ public class ModifyAppointment implements Initializable {
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException {
 
         try {
-            int contactInfo = contactId;
+
             int custID = Integer.parseInt(customerIdTextFld.getText());
             int userID = userIdCombo.getSelectionModel().getSelectedItem();
             int appointmentId = highlightedAppointment.getAppointmentId();
@@ -115,18 +115,6 @@ public class ModifyAppointment implements Initializable {
             Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, start));
             Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
-            System.out.println(appointmentId);
-            System.out.println(titleInfo);
-            System.out.println(descInfo);
-            System.out.println(userID);
-            System.out.println(locationInfo);
-            System.out.println(typeInfo);
-            System.out.println(custID);
-            System.out.println(startTimestamp);
-            System.out.println(endTimestamp);
-            System.out.println(contactId);
-
-
             if(titleNotNull(titleInfo) && descriptionNotNull(descInfo) && typeNotNull(typeInfo) && locationNotNull(locationInfo) && startNotNull(startTimestamp) &&
                     endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) &&
                     contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
@@ -135,7 +123,6 @@ public class ModifyAppointment implements Initializable {
                 DataBaseQueries.updateAppointment(appointmentId, titleInfo, descInfo, locationInfo, typeInfo,
                                                     startTimestamp, endTimestamp, custID, userID, contactId);
 
-                //Why is this being skipped?
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
 
             }

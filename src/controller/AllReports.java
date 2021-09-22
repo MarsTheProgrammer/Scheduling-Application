@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointments;
 import util.JDBC;
@@ -18,6 +19,8 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class AllReports implements Initializable {
@@ -33,7 +36,19 @@ public class AllReports implements Initializable {
     public TextField apptsPerCustomerTextFld;
     public Button appointmentCountSearchBttn;
     public Button scheduleBttn;
-    public ComboBox contactCombo;
+    public ComboBox<String> contactCombo;
+    public int contactId;
+    public TableColumn<Appointments, Integer> appointmentIdTblCol;
+    public TableColumn<Appointments, String> titleTblCol;
+    public TableColumn<Appointments, Integer> userIdTblCol;
+    public TableColumn<Appointments, Integer> customerIdTblCol;
+    public TableColumn<Appointments, LocalDateTime> endTblCol;
+    public TableColumn<Appointments, LocalDateTime> startTblCol;
+    public TableColumn<Appointments, String> contactTblCol;
+    public TableColumn<Appointments, String> typeTblCol;
+    public TableColumn<Appointments, String> locationTblCol;
+    public TableColumn<Appointments, String> descriptionTblCol;
+
 
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
     private ObservableList<String> monthList = FXCollections.observableArrayList("January", "February", "March", "April", "May", "June", "July",
@@ -95,6 +110,7 @@ public class AllReports implements Initializable {
         }
         monthCombo.setItems(monthList);
         typeCombo.setItems(typeList);
+
     }
 
     public void loadContactList() throws SQLException {
@@ -130,8 +146,41 @@ public class AllReports implements Initializable {
 
     }
 
-    public void onActionContactAppointmentTable(ActionEvent actionEvent) {
+    public void onActionContactAppointmentTable(ActionEvent actionEvent) throws SQLException {
 
-        String contactName = (String) contactCombo.getSelectionModel().getSelectedItem();
+        String contactName = contactCombo.getSelectionModel().getSelectedItem();
+
+
+        //query to get the contact id
+        Statement st = JDBC.getConnection().createStatement();
+        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
+        ResultSet resultSet = st.executeQuery(sql);
+
+        //set the contact id to the matching name in the DB
+        while(resultSet.next()){
+            contactId = resultSet.getInt("Contact_ID");
+        }
+        st.close();
+
+        //query to get the contact id
+        Statement statement = JDBC.getConnection().createStatement();
+        String sqlStatement = "SELECT * FROM appointments WHERE Contact_ID=" + contactId + "";
+        ResultSet results = statement.executeQuery(sqlStatement);
+
+        //set the contact id to the matching name in the DB
+        while(results.next()){
+            appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Appointment_ID")));
+            titleTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Title")));
+            descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Description")));
+            locationTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Location")));
+            contactTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Contact_ID")));
+            typeTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Type")));
+            startTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Start")));
+            endTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("End")));
+            customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Customer_ID")));
+            userIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("User_ID")));
+        }
+        st.close();
+
     }
 }

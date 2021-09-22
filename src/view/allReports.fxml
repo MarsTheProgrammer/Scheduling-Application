@@ -30,16 +30,16 @@
       <Label layoutX="43.0" layoutY="169.0" prefHeight="17.0" prefWidth="246.0" text="Number of appointments by month and type:" />
       <TableView fx:id="scheduleOfEachCustomerTblView" layoutX="5.0" layoutY="241.0" prefHeight="215.0" prefWidth="864.0">
         <columns>
-          <TableColumn prefWidth="102.0" text="Appointment ID" />
-          <TableColumn prefWidth="67.0" text="Title" />
-            <TableColumn prefWidth="96.0" text="Description" />
-            <TableColumn prefWidth="71.0" text="Location" />
-            <TableColumn prefWidth="50.0" text="Type" />
-            <TableColumn prefWidth="74.0" text="Contact" />
-            <TableColumn prefWidth="125.0" text="Start" />
-            <TableColumn prefWidth="129.0" text="End" />
-            <TableColumn prefWidth="90.0" text="Customer ID" />
-            <TableColumn prefWidth="59.0" text="User ID" />
+          <TableColumn fx:id="appointmentIdTblCol" prefWidth="102.0" text="Appointment ID" />
+          <TableColumn fx:id="titleTblCol" prefWidth="67.0" text="Title" />
+            <TableColumn fx:id="descriptionTblCol" prefWidth="96.0" text="Description" />
+            <TableColumn fx:id="locationTblCol" prefWidth="71.0" text="Location" />
+            <TableColumn fx:id="typeTblCol" prefWidth="50.0" text="Type" />
+            <TableColumn fx:id="contactTblCol" prefWidth="74.0" text="Contact" />
+            <TableColumn fx:id="startTblCol" prefWidth="125.0" text="Start" />
+            <TableColumn fx:id="endTblCol" prefWidth="129.0" text="End" />
+            <TableColumn fx:id="customerIdTblCol" prefWidth="90.0" text="Customer ID" />
+            <TableColumn fx:id="userIdTblCol" prefWidth="59.0" text="User ID" />
         </columns>
       </TableView>
       <ComboBox fx:id="customerComboBox" layoutX="121.0" layoutY="506.0" onAction="#onActionCustomerComboBox" prefHeight="25.0" prefWidth="211.0" promptText="Please select a Customer" />
