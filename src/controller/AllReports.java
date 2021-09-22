@@ -33,11 +33,14 @@ public class AllReports implements Initializable {
     public TextField apptsPerCustomerTextFld;
     public Button appointmentCountSearchBttn;
     public Button scheduleBttn;
+    public ComboBox contactCombo;
 
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
     private ObservableList<String> monthList = FXCollections.observableArrayList("January", "February", "March", "April", "May", "June", "July",
                                                                             "August", "September", "October", "November", "December");
     private ObservableList<String> customerList = FXCollections.observableArrayList();
+    private ObservableList<String> contactList = FXCollections.observableArrayList();
+
 
     //Variables
     Parent scene;
@@ -86,14 +89,23 @@ public class AllReports implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             loadCustomersList();
+            loadContactList();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         monthCombo.setItems(monthList);
         typeCombo.setItems(typeList);
         customerComboBox.setItems(customerList);
+    }
 
-        //WE need to populate the apppointments table
+    public void loadContactList() throws SQLException {
+        Statement loadContactStatement = JDBC.getConnection().createStatement();
+        String loadContactNameSQL = "SELECT * FROM contacts";
+        ResultSet loadContactResults = loadContactStatement.executeQuery(loadContactNameSQL);
+
+        while(loadContactResults.next()) {
+            contactList.add(loadContactResults.getString("Contact_Name"));
+        }
     }
 
     public void loadCustomersList() throws SQLException {
@@ -114,5 +126,11 @@ public class AllReports implements Initializable {
     public void onActionGetSchedule(ActionEvent actionEvent) {
         //We need to load the appointments table that we made
 
+
+    }
+
+    public void onActionContactAppointmentTable(ActionEvent actionEvent) {
+
+        String contactName = (String) contactCombo.getSelectionModel().getSelectedItem();
     }
 }
