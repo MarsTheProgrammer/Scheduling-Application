@@ -299,7 +299,7 @@ public class ModifyAppointment implements Initializable {
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
-            if(checkApptValidation.getInt("Count") > 1) {
+            if(checkApptValidation.next() && checkApptValidation.getInt("Count") >= 2) {
                 Alerts.alertDisplays(26);
                 return false;
             }

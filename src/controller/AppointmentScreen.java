@@ -128,9 +128,9 @@ public class AppointmentScreen implements Initializable {
                 DataBaseQueries.deleteFromAppointmentsTable(highlightedAppointment.getAppointmentId());
 
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
-                deleteConfirmation.setTitle("Appointment Canceled");
-                deleteConfirmation.setHeaderText("Appointment ID: " + highlightedAppointment.getAppointmentId() + " was canceled");
-                deleteConfirmation.setContentText("Type of Appointment was: " + highlightedAppointment.getType());
+                deleteConfirmation.setTitle("Appointment Cancelled");
+                deleteConfirmation.setHeaderText("Appointment ID was " + highlightedAppointment.getAppointmentId());
+                deleteConfirmation.setContentText("It was a " + highlightedAppointment.getType() + " meeting");
                 deleteConfirmation.showAndWait();
 
 
