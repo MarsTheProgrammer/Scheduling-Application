@@ -169,23 +169,6 @@ public class AllReports implements Initializable {
         //set the contact id to the matching name in the DB
         while(results.next()){
 
-            try {
-                Appointments.getSelectedContactNameList(contactId).clear();
-                scheduleOfEachContactTblView.setItems( Appointments.getSelectedContactNameList(contactId));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-//
-//            appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Appointment_ID")));
-//            titleTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Title")));
-//            descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Description")));
-//            locationTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Location")));
-//            contactTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Contact_ID")));
-//            typeTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Type")));
-//            startTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Start")));
-//            endTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("End")));
-//            customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Customer_ID")));
-//            userIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("User_ID")));
         }
         st.close();
     }
