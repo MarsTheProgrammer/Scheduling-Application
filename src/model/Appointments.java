@@ -24,6 +24,7 @@ public class Appointments {
     private String contactName;
 
     public static ObservableList<Appointments> allAppointmentsList = FXCollections.observableArrayList();
+    public static ObservableList<Appointments> selectedContactNameList = FXCollections.observableArrayList();
 
     //private String customerName;
     //private LocalTime time;
@@ -146,5 +147,30 @@ public class Appointments {
         }
         return allAppointmentsList;
     }
+
+    public static ObservableList<Appointments> getSelectedContactNameList(int contactID) throws SQLException {
+
+        Statement statement = JDBC.getConnection().createStatement();
+
+        String appointmentInfoSQL = "SELECT appointments.*, contacts.* FROM appointments INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID WHERE Contact_ID=" + contactID;
+
+        ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
+
+        while(appointmentResults.next()) {
+            Appointments appointments = new Appointments(appointmentResults.getInt("Appointment_ID"),
+                    appointmentResults.getString("Title"),
+                    appointmentResults.getString("Description"),
+                    appointmentResults.getString("Location"),
+                    appointmentResults.getString("Contact_Name"),
+                    appointmentResults.getString("Type"),
+                    appointmentResults.getTimestamp("Start").toLocalDateTime(),
+                    appointmentResults.getTimestamp("End").toLocalDateTime(),
+                    appointmentResults.getInt("Customer_ID"),
+                    appointmentResults.getInt("User_ID"));
+            selectedContactNameList.add(appointments);
+        }
+        return selectedContactNameList;
+    }
+
 
 }
