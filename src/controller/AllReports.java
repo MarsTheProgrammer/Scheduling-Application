@@ -95,7 +95,6 @@ public class AllReports implements Initializable {
         }
         monthCombo.setItems(monthList);
         typeCombo.setItems(typeList);
-        customerComboBox.setItems(customerList);
     }
 
     public void loadContactList() throws SQLException {
@@ -105,6 +104,7 @@ public class AllReports implements Initializable {
 
         while(loadContactResults.next()) {
             contactList.add(loadContactResults.getString("Contact_Name"));
+            contactCombo.setItems(contactList);
         }
     }
 
@@ -116,6 +116,7 @@ public class AllReports implements Initializable {
 
         while(loadCustomerResults.next()) {
             customerList.add(loadCustomerResults.getString("Customer_Name"));
+            customerComboBox.setItems(customerList);
         }
     }
 
