@@ -115,13 +115,25 @@ public class ModifyAppointment implements Initializable {
             Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, start));
             Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
+            System.out.println(appointmentId);
+            System.out.println(titleInfo);
+            System.out.println(descInfo);
+            System.out.println(userID);
+            System.out.println(locationInfo);
+            System.out.println(typeInfo);
+            System.out.println(custID);
+            System.out.println(startTimestamp);
+            System.out.println(endTimestamp);
+            System.out.println(contactId);
+
+
             if(titleNotNull(titleInfo) && descriptionNotNull(descInfo) && typeNotNull(typeInfo) && locationNotNull(locationInfo) && startNotNull(startTimestamp) &&
                     endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) &&
                     contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
 
                 Alerts.alertDisplays(23);
                 DataBaseQueries.updateAppointment(appointmentId, titleInfo, descInfo, locationInfo, typeInfo,
-                                                    startTimestamp, endTimestamp, custID, userID, contactInfo);
+                                                    startTimestamp, endTimestamp, custID, userID, contactId);
 
                 //Why is this being skipped?
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
@@ -172,11 +184,17 @@ public class ModifyAppointment implements Initializable {
         descriptionTextFld.setText(highlightedAppointment.getDescription());
         typeComboBox.setValue(highlightedAppointment.getType());
         contactNameCombo.setValue(highlightedAppointment.getContactName());
+
         dateDatePicker.setValue(highlightedAppointment.getStart().toLocalDate());
         startTimeComboBox.setValue(highlightedAppointment.getStart().toLocalTime());
         endTimeComboBox.setValue((highlightedAppointment.getEnd().toLocalTime()));
         customerIdTextFld.setText(String.valueOf(highlightedAppointment.getCustomerId()));
         userIdCombo.setValue(highlightedAppointment.getUserId());
+        try {
+            getContactIDFromContactName();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         //Loads the time combo boxes
         TimeManager startTime = new TimeManager();
@@ -356,7 +374,7 @@ public class ModifyAppointment implements Initializable {
         return true;
     }
 
-    public void onActionContactComboBoc(ActionEvent actionEvent) throws SQLException {
+    public void getContactIDFromContactName() throws SQLException {
         //This will get the contact name after it's selected in the contacts combo box
         String contactName = contactNameCombo.getSelectionModel().getSelectedItem();
 
@@ -369,8 +387,28 @@ public class ModifyAppointment implements Initializable {
         while(resultSet.next()){
             int contactId = resultSet.getInt("Contact_ID");
             setContactId(contactId);
-            System.out.println(contactId);
+//            System.out.println(contactId);
         }
         st.close();
+    }
+
+    public void onActionContactComboBoc(ActionEvent actionEvent) throws SQLException {
+
+        getContactIDFromContactName();
+        //This will get the contact name after it's selected in the contacts combo box
+//        String contactName = contactNameCombo.getSelectionModel().getSelectedItem();
+//
+//        //query to get the contact id
+//        Statement st = JDBC.getConnection().createStatement();
+//        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
+//        ResultSet resultSet = st.executeQuery(sql);
+//
+//        //set the contact id to the matching name in the DB
+//        while(resultSet.next()){
+//            int contactId = resultSet.getInt("Contact_ID");
+//            setContactId(contactId);
+//            System.out.println(contactId);
+//        }
+//        st.close();
     }
 }
