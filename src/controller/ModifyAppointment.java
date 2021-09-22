@@ -299,7 +299,7 @@ public class ModifyAppointment implements Initializable {
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
-            if(checkApptValidation.next() && checkApptValidation.getInt("Count") >= 2) {
+            if(checkApptValidation.next() && checkApptValidation.getInt("Count") > 1) {
                 Alerts.alertDisplays(26);
                 return false;
             }
@@ -403,20 +403,6 @@ public class ModifyAppointment implements Initializable {
     public void onActionContactComboBoc(ActionEvent actionEvent) throws SQLException {
 
         getContactIDFromContactName();
-        //This will get the contact name after it's selected in the contacts combo box
-//        String contactName = contactNameCombo.getSelectionModel().getSelectedItem();
-//
-//        //query to get the contact id
-//        Statement st = JDBC.getConnection().createStatement();
-//        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
-//        ResultSet resultSet = st.executeQuery(sql);
-//
-//        //set the contact id to the matching name in the DB
-//        while(resultSet.next()){
-//            int contactId = resultSet.getInt("Contact_ID");
-//            setContactId(contactId);
-//            System.out.println(contactId);
-//        }
-//        st.close();
+
     }
 }
