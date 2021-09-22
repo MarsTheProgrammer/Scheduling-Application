@@ -43,9 +43,8 @@ public class AddAppointment implements Initializable {
     public ComboBox<Integer> userIdCombo;
     public TextField locationTextFld;
     public TextField customerIdTextFld;
+    public ComboBox<String> typeComboBox;
     private int contactId;
-
-
 
     public int getContactId() {
         return contactId;
@@ -57,8 +56,7 @@ public class AddAppointment implements Initializable {
     public static ObservableList<String> existingCustList = FXCollections.observableArrayList();
     public static ObservableList<String> contactNameList = FXCollections.observableArrayList();
     public static ObservableList<Integer> userIdList = FXCollections.observableArrayList();
-    public static ObservableList<LocalTime> appointmentTimesList = FXCollections.observableArrayList();
-    public static ObservableList<LocalTime> appointmentEndTimesList = FXCollections.observableArrayList();
+    private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
 
     Parent scene;
     Stage stage;
@@ -77,6 +75,8 @@ public class AddAppointment implements Initializable {
 
         endTimeComboBox.setItems(endTimeList);
         endTimeComboBox.getSelectionModel().selectFirst();
+
+        typeComboBox.setItems(typeList);
 
         //Populates combo boxes from DB
         try {
@@ -132,6 +132,7 @@ public class AddAppointment implements Initializable {
     }
 
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
+
         Alert alertForMainMenu = new Alert(Alert.AlertType.CONFIRMATION);
         alertForMainMenu.setTitle("Cancel");
         alertForMainMenu.setHeaderText("Are You Sure You Want To Go the Main Menu?");
@@ -163,7 +164,6 @@ public class AddAppointment implements Initializable {
             Alerts.alertDisplays(29);
             return false;
         }
-
         if(endBeforeStart) {
             Alerts.alertDisplays(24);
             return false;
@@ -187,7 +187,6 @@ public class AddAppointment implements Initializable {
         return true;
     }
 
-
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException, SQLException {
 
         try {
@@ -195,7 +194,7 @@ public class AddAppointment implements Initializable {
             String descInfo = descriptionTxtFld.getText();
             String locationInfo = locationTextFld.getText();
             int contactInfo = contactId;
-            String typeInfo = typeTxtFld.getText();
+            String typeInfo = typeComboBox.getSelectionModel().getSelectedItem();
             int custID = Integer.parseInt(customerIdTextFld.getText());
             int userID = userIdCombo.getSelectionModel().getSelectedItem();
             LocalDate date = dateDatePicker.getValue();
@@ -205,12 +204,14 @@ public class AddAppointment implements Initializable {
             Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
             if(titleNotNull(titleInfo) && descriptionNotNull(descInfo) && typeNotNull(typeInfo) && locationNotNull(locationInfo) && startNotNull(startTimestamp) &&
-                    endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) && contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
+                    endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) &&
+                    contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
 
                 Alerts.alertDisplays(23);
                 DataBaseQueries.insertAppointment(titleInfo, descInfo, locationInfo, typeInfo, startTimestamp, endTimestamp, custID, userID, contactInfo);
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
             }
+
         } catch(Exception e) {
             if(customerIdTextFld.getText() == null) {
                 Alerts.alertDisplays(20);
@@ -232,8 +233,6 @@ public class AddAppointment implements Initializable {
 
     public void onActionExistingCustomer(ActionEvent actionEvent) throws SQLException {
         String customerName = existingCustomerComboBox.getSelectionModel().getSelectedItem();
-        //userIdTextFld.setText(String.valueOf(Controller.getUserIdFromUsername(User.username)));
-
         Statement st = DBConnection.getConnection().createStatement();
         String sql = "SELECT Customer_ID FROM customers WHERE Customer_Name='" + customerName + "'";
         ResultSet resultSet = st.executeQuery(sql);
@@ -244,7 +243,6 @@ public class AddAppointment implements Initializable {
         st.close();
     }
 
-
     //Created this to remove code redundancy
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resource Example: "/view/mainMenu.fxml"
@@ -253,7 +251,6 @@ public class AddAppointment implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
 
     public void onActionContactComboBox(ActionEvent actionEvent) throws SQLException {
         //This will get the contact name after it's selected in the contacts combo box
@@ -271,9 +268,7 @@ public class AddAppointment implements Initializable {
             System.out.println(contactId);
         }
         st.close();
-
     }
-
 
     //The below handles empty text fields
     public boolean titleNotNull(String title) {
@@ -291,7 +286,7 @@ public class AddAppointment implements Initializable {
         return true;
     }
     public boolean typeNotNull(String type) {
-        if (typeTxtFld.getText().isEmpty()) {
+        if (typeComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(16);
             return false;
         }
@@ -346,7 +341,4 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
-
-
-
 }

@@ -5,7 +5,6 @@ import model.Alerts;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 public class DataBaseQueries {
@@ -73,17 +72,37 @@ public class DataBaseQueries {
         return rowsDeletedForAppointments;
     }
 
-
-//    INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)
-//    VALUES (5,'title', 'description', 'location', 'type', '2020-05-28 12:00:00', '2020-05-28 12:00:00', 2, 2, 2)
-
     public static int insertAppointment(String title, String description, String location, String type,
                                         Timestamp start, Timestamp end, int customerId, int userId, int contactId) throws SQLException {
         String insertApptSQL = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
-                                "VALUES (?,?,?,?,?,?,?,?,?)";
+                               "VALUES (?,?,?,?,?,?,?,?,?)";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(insertApptSQL);
+
+        ps.setString(1, title);
+        ps.setString(2, description);
+        ps.setString(3, location);
+        ps.setString(4, type);
+        ps.setTimestamp(5, start);
+        ps.setTimestamp(6, end);
+        ps.setInt(7, customerId);
+        ps.setInt(8, userId);
+        ps.setInt(9, contactId);
+
+        int rowsAffectedAppointmentInsert = ps.executeUpdate();
+
+        ps.close();
+        return rowsAffectedAppointmentInsert;
+    }
+
+    public static int updateAppointment(int appointmentID, String title, String description, String location, String type,
+                                        Timestamp start, Timestamp end, int customerId, int userId, int contactId) throws SQLException {
+
+        String insertApptSQL = "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, " +
+                                "Customer_ID=?, User_ID=?, Contact_ID=? WHERE Appointment_ID=?";
 
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(insertApptSQL);
 
+        ps.setInt(10, appointmentID);
         ps.setString(1, title);
         ps.setString(2, description);
         ps.setString(3, location);

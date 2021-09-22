@@ -62,10 +62,9 @@
                </font></Label>
             <TextField fx:id="assignedContractTxtFld" disable="true" text="Auto-Generated" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="titleTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="typeTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ComboBox fx:id="endTimeComboBox" prefHeight="25.0" prefWidth="207.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <ComboBox fx:id="startTimeComboBox" prefHeight="25.0" prefWidth="216.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <DatePicker fx:id="dateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <DatePicker fx:id="dateDatePicker" prefHeight="25.0" prefWidth="292.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label text="Existing Customer">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -92,6 +91,7 @@
             </Label>
             <ComboBox fx:id="userIdCombo" prefHeight="25.0" prefWidth="205.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <TextField fx:id="locationTextFld" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="typeComboBox" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
          </children>
       </GridPane>
       <Label layoutX="28.0" layoutY="14.0" prefHeight="35.0" prefWidth="244.0" text="Add Appointment">

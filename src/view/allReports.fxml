@@ -4,30 +4,65 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="806.0" prefWidth="717.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AllReports">
+<AnchorPane prefHeight="553.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AllReports">
    <children>
-      <Label layoutX="29.0" layoutY="14.0" text="Reports">
+      <Label contentDisplay="CENTER" layoutX="366.0" layoutY="28.0" text="Reports" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="28.0" />
          </font>
       </Label>
-      <ComboBox layoutX="22.0" layoutY="72.0" prefHeight="25.0" prefWidth="262.0" promptText=" Select report type" />
-      <Button layoutX="298.0" layoutY="72.0" mnemonicParsing="false" onAction="#onActionFilterReports" text="Filter Reports" />
-      <TextArea layoutX="28.0" layoutY="137.0" prefHeight="200.0" prefWidth="676.0" />
-      <TextArea layoutX="28.0" layoutY="373.0" prefHeight="200.0" prefWidth="676.0" />
-      <TextArea layoutX="28.0" layoutY="606.0" prefHeight="200.0" prefWidth="676.0" />
-      <Label layoutX="29.0" layoutY="120.0" prefHeight="17.0" prefWidth="676.0" text="Number of appointments by month">
+      <Label layoutX="34.0" layoutY="76.0" prefHeight="17.0" prefWidth="676.0" text="Number of appointments by month and type">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <Label fx:id="filterReportsBttn" layoutX="29.0" layoutY="356.0" prefHeight="17.0" prefWidth="676.0" text="Schedule of each customer">
+      <Label fx:id="filterReportsBttn" layoutX="28.0" layoutY="211.0" prefHeight="17.0" prefWidth="676.0" text="Schedule of each customer">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <Label layoutX="29.0" layoutY="589.0" prefHeight="17.0" prefWidth="676.0" text="Total number appoinments this year">
+      <Label layoutX="34.0" layoutY="476.0" prefHeight="17.0" prefWidth="676.0" text="Total number of appointments per Customer">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <Button fx:id="mainMenuBttn" layoutX="611.0" layoutY="72.0" mnemonicParsing="false" onAction="#onActionMainMenu" text="Main Menu" />
+      <Button fx:id="mainMenuBttn" layoutX="767.0" layoutY="515.0" mnemonicParsing="false" onAction="#onActionMainMenu" text="Main Menu" />
+      <ComboBox fx:id="monthCombo" layoutX="98.0" layoutY="115.0" onAction="#onActionMonthCombo" prefHeight="25.0" prefWidth="178.0" promptText="Please select a month" />
+      <ComboBox fx:id="typeCombo" layoutX="372.0" layoutY="115.0" onAction="#onActionTypeCombo" prefHeight="25.0" prefWidth="195.0" promptText="Please select a type" />
+      <TextField fx:id="numberOfApptsTextFld" disable="true" layoutX="299.0" layoutY="165.0" prefHeight="25.0" prefWidth="52.0" />
+      <Label layoutX="43.0" layoutY="169.0" prefHeight="17.0" prefWidth="246.0" text="Number of appointments by month and type:" />
+      <TableView fx:id="scheduleOfEachCustomerTblView" layoutX="5.0" layoutY="241.0" prefHeight="215.0" prefWidth="864.0">
+        <columns>
+          <TableColumn prefWidth="102.0" text="Appointment ID" />
+          <TableColumn prefWidth="67.0" text="Title" />
+            <TableColumn prefWidth="96.0" text="Description" />
+            <TableColumn prefWidth="71.0" text="Location" />
+            <TableColumn prefWidth="50.0" text="Type" />
+            <TableColumn prefWidth="74.0" text="Contact" />
+            <TableColumn prefWidth="125.0" text="Start" />
+            <TableColumn prefWidth="129.0" text="End" />
+            <TableColumn prefWidth="90.0" text="Customer ID" />
+            <TableColumn prefWidth="59.0" text="User ID" />
+        </columns>
+      </TableView>
+      <ComboBox fx:id="customerComboBox" layoutX="121.0" layoutY="506.0" onAction="#onActionCustomerComboBox" prefHeight="25.0" prefWidth="211.0" promptText="Please select a Customer" />
+      <TextField fx:id="apptsPerCustomerTextFld" disable="true" layoutX="500.0" layoutY="507.0" prefHeight="25.0" prefWidth="52.0" />
+      <Label layoutX="43.0" layoutY="119.0" text="Month:">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="325.0" layoutY="119.0" text="Type:">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="50.0" layoutY="510.0" text="Customer:">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="372.0" layoutY="511.0" text="Total Appointments:">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -43,7 +43,7 @@ public class ModifyAppointment implements Initializable {
     public TextField titleTextFld;
     public ComboBox<String> contactNameCombo;
     public TextField customerIdTextFld;
-    public TextField typeTextFld;
+    public ComboBox<String> typeComboBox;
     private int contactId;
     private static Appointments highlightedAppointment;
 
@@ -58,6 +58,7 @@ public class ModifyAppointment implements Initializable {
     public static ObservableList<String> existingCustList = FXCollections.observableArrayList();
     public static ObservableList<String> contactNameList = FXCollections.observableArrayList();
     public static ObservableList<Integer> userIdList = FXCollections.observableArrayList();
+    private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
 
 
     //Variables
@@ -98,15 +99,16 @@ public class ModifyAppointment implements Initializable {
     }
 
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException {
-        //pretty much the same as the add
+
         try {
+            int contactInfo = contactId;
+            int custID = Integer.parseInt(customerIdTextFld.getText());
+            int userID = userIdCombo.getSelectionModel().getSelectedItem();
+            int appointmentId = highlightedAppointment.getAppointmentId();
             String titleInfo = titleTextFld.getText();
             String descInfo = descriptionTextFld.getText();
             String locationInfo = locationTextFld.getText();
-            int contactInfo = contactId;
-            String typeInfo = typeTextFld.getText();
-            int custID = Integer.parseInt(customerIdTextFld.getText());
-            int userID = userIdCombo.getSelectionModel().getSelectedItem();
+            String typeInfo = typeComboBox.getSelectionModel().getSelectedItem();
             LocalDate date = dateDatePicker.getValue();
             LocalTime start = startTimeComboBox.getSelectionModel().getSelectedItem();
             LocalTime end = endTimeComboBox.getSelectionModel().getSelectedItem();
@@ -114,12 +116,18 @@ public class ModifyAppointment implements Initializable {
             Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
             if(titleNotNull(titleInfo) && descriptionNotNull(descInfo) && typeNotNull(typeInfo) && locationNotNull(locationInfo) && startNotNull(startTimestamp) &&
-                    endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) && contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
+                    endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) &&
+                    contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
 
                 Alerts.alertDisplays(23);
-                DataBaseQueries.insertAppointment(titleInfo, descInfo, locationInfo, typeInfo, startTimestamp, endTimestamp, custID, userID, contactInfo);
+                DataBaseQueries.updateAppointment(appointmentId, titleInfo, descInfo, locationInfo, typeInfo,
+                                                    startTimestamp, endTimestamp, custID, userID, contactInfo);
+
+                //Why is this being skipped?
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
+
             }
+
         } catch(Exception e) {
             if(customerIdTextFld.getText() == null) {
                 Alerts.alertDisplays(20);
@@ -158,12 +166,11 @@ public class ModifyAppointment implements Initializable {
 
         highlightedAppointment = AppointmentScreen.getHighlightedAppointment();
 
-
         appointmentTxtFld.setText(String.valueOf(highlightedAppointment.getAppointmentId()));
         titleTextFld.setText(highlightedAppointment.getTitle());
         locationTextFld.setText(highlightedAppointment.getLocation());
         descriptionTextFld.setText(highlightedAppointment.getDescription());
-        typeTextFld.setText(highlightedAppointment.getType());
+        typeComboBox.setValue(highlightedAppointment.getType());
         contactNameCombo.setValue(highlightedAppointment.getContactName());
         dateDatePicker.setValue(highlightedAppointment.getStart().toLocalDate());
         startTimeComboBox.setValue(highlightedAppointment.getStart().toLocalTime());
@@ -180,7 +187,7 @@ public class ModifyAppointment implements Initializable {
         endTimeList.add(LocalTime.of(0, 0));
 
         endTimeComboBox.setItems(endTimeList);
-
+        typeComboBox.setItems(typeList);
 
         try {
             Statement st = DBConnection.getConnection().createStatement();
@@ -193,7 +200,6 @@ public class ModifyAppointment implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
 
         try {
             //Populates the existing customers combo box
@@ -229,11 +235,9 @@ public class ModifyAppointment implements Initializable {
             }
             userIdStatement.close();
 
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
     }
 
     public boolean isValidAppointment(Timestamp start, Timestamp end) {
@@ -256,7 +260,6 @@ public class ModifyAppointment implements Initializable {
             Alerts.alertDisplays(29);
             return false;
         }
-
         if(endBeforeStart) {
             Alerts.alertDisplays(24);
             return false;
@@ -297,7 +300,7 @@ public class ModifyAppointment implements Initializable {
         return true;
     }
     public boolean typeNotNull(String type) {
-        if (typeTextFld.getText().isEmpty()) {
+        if (typeComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(16);
             return false;
         }

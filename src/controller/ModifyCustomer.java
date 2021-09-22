@@ -104,9 +104,7 @@ public class ModifyCustomer implements Initializable {
     public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
 
         Statement state = DBConnection.getConnection().createStatement();
-
         String getAllCitiesDivisionIDSQL = "SELECT Division_ID FROM first_level_divisions WHERE Division='" + comboBoxSelection + "'";
-
         ResultSet result = state.executeQuery(getAllCitiesDivisionIDSQL);
 
         while(result.next()) {
