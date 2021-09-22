@@ -31,7 +31,7 @@ public class AllReports implements Initializable {
     public ComboBox<String> monthCombo;
     public ComboBox<String> typeCombo;
     public TextField numberOfApptsTextFld;
-    public TableView<Appointments> scheduleOfEachCustomerTblView;
+    public TableView<Appointments> scheduleOfEachContactTblView;
     public ComboBox<String> customerComboBox;
     public TextField apptsPerCustomerTextFld;
     public Button appointmentCountSearchBttn;
@@ -60,6 +60,18 @@ public class AllReports implements Initializable {
     //Variables
     Parent scene;
     Stage stage;
+    public int apptId;
+    public String type;
+    public String descript;
+    public String locate;
+    public String tittle;
+    //public String contactName;
+    public int custerId;
+    public int useId;
+    public LocalDateTime startt;
+    public LocalDateTime ennd;
+
+
 
     //Created this to remove code redundancy
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
@@ -167,20 +179,43 @@ public class AllReports implements Initializable {
         String sqlStatement = "SELECT * FROM appointments WHERE Contact_ID=" + contactId + "";
         ResultSet results = statement.executeQuery(sqlStatement);
 
+
+
         //set the contact id to the matching name in the DB
         while(results.next()){
-            appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Appointment_ID")));
-            titleTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Title")));
-            descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Description")));
-            locationTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Location")));
-            contactTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Contact_ID")));
-            typeTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Type")));
-            startTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Start")));
-            endTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("End")));
-            customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("Customer_ID")));
-            userIdTblCol.setCellValueFactory(new PropertyValueFactory<>(results.getString("User_ID")));
+            try {
+                Appointments.getGetAllAppointments().clear();
+                scheduleOfEachContactTblView.setItems( Appointments.getGetAllAppointments());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+            titleTblCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+            descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+            locationTblCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+            contactTblCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+            typeTblCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+            startTblCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+            endTblCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+            customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+            userIdTblCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+//            apptId = results.getInt("Appointment_ID");
+//            custerId = results.getInt("Customer_ID");
+//            useId = results.getInt("User_ID");
+//            contactId = results.getInt("Contact_ID");
+//            tittle = results.getString("Title");
+//            descript = results.getString("Description");
+//            locate = results.getString("Location");
+//            type = results.getString("Type");
+//            startt = results.getTimestamp("Start").toLocalDateTime();
+//            ennd = results.getTimestamp("End").toLocalDateTime();
+
+
         }
         st.close();
+
+
 
     }
 }
