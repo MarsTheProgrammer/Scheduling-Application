@@ -152,7 +152,7 @@ public class Appointments {
 
         Statement statement = JDBC.getConnection().createStatement();
 
-        String appointmentInfoSQL = "SELECT appointments.*, contacts.* FROM appointments INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID WHERE Contact_ID=" + contactID;
+        String appointmentInfoSQL = "Select * from appointments WHERE Contact_ID=" + contactID;
 
         ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
 
