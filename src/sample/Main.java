@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 public class Main extends Application {
 
+    /** Sets the main stage*/
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../view/sample.fxml"));
@@ -18,7 +19,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
-
+    /** Starts the program with JDBC connection and entry point for progrom*/
     public static void main(String[] args) throws SQLException {
         JDBC.startConnection();
         //DataBaseQueries.insert("asdf","sdf 234", "115-519651","65464", 3);

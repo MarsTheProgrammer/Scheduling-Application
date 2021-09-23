@@ -2,14 +2,23 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import model.Alerts;
+import util.JDBC;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.ResourceBundle;
 
-public class MainMenu {
+public class MainMenu implements Initializable {
 
     //FXML Variables
     /** Customers Button */
@@ -72,5 +81,32 @@ public class MainMenu {
      @param actionEvent The action event */
     public void onActionExit(ActionEvent actionEvent) {
         System.exit(0);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //In here is where we will call the method to display an alert for 15 min appointment
+        try {
+            displayAppointmentReminder();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void displayAppointmentReminder() throws SQLException {
+        LocalDateTime start = LocalDateTime.now().plusMinutes(15);
+        Statement appointmentWithin15Minutes = JDBC.getConnection().createStatement();
+        String checkForAppointments = "SELECT * FROM appointments WHERE Start='" + start + "' BETWEEN Start AND End";
+        ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
+
+        if(appointmentResults.next()) {
+
+            Alerts.informationAlert("Appointment Reminder",
+                    ("Appointment ID = "+ appointmentResults.getInt(("Appointment_ID")) + " is within 15 minutes") ,
+                    "You have an upcoming appointment with " +
+                                appointmentResults.getString("Contact") +
+                                " and is a " + appointmentResults.getString("Type") + " meeting.");
+        }
     }
 }
