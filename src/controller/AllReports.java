@@ -1,5 +1,6 @@
 package controller;
 
+import com.mysql.cj.result.IntegerValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -144,11 +145,8 @@ public class AllReports implements Initializable {
 
 
     }
-
-    public void onActionContactAppointmentTable(ActionEvent actionEvent) throws SQLException {
-
+    public void getContactID() throws SQLException {
         String contactName = contactCombo.getSelectionModel().getSelectedItem();
-
 
         //query to get the contact id
         Statement st = JDBC.getConnection().createStatement();
@@ -160,16 +158,28 @@ public class AllReports implements Initializable {
             contactId = resultSet.getInt("Contact_ID");
         }
         st.close();
+    }
 
-        //query to get the contact id
-        Statement statement = JDBC.getConnection().createStatement();
-        String sqlStatement = "SELECT * FROM appointments WHERE Contact_ID=" + contactId + "";
-        ResultSet results = statement.executeQuery(sqlStatement);
+    public void onActionContactAppointmentTable(ActionEvent actionEvent) throws SQLException {
 
-        //set the contact id to the matching name in the DB
-        while(results.next()){
 
+
+        ObservableList contactTableList = FXCollections.observableArrayList();
+        //This will get the contact ID and set the global variable to it
+        getContactID();
+
+        Statement st = JDBC.getConnection().createStatement();
+        String sql = "SELECT * FROM appointments WHERE Contact_ID=";
+        ResultSet resultSet = st.executeQuery(sql);
+
+        while(resultSet.next()){
+            String rs = resultSet.getString("Appointment_ID");
+
+            contactTableList.add(rs);
         }
         st.close();
+
+        scheduleOfEachContactTblView.setItems(contactTableList);
+
     }
 }
