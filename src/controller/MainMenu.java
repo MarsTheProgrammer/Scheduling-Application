@@ -97,7 +97,9 @@ public class MainMenu implements Initializable {
     public void displayAppointmentReminder() throws SQLException {
         LocalDateTime start = LocalDateTime.now().plusMinutes(15);
         Statement appointmentWithin15Minutes = JDBC.getConnection().createStatement();
-        String checkForAppointments = "SELECT * FROM appointments WHERE Start='" + start + "' BETWEEN Start AND End";
+        String checkForAppointments = "SELECT * " +
+                                        "FROM appointments " +
+                                        "WHERE Start >= DATE_SUB(NOW(),INTERVAL 15 MINUTE)";
         ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
 
         if(appointmentResults.next()) {

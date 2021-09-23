@@ -187,7 +187,7 @@ public class AllReports implements Initializable {
 
     public void onActionContactAppointmentTable(ActionEvent actionEvent) throws SQLException {
 
-
+        //just like appointment just a different list lol
 
         ObservableList contactTableList = FXCollections.observableArrayList();
         //This will get the contact ID and set the global variable to it
