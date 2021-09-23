@@ -12,22 +12,31 @@ import java.sql.Statement;
 public class Customer {
 
     //Class variables
+    /** Customer ID*/
     private int customerID;
+    /** Customer Name*/
     private String customerName;
+    /** Address*/
     private String address;
+    /** City*/
     private String city;
+    /** Postal Code*/
     private String postalCode;
+    /** Phone number*/
     private String phoneNumber;
+    /** Country*/
     private String country;
-
-
-
-    //List
-    //public static ObservableList<Customer> allCustomersTableList = FXCollections.observableArrayList();
+    /** Observable List of Customer called allCustomersList*/
     public static ObservableList<Customer> allCustomersList = FXCollections.observableArrayList();
 
-
-    //Basic constructor
+    /** Customer constructor
+     @param customerID
+     @param customerName
+     @param address
+     @param city
+     @param country
+     @param postal_Code
+     @param phoneNumber */
     public Customer(int customerID, String customerName, String address, String city, String postal_Code, String phoneNumber, String country) {
         this.customerID = customerID;
         this.customerName = customerName;
@@ -37,69 +46,71 @@ public class Customer {
         this.postalCode = postal_Code;
         this.phoneNumber = phoneNumber;
     }
-
-    //Getters and Setters
+    /** Getter for customer ID
+     @return customerID*/
     public int getCustomerID() {
         return customerID;
     }
-
+    /** Setter for customer id*/
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
     }
-
+    /** Getter for customer Name
+     @return customer Name*/
     public String getCustomerName() {
         return customerName;
     }
-
+    /** Setter for customerN ame*/
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-
+    /** Getter for address
+     @return address*/
     public String getAddress() {
         return address;
     }
-
+    /** Setter for address*/
     public void setAddress(String address) {
         this.address = address;
     }
-
+    /** Getter for city
+     @return city*/
     public String getCity() {
         return city;
     }
-
+    /** Setter for city*/
     public void setCity(String city) {
         this.city = city;
     }
-
+    /** Getter for Postal Code
+     @return Postal Code*/
     public String getPostalCode() {
         return postalCode;
     }
-
+    /** Setter for Postal Code*/
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
-
+    /** Getter for Phone number
+     @return Phone number*/
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
+    /** Setter for Phone number*/
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
+    /** Getter for country
+     @return country*/
     public String getCountry() {
         return country;
     }
-
+    /** Setter for country*/
     public void setCountry(String country) {
         this.country = country;
     }
-
-//    public static ObservableList<Customer> getAllCustomersTableList() {
-//        return allCustomersTableList;
-//    }
-
-    //Getter for all customers list
+    /** Getter for all customers from the database
+     @return allCustomersList*/
     public static ObservableList<Customer> getGetAllCustomers() throws SQLException {
 
         Statement statement = JDBC.getConnection().createStatement();
@@ -119,5 +130,4 @@ public class Customer {
         }
         return allCustomersList;
     }
-
 }

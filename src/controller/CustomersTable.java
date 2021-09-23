@@ -24,17 +24,29 @@ import java.util.ResourceBundle;
 public class CustomersTable implements Initializable {
 
     //FXML Variables
+    /** Customer table view*/
     public TableView<Customer> customersTblView;
+    /** Customer id table column*/
     public TableColumn<Customer, Integer> customersTblID;
+    /** Customer name table column*/
     public TableColumn<Customer, String> customersTblName;
+    /** Customer address table column*/
     public TableColumn<Customer, String> customersTblAddress;
+    /** Customer city table column*/
     public TableColumn<Customer, String> customersTblCity;
+    /** Customer county table column*/
     public TableColumn<Customer, String> customersTblCountry;
+    /** Customer postal code table column*/
     public TableColumn<Customer, String> customersTblPostalCode;
+    /** Customer phone table column*/
     public TableColumn<Customer, String> customersTblPhone;
+    /** Add button*/
     public Button addBttn;
+    /** Modify button*/
     public Button modifyBttn;
+    /** Delete button*/
     public Button deleteBtnn;
+    /** Main menu button*/
     public Button mainMenuBttn;
 
     //Variables
@@ -42,12 +54,14 @@ public class CustomersTable implements Initializable {
     Stage stage;
     private static Customer highlightedCustomer;
 
-    //Getter for highlightedCustomer
+    /** Getter for the highlighted customer.*/
     public static Customer getHighlightedCustomer() {
         return highlightedCustomer;
     }
 
-    //Created this to remove code redundancy
+    /** Changed the screen to desired screen.
+     @param actionEvent The action event.
+     @param resourcesString The link to the desired screen. */
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resource Example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -56,10 +70,14 @@ public class CustomersTable implements Initializable {
         stage.show();
     }
 
+    /** Changes to the add customer screen.
+     @param actionEvent Handles button press.*/
     public void onActionAdd(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/addCustomer.fxml");
     }
 
+    /** Changes to the modify customer screen.
+     @param actionEvent Handles button press. */
     public void onActionModify(ActionEvent actionEvent) throws IOException {
 
         //Grabs highlighted customer and pushes to modify table
@@ -75,6 +93,9 @@ public class CustomersTable implements Initializable {
         }
     }
 
+    /** Queries the database for a count of appointments per customer.
+     If that count is 1 or greater, doesn't allow deletion.
+     @param customerID Customer id. */
     public static int getCustomerApptCount(int customerID) throws SQLException {
 
         Statement customerApptCount = JDBC.getConnection().createStatement();
@@ -94,6 +115,8 @@ public class CustomersTable implements Initializable {
         return 0;
     }
 
+    /** Deletes the highlighted customer if all premises are met.
+     @param actionEvent Handles button press. */
     public void onActionDelete(ActionEvent actionEvent) throws SQLException, IOException {
         Customer highlightedCustomer = customersTblView.getSelectionModel().getSelectedItem();
 
@@ -118,11 +141,13 @@ public class CustomersTable implements Initializable {
 
     }
 
-
+    /** Changes to the main menu customer screen.
+     @param actionEvent Handles button press. */
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
     }
 
+    /** Populates the customer table view. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

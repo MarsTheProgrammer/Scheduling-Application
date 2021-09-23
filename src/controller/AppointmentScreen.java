@@ -21,40 +21,62 @@ import java.util.ResourceBundle;
 
 public class AppointmentScreen implements Initializable {
 
-    //FXML Variables
-    public Button mainMenuBttn;
-    public TableView<Appointments> appointmentTblView;
-    public RadioButton byMonthRadBttn;
-    public RadioButton byWeekRadBttn;
-    public ComboBox<String> viewBySelectionComboBox;
-    public Button searchBttn;
-    public ToggleGroup appointmentRadBtnTgglGrp;
-    public Button addAppointmentBttn;
-    public Button deleteAppointmentBttn;
-    public Button modifyAppointmentBttn;
-    public TableColumn<Appointments, Integer> appointmentIdTblCol;
-    public TableColumn<Appointments, String> titleTblCol;
-    public TableColumn<Appointments, String> descriptionTblCol;
-    public TableColumn<Appointments, String> locationTblCol;
-    public TableColumn<Appointments, String> contactTblCol;
-    public TableColumn<Appointments, String> typeTblCol;
-    public TableColumn<Appointments, LocalDateTime> startTblCol;
-    public TableColumn<Appointments, LocalDateTime> endTblCol;
-    public TableColumn<Appointments, Integer> customerIdTblCol;
-    public TableColumn<Appointments, Integer> userIdTblCol;
 
+    //FXML Variables
+    /** Main menu Button*/
+    public Button mainMenuBttn;
+    /** Appointments table viel*/
+    public TableView<Appointments> appointmentTblView;
+    /** Month radio button*/
+    public RadioButton byMonthRadBttn;
+    /** Week radio button*/
+    public RadioButton byWeekRadBttn;
+    /** View selection combo box*/
+    public ComboBox<String> viewBySelectionComboBox;
+    /** Search button*/
+    public Button searchBttn;
+    /** Radio button toggle group*/
+    public ToggleGroup appointmentRadBtnTgglGrp;
+    /** Add appointment button*/
+    public Button addAppointmentBttn;
+    /** Delete appointment button*/
+    public Button deleteAppointmentBttn;
+    /** Modify appointment button*/
+    public Button modifyAppointmentBttn;
+    /** Appointment id table column*/
+    public TableColumn<Appointments, Integer> appointmentIdTblCol;
+    /** Title table column*/
+    public TableColumn<Appointments, String> titleTblCol;
+    /** Description table column*/
+    public TableColumn<Appointments, String> descriptionTblCol;
+    /** Location table column*/
+    public TableColumn<Appointments, String> locationTblCol;
+    /** Contact table column*/
+    public TableColumn<Appointments, String> contactTblCol;
+    /** Type table column*/
+    public TableColumn<Appointments, String> typeTblCol;
+    /** Start time table column*/
+    public TableColumn<Appointments, LocalDateTime> startTblCol;
+    /** End time table column*/
+    public TableColumn<Appointments, LocalDateTime> endTblCol;
+    /** Customer id table column*/
+    public TableColumn<Appointments, Integer> customerIdTblCol;
+    /** User id table column*/
+    public TableColumn<Appointments, Integer> userIdTblCol;
 
     //Variables
     Parent scene;
     Stage stage;
      public static Appointments highlightedAppointment;
 
-
+    /** Getter for highlighted appointment*/
     public static Appointments getHighlightedAppointment() {
         return highlightedAppointment;
     }
 
-    //Created this to remove code redundancy
+    /** Changed the screen to desired screen
+     @param actionEvent The action event
+     @param resourcesString The link to the desired screen */
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resources example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -64,6 +86,7 @@ public class AppointmentScreen implements Initializable {
     }
 
 
+    /** Populates the appointments table*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -87,6 +110,7 @@ public class AppointmentScreen implements Initializable {
         //filterAppointments();
     }
 
+    /** Filters the appointments table by month and week*/
     public void filterAppointments() {
         if(byMonthRadBttn.isSelected()) {
             System.out.println("appointments will be filtered here.");
@@ -96,6 +120,8 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /** This will go to main menu
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
     }
@@ -107,10 +133,14 @@ public class AppointmentScreen implements Initializable {
         //need to mess with this
     }
 
+    /** Will go to the add appointment screen
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionAddAppointment(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/addAppointment.fxml");
     }
 
+    /** Will delete the appointment from the database with error and warning screens
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionDeleteAppointment(ActionEvent actionEvent) throws SQLException, IOException {
 
         Appointments highlightedAppointment = appointmentTblView.getSelectionModel().getSelectedItem();
@@ -140,6 +170,8 @@ public class AppointmentScreen implements Initializable {
 
     }
 
+    /** Goes to the modify screen
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionModifyAppointment(ActionEvent actionEvent) throws IOException {
 
         highlightedAppointment = appointmentTblView.getSelectionModel().getSelectedItem();

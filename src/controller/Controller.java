@@ -29,17 +29,24 @@ public class Controller implements Initializable {
 
     //FXML Variables
 
+    /** Username text field*/
     public TextField usernameTxtField;
+    /** Password text field*/
     public TextField passwordTxtField;
+    /** Login button*/
     public Button loginButton;
+    /** Zone Id label*/
     public Label zoneID;
+    /** Exit button*/
     public Button exitBttn;
 
     //Variables
     Parent scene;
     Stage stage;
 
-    //This will login the user if the credentials are correct, else throw an error
+    /** Log the user in if user and pass match information in the database
+     All login attempts are tracked to the C195LoginAttempts text file
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionLogin(ActionEvent actionEvent) throws IOException, SQLException {
 
         //Commenting this out now to save time
@@ -79,7 +86,8 @@ public class Controller implements Initializable {
             stage.show();
     }
 
-    //Gets the password from the database
+    /** Gets the passwords from the database and checks it with inserted password
+     @param password Password entered at login*/
     private boolean getPassword(String password) throws SQLException {
 
         Statement statement = JDBC.getConnection().createStatement();
@@ -96,7 +104,8 @@ public class Controller implements Initializable {
         return false;
     }
 
-    //Gets the username from the database
+    /** Gets the username from the database and checks it with inserted username
+     @param username username entered at login*/
     private boolean getUsername(String username) throws SQLException {
 
         Statement statement = JDBC.getConnection().createStatement();
@@ -113,6 +122,8 @@ public class Controller implements Initializable {
         return false;
     }
 
+    /** Gets the User id from the username in the database
+     @param username username entered at login*/
     public static int getUserIdFromUsername(String username) throws SQLException {
 
         Statement statement = JDBC.getConnection().createStatement();
@@ -137,6 +148,8 @@ public class Controller implements Initializable {
         //this will include getting a resource bundle and local?
     }
 
+    /** Exits the program when the exit button is pressed
+     @param actionEvent Handles the button being pressed. */
     public void onActionExit(ActionEvent actionEvent) {
         System.exit(0);
     }

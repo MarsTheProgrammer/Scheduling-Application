@@ -26,34 +26,58 @@ import java.util.ResourceBundle;
 public class AllReports implements Initializable {
 
     //FXML Variables
+    /** Wait on this */
     public Label filterReportsBttn;
+    /** Main meny Button*/
     public Button mainMenuBttn;
+    /** Month combo boc*/
     public ComboBox<String> monthCombo;
+    /** Type combo box*/
     public ComboBox<String> typeCombo;
+    /** Number of appointments per customer text field*/
     public TextField numberOfApptsTextFld;
+    /** Schedule table fiel*/
     public TableView<Appointments> scheduleOfEachContactTblView;
+    /** Save Button*/
     public ComboBox<String> customerComboBox;
+    /** Save Button*/
     public TextField apptsPerCustomerTextFld;
+    /** Save Button*/
     public Button appointmentCountSearchBttn;
+    /** Save Button*/
     public Button scheduleBttn;
+    /** Save Button*/
     public ComboBox<String> contactCombo;
+    /** Save Button*/
     public int contactId;
+    /** Save Button*/
     public TableColumn<Appointments, Integer> appointmentIdTblCol;
+
     public TableColumn<Appointments, String> titleTblCol;
+
     public TableColumn<Appointments, Integer> userIdTblCol;
+
     public TableColumn<Appointments, Integer> customerIdTblCol;
+
     public TableColumn<Appointments, LocalDateTime> endTblCol;
+
     public TableColumn<Appointments, LocalDateTime> startTblCol;
+
     public TableColumn<Appointments, String> contactTblCol;
+
     public TableColumn<Appointments, String> typeTblCol;
+
     public TableColumn<Appointments, String> locationTblCol;
+
     public TableColumn<Appointments, String> descriptionTblCol;
 
 
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
+
     private ObservableList<String> monthList = FXCollections.observableArrayList("January", "February", "March", "April", "May", "June", "July",
                                                                             "August", "September", "October", "November", "December");
     private ObservableList<String> customerList = FXCollections.observableArrayList();
+
     private ObservableList<String> contactList = FXCollections.observableArrayList();
 
 
@@ -62,6 +86,7 @@ public class AllReports implements Initializable {
     Stage stage;
 
     //Created this to remove code redundancy
+
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resource Example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

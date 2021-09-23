@@ -7,6 +7,12 @@ import java.sql.*;
 
 public class DataBaseQueries {
 
+    /** Insert customer in to the database query
+     @param customerName customer Name
+     @param address address
+     @param divisionID divisionID
+     @param Phone Phone
+     @param postalCode postalCode */
     public static int insertIntoCustomersTable(String customerName, String address, String Phone, String postalCode, int divisionID) throws SQLException {
         String sql = "INSERT INTO customers (Customer_Name, Address, Phone, Postal_Code, Division_ID) VALUES(?,?,?,?,?)";
 
@@ -24,6 +30,13 @@ public class DataBaseQueries {
         return rowsAffected;
     }
 
+    /** Update customers table from the database
+     @param customerName customer Name
+     @param address address
+     @param divisionID divisionID
+     @param Phone Phone
+     @param postalCode postalCode
+     @param customerID customerID*/
     public static int updateToCustomersTable(int customerID, String customerName, String address, String postalCode, String Phone, int divisionID) throws SQLException {
 
         String modifySQL = "UPDATE customers SET Customer_Name=?, Address=?, Phone=?, Postal_Code=?, Division_ID=? WHERE Customer_ID=?";
@@ -46,6 +59,8 @@ public class DataBaseQueries {
         return rowsUpdates;
     }
 
+    /** Delete customers from the database
+     @param customerID customerID*/
     public static int deleteFromCustomersTable(int customerID) throws SQLException {
 
         String modifySQL = "DELETE FROM customers WHERE Customer_ID = ?";
@@ -74,6 +89,8 @@ public class DataBaseQueries {
 //
 //    }
 
+    /** Delete appointment from the database
+     @param appointmentId customerID*/
     public static int deleteFromAppointmentsTable(int appointmentId) throws SQLException {
 
         String deleteAppointmentSQL = "DELETE FROM appointments WHERE Appointment_ID = ?";
@@ -87,6 +104,16 @@ public class DataBaseQueries {
         return rowsDeletedForAppointments;
     }
 
+    /** Insert into the appointments table
+     @param userId userId
+     @param type type
+     @param location location
+     @param description description
+     @param end end
+     @param start start
+     @param title title
+     @param contactId contactId
+     @param customerId customerId*/
     public static int insertAppointment(String title, String description, String location, String type,
                                         Timestamp start, Timestamp end, int customerId, int userId, int contactId) throws SQLException {
         String insertApptSQL = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
@@ -109,6 +136,17 @@ public class DataBaseQueries {
         return rowsAffectedAppointmentInsert;
     }
 
+    /** Update appointments from the database from the selected appointment id
+     @param appointmentID appointmentID
+     @param customerId customerId
+     @param contactId contactId
+     @param title title
+     @param start start
+     @param end end
+     @param description descripiton
+     @param location location
+     @param type type
+     @param userId user id*/
     public static int updateAppointment(int appointmentID, String title, String description, String location, String type,
                                         Timestamp start, Timestamp end, int customerId, int userId, int contactId) throws SQLException {
 

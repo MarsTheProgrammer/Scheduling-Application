@@ -51,13 +51,11 @@ public class JDBC {
         else
             System.out.println("Prepared Statement Creation Failed!");
     }
+
     public static PreparedStatement getPreparedStatement() throws SQLException {
         if (preparedStatement != null)
             return preparedStatement;
         else System.out.println("Null reference to Prepared Statement");
         return null;
     }
-
-
-
 }

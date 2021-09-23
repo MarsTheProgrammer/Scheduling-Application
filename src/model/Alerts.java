@@ -5,8 +5,23 @@ import javafx.scene.control.Alert;
 public class Alerts {
 
 
+    /** Displays an error alert
+     @param title Title of the error
+     @param context Context of the error
+     @param header  header of the error*/
     public static void errorAlert(String title, String header, String context) {
         Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setTitle(title);
+        error.setHeaderText(header);
+        error.setContentText(context);
+        error.showAndWait();
+    }
+    /** Displays an informative alert
+     @param title Title of the information
+     @param context Context of the information
+     @param header  header of the information*/
+    public static void informationAlert(String title, String header, String context) {
+        Alert error = new Alert(Alert.AlertType.INFORMATION);
         error.setTitle(title);
         error.setHeaderText(header);
         error.setContentText(context);
@@ -16,7 +31,6 @@ public class Alerts {
     public static void alertDisplays(int alertType) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Alert alertForSave = new Alert(Alert.AlertType.INFORMATION);
-        Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
 
         switch (alertType) {
             case 1:

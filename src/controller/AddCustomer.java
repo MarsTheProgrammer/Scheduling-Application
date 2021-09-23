@@ -24,25 +24,39 @@ import java.util.ResourceBundle;
 public class AddCustomer implements Initializable {
 
     //FXML variables
+    /** Save Button*/
     public Button saveCustomerBttn;
+    /** Cancel Button*/
     public Button cancelBttn;
+    /** Name text field*/
     public TextField nameTxtFld;
+    /** Address text field*/
     public TextField addressTxtFld;
+    /** Postal code text field*/
     public TextField postalCodeTxtFld;
+    /** Phone number text field*/
     public TextField phoneTxtFld;
+    /** City combo box*/
     public ComboBox<String> cityComboBox;
-    public int divisionIDFromCity;
+    /** Customer id text field*/
     public TextField customerIdTextFld;
+    /** Country combo box*/
     public ComboBox<String> countryComboBox;
+    /** Division ID From selected city variable*/
+    public int divisionIDFromCity;
 
     //Variables
     Parent scene;
     Stage stage;
 
+    /** Observable List for all cities*/
     ObservableList<String> citiesList = FXCollections.observableArrayList();
+    /** Observable List for all countries*/
     ObservableList<String> countriesList = FXCollections.observableArrayList("U.S", "Canada", "UK");
 
-    //Created this to remove code redundancy
+    /** Changed the screen to desired screen
+     @param actionEvent The action event
+     @param resourcesString The link to the desired screen */
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resources example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -51,7 +65,8 @@ public class AddCustomer implements Initializable {
         stage.show();
     }
 
-    //this is is good. Handles the cancel button
+    /** This will cancel the adding and go back to the main menu
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionCancel(ActionEvent actionEvent) throws IOException {
         Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
         alertForCancel.setTitle("Cancel");
@@ -64,6 +79,8 @@ public class AddCustomer implements Initializable {
         }
     }
 
+    /** Sets the cities combo box to the cities available in that country
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionCountryComboBox(ActionEvent actionEvent) throws SQLException {
         String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
 
@@ -105,6 +122,8 @@ public class AddCustomer implements Initializable {
         }
     }
 
+    /** Saves the customer to the database. Does various checks to make sure the information is valid for the DB
+     @param actionEvent Handles the event of the button being pressed*/
     public void onActionSaveCustomer(ActionEvent actionEvent) throws IOException, SQLException {
 
         int customerID = 0;
@@ -139,6 +158,7 @@ public class AddCustomer implements Initializable {
         }
     }
 
+    /** Populates the country combo box*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         countryComboBox.setItems(countriesList);
@@ -153,7 +173,8 @@ public class AddCustomer implements Initializable {
         System.out.println(divisionIDFromCity);
     }
 
-    //Get the cities division ID and assigns it to the DataProvider class variable named: divisionIDFromCity
+    /** This gets all the cities of a given division ID
+     @param comboBoxSelection Combo box selection.*/
     public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
 
         Statement state = JDBC.getConnection().createStatement();
@@ -165,7 +186,8 @@ public class AddCustomer implements Initializable {
         }
     }
 
-    //The 5 below handles empty text fields
+    /**Throws error if the name field is empty
+     @param name The text in the name field*/
     public boolean nameNotNull(String name) {
         if (nameTxtFld.getText().isEmpty()) {
             Alerts.alertDisplays(1);
@@ -173,6 +195,8 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+    /**Throws error if the address field is empty
+     @param address The text in the address*/
     public boolean addressNotNull(String address) {
         if (addressTxtFld.getText().isEmpty()) {
             Alerts.alertDisplays(2);
@@ -180,6 +204,8 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+    /**Throws error if the postalCode field is empty
+     @param postalCode The text in the postalCode*/
     public boolean postalCodeNotNull(String postalCode) {
         if (postalCodeTxtFld.getText().isEmpty()) {
             Alerts.alertDisplays(4);
@@ -187,6 +213,8 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+    /**Throws error if the phone field is empty
+     @param phone The text in the phone*/
     public boolean phoneNotNull(String phone) {
         if (phoneTxtFld.getText().isEmpty()) {
             Alerts.alertDisplays(5);
@@ -194,6 +222,8 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+    /**Throws error if the country combo box is empty
+     @param country The text in the country combo box*/
     public boolean countryNotNull(String country) {
         if (countryComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(10);
@@ -201,6 +231,8 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+    /**Throws error if the city combo box is empty
+     @param city The text in the city combo box*/
     public boolean cityNotNull(String city) {
         if (cityComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(3);

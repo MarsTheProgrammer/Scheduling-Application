@@ -29,43 +29,66 @@ import java.util.ResourceBundle;
 public class ModifyAppointment implements Initializable {
 
     //FXML Variables
+    /** Back button*/
     public Button backBttn;
+    /** Main menu button*/
     public Button mainMenuBttn;
+    /** End time combo box*/
     public ComboBox<LocalTime> endTimeComboBox;
+    /** Start time combo box*/
     public ComboBox<LocalTime> startTimeComboBox;
+    /** Date picker*/
     public DatePicker dateDatePicker;
+    /** Save button*/
     public Button saveAppointmentBtn;
+    /** Appointment id text field */
     public TextField appointmentTxtFld;
+    /** Location text field*/
     public TextField locationTextFld;
+    /** Description text field*/
     public TextField descriptionTextFld;
+    /** Customer name combo box*/
     public ComboBox<String> customerComboBox;
+    /** User id combo box*/
     public ComboBox<Integer> userIdCombo;
+    /** Title text field*/
     public TextField titleTextFld;
+    /** Contact name combo box*/
     public ComboBox<String> contactNameCombo;
+    /** Customer id text field*/
     public TextField customerIdTextFld;
+    /** Type combo box*/
     public ComboBox<String> typeComboBox;
+    /** Contact id*/
     private int contactId;
+    /** Highlighted appointment*/
     private static Appointments highlightedAppointment;
 
+    /** Getter for contact id*/
     public int getContactId() {
         return contactId;
     }
-
+    /** Setter for contact id*/
     public void setContactId(int contactId) {
         this.contactId = contactId;
     }
 
+    /** Observable List of existing customers*/
     public static ObservableList<String> existingCustList = FXCollections.observableArrayList();
+    /** Observable List of contact name*/
     public static ObservableList<String> contactNameList = FXCollections.observableArrayList();
+    /** Observable List of user id*/
     public static ObservableList<Integer> userIdList = FXCollections.observableArrayList();
+    /** Observable List of types*/
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
-
 
     //Variables
     Parent scene;
     Stage stage;
 
-    //Created this to remove code redundancy
+    /** Changed the screen to desired screen
+     @param actionEvent The action event
+     @param resourcesString The link to the desired screen */
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resources example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -73,7 +96,8 @@ public class ModifyAppointment implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
+    /** Goes back to the appointments screen
+     @param actionEvent The action event */
     public void onActionBack(ActionEvent actionEvent) throws IOException {
         Alert alertForBack = new Alert(Alert.AlertType.CONFIRMATION);
         alertForBack.setTitle("Cancel");
@@ -86,6 +110,8 @@ public class ModifyAppointment implements Initializable {
         }
     }
 
+    /** Goes back to the main menu screen.
+     @param actionEvent The action event. */
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
         Alert alertForMainMenu = new Alert(Alert.AlertType.CONFIRMATION);
         alertForMainMenu.setTitle("Cancel");
@@ -98,10 +124,11 @@ public class ModifyAppointment implements Initializable {
         }
     }
 
+    /** Saves the appointments to the database after check valid input.
+     @param actionEvent The action event. */
     public void onActionSaveAppointment(ActionEvent actionEvent) throws IOException {
 
         try {
-
             int custID = Integer.parseInt(customerIdTextFld.getText());
             int userID = userIdCombo.getSelectionModel().getSelectedItem();
             int appointmentId = highlightedAppointment.getAppointmentId();
@@ -124,9 +151,7 @@ public class ModifyAppointment implements Initializable {
                                                     startTimestamp, endTimestamp, custID, userID, contactId);
 
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
-
             }
-
         } catch(Exception e) {
             if(customerIdTextFld.getText() == null) {
                 Alerts.alertDisplays(20);
@@ -142,10 +167,10 @@ public class ModifyAppointment implements Initializable {
                 Alerts.alertDisplays(20);
             }
         }
-
-//        buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
     }
 
+    /** Populates the appointments id text field with the matching customer information from the DB
+     @param actionEvent The action event */
     public void onActionCustomerCombo(ActionEvent actionEvent) throws SQLException {
         String customerName = customerComboBox.getSelectionModel().getSelectedItem();
         //userIdTextFld.setText(String.valueOf(Controller.getUserIdFromUsername(User.username)));
@@ -160,6 +185,7 @@ public class ModifyAppointment implements Initializable {
         st.close();
     }
 
+    /** Loads the data from the appointments screen into the matching fields */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -245,6 +271,9 @@ public class ModifyAppointment implements Initializable {
         }
     }
 
+    /** Checks to make sure the appointments are after each other, not equal, and fall within business hours
+     @param start Start appointment timestamp
+     @param end End appointment timestamp*/
     public boolean isValidAppointment(Timestamp start, Timestamp end) {
 
         boolean endBeforeStart = end.before(start);
@@ -297,7 +326,8 @@ public class ModifyAppointment implements Initializable {
     }
 
 
-    //The below handles empty text fields
+    /**Throws error if the title field is empty
+     @param title The text in the title*/
     public boolean titleNotNull(String title) {
         if (titleTextFld.getText().isEmpty()) {
             Alerts.alertDisplays(13);
@@ -305,6 +335,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the desc field is empty
+     @param desc The text in the description*/
     public boolean descriptionNotNull(String desc) {
         if (descriptionTextFld.getText().isEmpty()) {
             Alerts.alertDisplays(14);
@@ -312,6 +344,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the type field is empty
+     @param type The text in the type*/
     public boolean typeNotNull(String type) {
         if (typeComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(16);
@@ -319,6 +353,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the location field is empty
+     @param location The text in the location*/
     public boolean locationNotNull(String location) {
         if (locationTextFld.getText().isEmpty()) {
             Alerts.alertDisplays(15);
@@ -326,6 +362,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the start combo box is empty
+     @param start The time of the start combo box*/
     public boolean startNotNull(Timestamp start) {
         if (startTimeComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(18);
@@ -333,6 +371,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the end combo box is empty
+     @param end The time of the end combo box*/
     public boolean endNotNull(Timestamp end) {
         if (endTimeComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(19);
@@ -340,6 +380,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the date picker is empty
+     @param date The local date of the date picker*/
     public boolean dateNotNull(LocalDate date) {
         if (dateDatePicker.getValue() == null) {
             Alerts.alertDisplays(17);
@@ -347,6 +389,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the customerId field is empty
+     @param customerId The text in the customerId*/
     public boolean customerNotNull(int customerId) {
         if (customerComboBox.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(20);
@@ -354,6 +398,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the userId field is empty
+     @param userId The text in the userId*/
     public boolean userIdNotNull(int userId) {
         if (userIdCombo.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(21);
@@ -361,6 +407,8 @@ public class ModifyAppointment implements Initializable {
         }
         return true;
     }
+    /**Throws error if the contact field is empty
+     @param contact The text in the location*/
     public boolean contactNotNull(int contact) {
         if (contactNameCombo.getSelectionModel().getSelectedItem() == null) {
             Alerts.alertDisplays(22);
@@ -369,27 +417,24 @@ public class ModifyAppointment implements Initializable {
         return true;
     }
 
+    /** Gets the contact id from the selected contact name in the combo box */
     public void getContactIDFromContactName() throws SQLException {
-        //This will get the contact name after it's selected in the contacts combo box
         String contactName = contactNameCombo.getSelectionModel().getSelectedItem();
 
-        //query to get the contact id
         Statement st = JDBC.getConnection().createStatement();
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
         ResultSet resultSet = st.executeQuery(sql);
 
-        //set the contact id to the matching name in the DB
         while(resultSet.next()){
             int contactId = resultSet.getInt("Contact_ID");
             setContactId(contactId);
-//            System.out.println(contactId);
         }
         st.close();
     }
 
+    /** Calls to get the contact id from the contact name
+     @param actionEvent Action even*/
     public void onActionContactComboBoc(ActionEvent actionEvent) throws SQLException {
-
         getContactIDFromContactName();
-
     }
 }

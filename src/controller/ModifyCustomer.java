@@ -27,17 +27,29 @@ import java.util.ResourceBundle;
 public class ModifyCustomer implements Initializable {
 
     //FXML Variables
+    /** Save button*/
     public Button saveCustomerBttn;
+    /** Cancel button*/
     public Button cancelBttn;
+    /** Name text field*/
     public TextField nameTxtFld;
+    /** Address text field*/
     public TextField addressTxtFld;
+    /** Postal Code text field*/
     public TextField postalCodeTxtFld;
+    /** Phone text field*/
     public TextField phoneTxtFld;
+    /** City combo box*/
     public ComboBox<String> cityComboBox;
+    /** Country combo box*/
     public ComboBox<String> countryComboBox;
+    /** Customer id text field*/
     public TextField customerIdTextFld;
+    /** Observable List of cities*/
     ObservableList<String> citiesList = FXCollections.observableArrayList();
+    /** Observable List of countries*/
     ObservableList<String> countriesList = FXCollections.observableArrayList("U.S", "Canada", "UK");
+
 
     //Variables
     Parent scene;
@@ -45,6 +57,7 @@ public class ModifyCustomer implements Initializable {
     Customer highlightedCustomer;
     public int divisionIDFromCity;
 
+    /** Populates the countries combo box and fills in the fields from the highlighted customer.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -62,7 +75,9 @@ public class ModifyCustomer implements Initializable {
         cityComboBox.setValue(highlightedCustomer.getCity());
     }
 
-    //Created this to remove code redundancy
+    /** Changed the screen to desired screen
+     @param actionEvent The action event
+     @param resourcesString The link to the desired screen */
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resources example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -71,6 +86,8 @@ public class ModifyCustomer implements Initializable {
         stage.show();
     }
 
+    /** Saves the customer to the database
+     @param actionEvent The action event */
     public void onActionSaveCustomer(ActionEvent actionEvent) throws IOException, SQLException {
 
         String customerName = nameTxtFld.getText();
@@ -84,6 +101,8 @@ public class ModifyCustomer implements Initializable {
 
     }
 
+    /** Cancels the modify of the customer and takes them back to the appointments screen.
+     @param actionEvent The action event */
     public void onActionCancel(ActionEvent actionEvent)  throws IOException {
 
         Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
@@ -96,13 +115,16 @@ public class ModifyCustomer implements Initializable {
             buttonChanging(actionEvent, "/view/customersTable.fxml");
         }
     }
-
+    /** Gets the division id from the city combo box.
+     @param actionEvent The action event */
     public void onActionCityComboBox(ActionEvent actionEvent) throws SQLException {
         String citySelected = cityComboBox.getSelectionModel().getSelectedItem();
         getAllCitiesDivisionID(citySelected);
         DataProvider.divisionID = divisionIDFromCity;
     }
 
+    /** Gets the division id from the database and selected division
+     @param comboBoxSelection combo box selection */
     public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
 
         Statement state = JDBC.getConnection().createStatement();
@@ -114,7 +136,8 @@ public class ModifyCustomer implements Initializable {
         }
     }
 
-    //Filters the city combo box based upon the city selection
+    /** Filters the city combo box based on the country combo box selection,
+     @param actionEvent Handles the action event */
     public void onActionComboBox(ActionEvent actionEvent) throws SQLException {
 
         String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
