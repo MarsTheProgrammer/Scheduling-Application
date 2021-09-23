@@ -109,7 +109,7 @@ public class MainMenu implements Initializable {
                 "WHERE Start >= DATE_SUB('" + starter + "',INTERVAL 15 MINUTE)";
         ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
 
-        if(appointmentResults.next()) {
+        if(appointmentResults.next())  {
 
             Alerts.informationAlert("Appointment Reminder",
                     ("Appointment ID = "+ appointmentResults.getInt(("Appointment_ID")) + " is within 15 minutes") ,

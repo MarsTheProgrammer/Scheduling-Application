@@ -80,6 +80,8 @@ public class AllReports implements Initializable {
 
     private ObservableList<String> contactList = FXCollections.observableArrayList();
 
+    private ObservableList<Appointments> contactAppointmentSchedule = FXCollections.observableArrayList();
+
 
     //Variables
     Parent scene;
@@ -165,9 +167,33 @@ public class AllReports implements Initializable {
 
     }
 
-    public void onActionGetSchedule(ActionEvent actionEvent) {
-        //We need to load the appointments table that we made
+    public ObservableList<Appointments> onActionGetSchedule(ActionEvent actionEvent) throws SQLException {
+        String contactName = contactCombo.getSelectionModel().getSelectedItem();
 
+        Statement statement = JDBC.getConnection().createStatement();
+
+        String appointmentInfoSQL = "SELECT appointments.*, contacts.* " +
+                "FROM appointments " +
+                "INNER JOIN contacts " +
+                "ON appointments.Contact_ID = contacts.Contact_ID " +
+                "WHERE Contact_Name='" + contactName + "'";
+
+        ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
+
+        while(appointmentResults.next()) {
+            Appointments appointments = new Appointments(appointmentResults.getInt("Appointment_ID"),
+                    appointmentResults.getString("Title"),
+                    appointmentResults.getString("Description"),
+                    appointmentResults.getString("Location"),
+                    appointmentResults.getString("Contact_Name"),
+                    appointmentResults.getString("Type"),
+                    appointmentResults.getTimestamp("Start").toLocalDateTime(),
+                    appointmentResults.getTimestamp("End").toLocalDateTime(),
+                    appointmentResults.getInt("Customer_ID"),
+                    appointmentResults.getInt("User_ID"));
+            contactAppointmentSchedule.add(appointments);
+        }
+        return contactAppointmentSchedule;
 
     }
     public void getContactID() throws SQLException {
