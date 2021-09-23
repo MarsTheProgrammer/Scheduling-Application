@@ -1,6 +1,5 @@
 package controller;
 
-import com.mysql.cj.result.IntegerValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +19,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -163,15 +163,60 @@ public class AllReports implements Initializable {
         }
     }
 
+    public int monthSelectionToID(int monthId) {
+        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
+        switch(selectedMonth){
+            case "January":
+                monthId = 1;
+                break;
+            case "February":
+                monthId = 2;
+                break;
+            case "March":
+                monthId = 3;
+                break;
+            case "April":
+                monthId = 4;
+                break;
+            case "May":
+                monthId = 5;
+                break;
+            case "June":
+                monthId = 6;
+                break;
+            case "July":
+                monthId = 7;
+                break;
+            case "August":
+                monthId = 8;
+                break;
+            case "September":
+                monthId = 9;
+                break;
+            case "October":
+                monthId = 10;
+                break;
+            case "November":
+                monthId = 11;
+                break;
+            case "December":
+                monthId = 12;
+                break;
+        }
+        return monthId;
+    }
+
     public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) {
+        monthCombo.getSelectionModel().getSelectedItem();
+        typeCombo.getSelectionModel().getSelectedItem();
 
     }
 
-    public ObservableList<Appointments> onActionGetSchedule(ActionEvent actionEvent) throws SQLException {
+    /** Populates the contactAppointmentsSchedule list with all appointments matching selected contact name.*/
+    public ObservableList<Appointments> getContactsSchedule() throws SQLException {
         String contactName = contactCombo.getSelectionModel().getSelectedItem();
 
         Statement statement = JDBC.getConnection().createStatement();
-
         String appointmentInfoSQL = "SELECT appointments.*, contacts.* " +
                 "FROM appointments " +
                 "INNER JOIN contacts " +
@@ -211,15 +256,16 @@ public class AllReports implements Initializable {
         st.close();
     }
 
+    /** Populates the contact schedule table
+     @param actionEvent Handles combo box selection*/
     public void onActionContactAppointmentTable(ActionEvent actionEvent) throws SQLException {
-        onActionGetSchedule(actionEvent);
+        getContactsSchedule();
         try {
-            onActionGetSchedule(actionEvent).clear();
-            scheduleOfEachContactTblView.setItems(onActionGetSchedule(actionEvent));
+            getContactsSchedule().clear();
+            scheduleOfEachContactTblView.setItems(getContactsSchedule());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         titleTblCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>("description"));

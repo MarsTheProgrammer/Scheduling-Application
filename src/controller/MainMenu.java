@@ -108,8 +108,8 @@ public class MainMenu implements Initializable {
                 "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
                 "WHERE Start >= DATE_SUB('" + starter + "',INTERVAL 15 MINUTE)";
         ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
-
-        if(appointmentResults.next())  {
+        int count = 0;
+        if(appointmentResults.next() && count < 1)  {
 
             Alerts.informationAlert("Appointment Reminder",
                     ("Appointment ID = "+ appointmentResults.getInt(("Appointment_ID")) + " is within 15 minutes") ,
@@ -117,6 +117,7 @@ public class MainMenu implements Initializable {
                             appointmentResults.getString("Contact_Name") +
                             " and is a " + appointmentResults.getString("Type") + " meeting. It starts at " +
                             appointmentResults.getTimestamp("Start").toLocalDateTime() + ".");
+            count++;
         } else {
             Alerts.informationAlert("No Appointments", "No appointments in the next 15 minutes","");
         }
