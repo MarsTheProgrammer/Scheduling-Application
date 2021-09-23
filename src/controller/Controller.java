@@ -19,6 +19,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.ZoneId;
 import java.util.ResourceBundle;
 import model.User;
 
@@ -144,6 +145,9 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        ZoneId zone = ZoneId.systemDefault();
+        zoneID.setText(zone.toString());
         //We need to add the zone label to auto to whatever language the OS has selected and change the language
         //this will include getting a resource bundle and local?
     }
