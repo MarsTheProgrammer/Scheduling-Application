@@ -5,6 +5,13 @@ import javafx.scene.control.Alert;
 public class Alerts {
 
 
+    public static void errorAlert(String title, String header, String context) {
+        Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setTitle(title);
+        error.setHeaderText(header);
+        error.setContentText(context);
+        error.showAndWait();
+    }
 
     public static void alertDisplays(int alertType) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

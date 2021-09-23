@@ -11,9 +11,13 @@ import javafx.stage.Stage;
 import model.Alerts;
 import model.Customer;
 import util.DataBaseQueries;
+import util.JDBC;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -71,12 +75,32 @@ public class CustomersTable implements Initializable {
         }
     }
 
+    public static int getCustomerApptCount(int customerID) throws SQLException {
+
+        Statement customerApptCount = JDBC.getConnection().createStatement();
+        String modifySQL = "SELECT COUNT(Appointment_ID) AS Count " +
+                "FROM appointments " +
+                "INNER JOIN customers ON customers.Customer_ID = appointments.Customer_ID " +
+                "WHERE customers.Customer_ID=" + customerID;
+
+        ResultSet apptCount = customerApptCount.executeQuery(modifySQL);
+
+        if(apptCount.next() && apptCount.getInt("Count") > 0) {
+            Alerts.errorAlert("Cannot Delete Customer",
+                    "Customer has existing appointments",
+                    "Please delete all appointments associated with this customer before trying to delete.");
+            return -1;
+        }
+        return 0;
+    }
+
     public void onActionDelete(ActionEvent actionEvent) throws SQLException, IOException {
         Customer highlightedCustomer = customersTblView.getSelectionModel().getSelectedItem();
 
         if(highlightedCustomer == null) {
             Alerts.alertDisplays(9);
-        } else {
+        } else if(getCustomerApptCount(highlightedCustomer.getCustomerID()) == 0){
+
             Alert alertForDelete = new Alert(Alert.AlertType.CONFIRMATION);
             alertForDelete.setHeaderText("Are you sure you want to delete this customer?");
             alertForDelete.setContentText("Deleting the customer will remove them and their appointments");

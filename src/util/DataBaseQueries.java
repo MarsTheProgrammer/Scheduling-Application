@@ -3,9 +3,7 @@ package util;
 import javafx.scene.control.Alert;
 import model.Alerts;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class DataBaseQueries {
 
@@ -59,6 +57,22 @@ public class DataBaseQueries {
         preparedStatement.close();
         return rowsDeleted;
     }
+
+//    public static void getCustomerApptCount(int customerID) throws SQLException {
+//
+//        Statement customerApptCount = JDBC.getConnection().createStatement();
+//        String modifySQL = "SELECT COUNT(Appointment_ID) AS Count " +
+//                "FROM appointments " +
+//                "INNER JOIN customers ON customers.Customer_ID = appointments.Customer_ID " +
+//                "WHERE customers.Customer_ID=" + customerID;
+//
+//        ResultSet apptCount = customerApptCount.executeQuery(modifySQL);
+//
+//        if(apptCount.next() && apptCount.getInt("Appointment_ID") > 0) {
+//
+//        }
+//
+//    }
 
     public static int deleteFromAppointmentsTable(int appointmentId) throws SQLException {
 
