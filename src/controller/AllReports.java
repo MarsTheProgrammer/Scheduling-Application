@@ -212,25 +212,24 @@ public class AllReports implements Initializable {
     }
 
     public void onActionContactAppointmentTable(ActionEvent actionEvent) throws SQLException {
-
-        //just like appointment just a different list lol
-
-        ObservableList contactTableList = FXCollections.observableArrayList();
-        //This will get the contact ID and set the global variable to it
-        getContactID();
-
-        Statement st = JDBC.getConnection().createStatement();
-        String sql = "SELECT * FROM appointments WHERE Contact_ID=";
-        ResultSet resultSet = st.executeQuery(sql);
-
-        while(resultSet.next()){
-            String rs = resultSet.getString("Appointment_ID");
-
-            contactTableList.add(rs);
+        onActionGetSchedule(actionEvent);
+        try {
+            onActionGetSchedule(actionEvent).clear();
+            scheduleOfEachContactTblView.setItems(onActionGetSchedule(actionEvent));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        st.close();
 
-        scheduleOfEachContactTblView.setItems(contactTableList);
+        appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        titleTblCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        locationTblCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        contactTblCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+        typeTblCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        startTblCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        endTblCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        userIdTblCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
     }
 }
