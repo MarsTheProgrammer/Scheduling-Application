@@ -15,6 +15,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -87,19 +88,25 @@ public class MainMenu implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //In here is where we will call the method to display an alert for 15 min appointment
         try {
-            displayAppointmentReminder();
+            getsAppointmentsIn15MinutesLocal();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-
-    public void displayAppointmentReminder() throws SQLException {
+    /** Displays an alert to the user if there is an appointment that starts in the next 15 minutes.*/
+    public void getsAppointmentsIn15MinutesLocal() throws SQLException {
         LocalDateTime start = LocalDateTime.now().plusMinutes(15);
+        Timestamp starter = Timestamp.valueOf(start);
+        displayAppointmentReminder(starter);
+    }
+
+    public void displayAppointmentReminder(Timestamp starter) throws SQLException {
         Statement appointmentWithin15Minutes = JDBC.getConnection().createStatement();
         String checkForAppointments = "SELECT * " +
-                                        "FROM appointments " +
-                                        "WHERE Start >= DATE_SUB(NOW(),INTERVAL 15 MINUTE)";
+                "FROM appointments " +
+                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
+                "WHERE Start >= DATE_SUB('" + starter + "',INTERVAL 15 MINUTE)";
         ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
 
         if(appointmentResults.next()) {
@@ -107,8 +114,12 @@ public class MainMenu implements Initializable {
             Alerts.informationAlert("Appointment Reminder",
                     ("Appointment ID = "+ appointmentResults.getInt(("Appointment_ID")) + " is within 15 minutes") ,
                     "You have an upcoming appointment with " +
-                                appointmentResults.getString("Contact") +
-                                " and is a " + appointmentResults.getString("Type") + " meeting.");
+                            appointmentResults.getString("Contact_Name") +
+                            " and is a " + appointmentResults.getString("Type") + " meeting. It starts at " +
+                            appointmentResults.getTimestamp("Start").toLocalDateTime() + ".");
+        } else {
+            Alerts.informationAlert("No Appointments", "No appointments in the next 15 minutes","");
         }
     }
+
 }
