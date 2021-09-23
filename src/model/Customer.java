@@ -123,9 +123,13 @@ public class Customer {
         ResultSet customerInfoResults = statement.executeQuery(customerInfoSQL);
 
         while(customerInfoResults.next()) {
-            Customer customer = new Customer(customerInfoResults.getInt("Customer_ID"),customerInfoResults.getString("Customer_Name"),
-                    customerInfoResults.getString("Address"),customerInfoResults.getString("Division"),
-                    customerInfoResults.getString("Postal_Code"), customerInfoResults.getString("Phone"), customerInfoResults.getString("Country"));
+            Customer customer = new Customer(customerInfoResults.getInt("Customer_ID"),
+                                            customerInfoResults.getString("Customer_Name"),
+                                            customerInfoResults.getString("Address"),
+                                            customerInfoResults.getString("Division"),
+                                            customerInfoResults.getString("Postal_Code"),
+                                            customerInfoResults.getString("Phone"),
+                                            customerInfoResults.getString("Country"));
             allCustomersList.add(customer);
         }
         return allCustomersList;
