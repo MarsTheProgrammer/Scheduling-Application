@@ -27,15 +27,12 @@
       </Label>
       <Label layoutX="14.0" layoutY="55.0" text="Select a filter to view the calender:" />
       <Label layoutX="14.0" layoutY="83.0" text="NOTE: All appointments are shown by default. Use radio buttons and viewing filter below." />
-      <RadioButton fx:id="byMonthRadBttn" layoutX="207.0" layoutY="55.0" mnemonicParsing="false" text="Appointments by month">
+      <RadioButton fx:id="byMonthRadBttn" layoutX="207.0" layoutY="55.0" mnemonicParsing="false" onAction="#onActionFilerByMonth" text="Appointments by month">
          <toggleGroup>
             <ToggleGroup fx:id="appointmentRadBtnTgglGrp" />
          </toggleGroup></RadioButton>
-      <RadioButton fx:id="byWeekRadBttn" layoutX="394.0" layoutY="55.0" mnemonicParsing="false" text="Appointments by week" toggleGroup="$appointmentRadBtnTgglGrp" />
-      <Label layoutX="14.0" layoutY="511.0" text="View by:" />
+      <RadioButton fx:id="byWeekRadBttn" layoutX="394.0" layoutY="55.0" mnemonicParsing="false" onAction="#onActionFilterByWeek" text="Appointments by week" toggleGroup="$appointmentRadBtnTgglGrp" />
       <Button fx:id="mainMenuBttn" layoutX="901.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionMainMenu" text="Main Menu" />
-      <ComboBox fx:id="viewBySelectionComboBox" layoutX="67.0" layoutY="507.0" prefHeight="25.0" prefWidth="226.0" promptText="Select a value to sort the calendar" />
-      <Button fx:id="searchBttn" layoutX="325.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionSearch" text="Search" />
       <Button fx:id="addAppointmentBttn" layoutX="554.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionAddAppointment" text="Add" />
       <Button fx:id="deleteAppointmentBttn" layoutX="687.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionDeleteAppointment" text="Delete" />
       <Button fx:id="modifyAppointmentBttn" layoutX="613.0" layoutY="507.0" mnemonicParsing="false" onAction="#onActionModifyAppointment" text="Modify" />

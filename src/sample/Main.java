@@ -22,7 +22,6 @@ public class Main extends Application {
     /** Starts the program with JDBC connection and entry point for progrom*/
     public static void main(String[] args) throws SQLException {
         JDBC.startConnection();
-        //DataBaseQueries.insert("asdf","sdf 234", "115-519651","65464", 3);
         launch(args);
         JDBC.closeConnection();
     }

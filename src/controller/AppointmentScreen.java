@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 public class AppointmentScreen implements Initializable {
 
 
-    //FXML Variables
     /** Main menu Button*/
     public Button mainMenuBttn;
     /** Appointments table viel*/
@@ -31,10 +30,6 @@ public class AppointmentScreen implements Initializable {
     public RadioButton byMonthRadBttn;
     /** Week radio button*/
     public RadioButton byWeekRadBttn;
-    /** View selection combo box*/
-    public ComboBox<String> viewBySelectionComboBox;
-    /** Search button*/
-    public Button searchBttn;
     /** Radio button toggle group*/
     public ToggleGroup appointmentRadBtnTgglGrp;
     /** Add appointment button*/
@@ -85,7 +80,6 @@ public class AppointmentScreen implements Initializable {
         stage.show();
     }
 
-
     /** Populates the appointments table*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -107,30 +101,12 @@ public class AppointmentScreen implements Initializable {
         customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         userIdTblCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
-        //filterAppointments();
-    }
-
-    /** Filters the appointments table by month and week*/
-    public void filterAppointments() {
-        if(byMonthRadBttn.isSelected()) {
-            System.out.println("appointments will be filtered here.");
-        }
-        if(byWeekRadBttn.isSelected()) {
-            System.out.println("by week");
-        }
     }
 
     /** This will go to main menu
      @param actionEvent Handles the event of the button being pressed*/
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
-    }
-
-    public void onActionSearch(ActionEvent actionEvent) {
-    }
-
-    public void onSort(SortEvent<TableView> tableViewSortEvent) {
-        //need to mess with this
     }
 
     /** Will go to the add appointment screen
@@ -187,4 +163,11 @@ public class AppointmentScreen implements Initializable {
 
     }
 
+    public void onActionFilerByMonth(ActionEvent actionEvent) {
+        System.out.println("Filter by month");
+    }
+
+    public void onActionFilterByWeek(ActionEvent actionEvent) {
+        System.out.println("Filter by week");
+    }
 }
