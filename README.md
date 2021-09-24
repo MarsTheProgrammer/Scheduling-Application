@@ -1,4 +1,4 @@
-# Title: Scheduling Programing
+# Title: Scheduling Program
 ## Purpose: Schedule appointments for various customers
 ## Author: Marshall Christian
 ## Contact Information: 
