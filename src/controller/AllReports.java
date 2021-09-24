@@ -167,11 +167,7 @@ public class AllReports implements Initializable {
 
     public int monthSelectionToID(String selectedMonth) {
         int monthId;
-//        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
         switch(selectedMonth){
-//            case "JANUARY":
-//                monthId = 1;
-//                break;
             case "FEBRUARY":
                 monthId = 2;
                 break;
@@ -212,13 +208,23 @@ public class AllReports implements Initializable {
         return monthId;
     }
 
-    public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) {
-        monthCombo.getSelectionModel().getSelectedItem();
-        typeCombo.getSelectionModel().getSelectedItem();
-        Month month = LocalDateTime.now().getMonth();
-        System.out.println(month);
-        monthSelectionToID(month.toString());
-        System.out.println(monthSelectionToID(month.toString()));
+    public void searchAppointmentsByMonthAndType(int monthId, String type) throws SQLException {
+
+        Statement appointmentStatement = JDBC.getConnection().createStatement();
+        String searchByMonthAndType = "SELECT COUNT(Appointment_ID) AS Count FROM appointments WHERE month(Start)=" + monthId + " AND Type='" + type + "'";
+        ResultSet appointmentCount = appointmentStatement.executeQuery(searchByMonthAndType);
+
+        while(appointmentCount.next()) {
+            numberOfApptsTextFld.setText(String.valueOf(appointmentCount.getInt("Count")));
+        }
+    }
+
+    public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) throws SQLException {
+        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
+        int monthId = monthSelectionToID(selectedMonth);
+        String type = typeCombo.getSelectionModel().getSelectedItem();
+        searchAppointmentsByMonthAndType(monthId, type);
+
 
     }
 
