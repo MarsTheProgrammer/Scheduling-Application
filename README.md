@@ -1,8 +1,5 @@
-# C195_QAM1_MarshallChristian
-
-## Title: Scheduling Programing
-## Purpose: 
-### Schedule appointments for various customers
+# Title: Scheduling Programing
+## Purpose: ### Schedule appointments for various customers
 ## Author: 
 ### Marshall Christian
 ## Contact Information: 
