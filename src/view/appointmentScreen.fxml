@@ -6,7 +6,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentScreen">
    <children>
-      <TableView fx:id="appointmentTblView" layoutX="14.0" layoutY="112.0" onSort="#onSort" prefHeight="353.0" prefWidth="972.0" style="-fx-backgroud-color: grey;">
+      <TableView fx:id="appointmentTblView" layoutX="14.0" layoutY="112.0" prefHeight="353.0" prefWidth="972.0" style="-fx-backgroud-color: grey;">
         <columns>
           <TableColumn fx:id="appointmentIdTblCol" prefWidth="118.0" text="Appointment_ID" />
           <TableColumn fx:id="titleTblCol" prefWidth="54.0" text="Title" />
