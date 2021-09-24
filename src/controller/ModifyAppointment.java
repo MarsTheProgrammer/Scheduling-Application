@@ -306,11 +306,9 @@ public class ModifyAppointment implements Initializable {
             Statement validAppointmentStatement = JDBC.getConnection().createStatement();
             String validApptSQL = "SELECT COUNT(appointments.Start) AS Count " +
                     "FROM appointments " +
-                    "WHERE ('" + start + "' BETWEEN Start " +
-                    "AND End " +
-                    "OR '" + end + "' BETWEEN Start " +
-                    "AND End " +
-                    "OR '" + start + "' > Start " +
+                    "WHERE ('" + start + "' BETWEEN Start AND End " +
+                    "OR '" + end + "' BETWEEN Start AND End)" +
+                    "OR ('" + start + "' > Start " +
                     "AND '" + end + "' < End)";
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);

@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import model.Alerts;
 import util.JDBC;
 
+import javax.xml.transform.Result;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
@@ -94,11 +95,9 @@ public class MainMenu implements Initializable {
     /** Displays an alert to the user if there is an appointment that starts in the next 15 minutes.*/
     public void getsAppointmentsIn15MinutesLocal() throws SQLException {
         LocalDateTime localStart = LocalDateTime.now();
-        LocalDateTime localEnd = LocalDateTime.now().plusMinutes(45);
+        LocalDateTime localEnd = LocalDateTime.now().plusMinutes(15);
         Timestamp now = Timestamp.valueOf(localStart);
         Timestamp end = Timestamp.valueOf(localEnd);
-        System.out.println(now);
-        System.out.println(end);
         displayAppointmentReminder(now, end);
     }
 
@@ -106,28 +105,24 @@ public class MainMenu implements Initializable {
      @param now 15 minutes ahead of the current time
      @param end 45 minutes ahead of current time*/
     public void displayAppointmentReminder(Timestamp now, Timestamp end) throws SQLException {
-        Statement appointmentWithin15Minutes = JDBC.getConnection().createStatement();
-        String checkForAppointments =
-                                "SELECT * " +
-                                "FROM appointments " +
-                                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
-                                "WHERE Start >= DATE_SUB(NOW(), INTERVAL 15 MINUTE) " +
-                                "AND End <= End";
 
-        ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
+        PreparedStatement appointmentWithin15Minutes = JDBC.getConnection().prepareStatement(
+            "SELECT * " +
+                "FROM appointments " +
+                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
+                "WHERE Start BETWEEN ? AND ?");
 
+        appointmentWithin15Minutes.setTimestamp(1, now);
+        appointmentWithin15Minutes.setTimestamp(2, end);
+
+        ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery();
         if(appointmentResults.next())  {
-            if(now.toLocalDateTime().isBefore(appointmentResults.getTimestamp("Start").toLocalDateTime())) {
-                Alerts.informationAlert("Appointment Reminder",
-                        ("Appointment ID = "+ appointmentResults.getInt(("Appointment_ID")) + " is within 15 minutes") ,
-                        "You have an upcoming appointment with " +
-                                appointmentResults.getString("Contact_Name") +
-                                " and is a " + appointmentResults.getString("Type") + " meeting. It starts at " +
-                                appointmentResults.getTimestamp("Start").toLocalDateTime() + ".");
-            } else {
-                Alerts.informationAlert("No Appointments", "No appointments in the next 15 minutes","");
-            }
-
+            Alerts.informationAlert("Appointment Reminder",
+                    ("Appointment ID = "+ appointmentResults.getInt(("Appointment_ID")) + " is within 15 minutes") ,
+                    ("You have an upcoming appointment with " +
+                        appointmentResults.getString("Contact_Name") +
+                        " and is a " + appointmentResults.getString("Type") + " meeting. It starts at " +
+                        appointmentResults.getTimestamp("Start").toLocalDateTime() + "."));
             } else {
             Alerts.informationAlert("No Appointments", "No appointments in the next 15 minutes","");
         }
