@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ResourceBundle;
 
 public class AllReports implements Initializable {
@@ -103,7 +104,8 @@ public class AllReports implements Initializable {
     }
 
     public void onActionMonthCombo(ActionEvent actionEvent) {
-        monthSelectionToID();
+        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
+        monthSelectionToID(selectedMonth);
         //We need to get the middle digit?
         //We need to parse the middle digit out of the date
     }
@@ -163,9 +165,9 @@ public class AllReports implements Initializable {
         }
     }
 
-    public int monthSelectionToID() {
+    public int monthSelectionToID(String selectedMonth) {
         int monthId;
-        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
+//        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
         switch(selectedMonth){
 //            case "JANUARY":
 //                monthId = 1;
@@ -206,12 +208,17 @@ public class AllReports implements Initializable {
             default:
                 monthId = 1;
         }
+        System.out.println(monthId);
         return monthId;
     }
 
     public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) {
         monthCombo.getSelectionModel().getSelectedItem();
         typeCombo.getSelectionModel().getSelectedItem();
+        Month month = LocalDateTime.now().getMonth();
+        System.out.println(month);
+        monthSelectionToID(month.toString());
+        System.out.println(monthSelectionToID(month.toString()));
 
     }
 
