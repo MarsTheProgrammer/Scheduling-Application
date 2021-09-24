@@ -311,7 +311,6 @@ public class ModifyAppointment implements Initializable {
         return true;
     }
 
-
     /**Throws error if the title field is empty
      @param title The text in the title*/
     public boolean titleNotNull(String title) {

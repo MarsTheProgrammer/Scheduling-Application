@@ -51,21 +51,21 @@ public class Controller implements Initializable {
         String password = passwordTxtField.getText();
         User.username = username;
 
-        getUsername(username);
-        getPassword(password);
-
-        if (getUsername(username) && getPassword(password)) {
-            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
-            getUserIdFromUsername(username);
-
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
-        } else {
-            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
-            Alerts.errorAlert("Invalid Credentials", "Incorrect username and/or password", "Please enter a valid username and password");
-        }
+//        getUsername(username);
+//        getPassword(password);
+//
+//        if (getUsername(username) && getPassword(password)) {
+//            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
+//            getUserIdFromUsername(username);
+//
+//            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+//            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
+//            stage.setScene(new Scene(scene));
+//            stage.show();
+//        } else {
+//            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
+//            Alerts.errorAlert("Invalid Credentials", "Incorrect username and/or password", "Please enter a valid username and password");
+//        }
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
             stage.setScene(new Scene(scene));
