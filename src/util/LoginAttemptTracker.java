@@ -9,7 +9,7 @@ import java.time.Instant;
 public class LoginAttemptTracker {
 
     /** File name that is file*/
-    private static final String FILE_NAME = "C195LoginAttempts.txt";
+    private static final String FILE_NAME = "login_activity.txt";
 
     /** Basic constructor*/
     public LoginAttemptTracker() {}
