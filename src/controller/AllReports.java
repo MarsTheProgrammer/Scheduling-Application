@@ -262,7 +262,6 @@ public class AllReports implements Initializable {
             contactAppointmentSchedule.add(appointments);
         }
         return contactAppointmentSchedule;
-
     }
 
     //NEEDED??????????????

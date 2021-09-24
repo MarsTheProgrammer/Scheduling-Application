@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,11 +13,15 @@ import javafx.stage.Stage;
 import model.Alerts;
 import model.Appointments;
 import util.DataBaseQueries;
+import util.JDBC;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -58,6 +64,10 @@ public class AppointmentScreen implements Initializable {
     public TableColumn<Appointments, Integer> customerIdTblCol;
     /** User id table column*/
     public TableColumn<Appointments, Integer> userIdTblCol;
+    /** Observable List for all appointments By Current Month*/
+    private ObservableList<Appointments> filterByMonthList = FXCollections.observableArrayList();
+    /** Observable List for all appointments By Current Week*/
+    private ObservableList<Appointments> filterByWeekList = FXCollections.observableArrayList();
 
     //Variables
     Parent scene;
@@ -133,12 +143,14 @@ public class AppointmentScreen implements Initializable {
 
                 DataBaseQueries.deleteFromAppointmentsTable(highlightedAppointment.getAppointmentId());
 
-                Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
-                deleteConfirmation.setTitle("Appointment Cancelled");
-                deleteConfirmation.setHeaderText("Appointment ID was " + highlightedAppointment.getAppointmentId());
-                deleteConfirmation.setContentText("It was a " + highlightedAppointment.getType() + " meeting");
-                deleteConfirmation.showAndWait();
-
+                Alerts.informationAlert("Appointment Cancelled", "Appointment ID was " +
+                                        highlightedAppointment.getAppointmentId(), "It was a " +
+                                        highlightedAppointment.getType() + " meeting");
+//                Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
+//                deleteConfirmation.setTitle("Appointment Cancelled");
+//                deleteConfirmation.setHeaderText("Appointment ID was " + highlightedAppointment.getAppointmentId());
+//                deleteConfirmation.setContentText("It was a " + highlightedAppointment.getType() + " meeting");
+//                deleteConfirmation.showAndWait();
 
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
             }
@@ -163,11 +175,209 @@ public class AppointmentScreen implements Initializable {
 
     }
 
-    public void onActionFilerByMonth(ActionEvent actionEvent) {
-        System.out.println("Filter by month");
+    /** Gets the month Id from the current month*/
+    public int monthSelectionToID(String selectedMonth) {
+        int monthId;
+        switch(selectedMonth){
+            case "FEBRUARY":
+                monthId = 2;
+                break;
+            case "MARCH":
+                monthId = 3;
+                break;
+            case "APRIL":
+                monthId = 4;
+                break;
+            case "MAY":
+                monthId = 5;
+                break;
+            case "JUNE":
+                monthId = 6;
+                break;
+            case "JULY":
+                monthId = 7;
+                break;
+            case "AUGUST":
+                monthId = 8;
+                break;
+            case "SEPTEMBER":
+                monthId = 9;
+                break;
+            case "OCTOBER":
+                monthId = 10;
+                break;
+            case "NOVEMBER":
+                monthId = 11;
+                break;
+            case "DECEMBER":
+                monthId = 12;
+                break;
+            default:
+                monthId = 1;
+        }
+        System.out.println(monthId);
+        return monthId;
     }
 
-    public void onActionFilterByWeek(ActionEvent actionEvent) {
-        System.out.println("Filter by week");
+    public void onActionFilerByMonth(ActionEvent actionEvent) throws SQLException {
+        appointmentTblView.setItems(filterByMonth());
     }
+
+    public void onActionFilterByWeek(ActionEvent actionEvent) throws SQLException {
+        appointmentTblView.setItems(filterByWeek());
+    }
+
+    /** Filters the appointments table by month
+     @return Returns the loaded list of monthly appointments*/
+    public ObservableList<Appointments> filterByMonth() throws SQLException {
+        Month currentMonth = LocalDateTime.now().getMonth();
+        String month = currentMonth.toString();
+        int monthId = monthSelectionToID(month);
+        System.out.println(monthSelectionToID(month));
+
+        Statement monthlyAppointments = JDBC.getConnection().createStatement();
+        String filterByMonthSql =
+                "SELECT * " +
+                "FROM appointments " +
+                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
+                "WHERE month(Start)=" + monthId;
+
+        ResultSet filterResults = monthlyAppointments.executeQuery(filterByMonthSql);
+
+        while(filterResults.next()) {
+            Appointments appointments = new Appointments(
+                    filterResults.getInt("Appointment_ID"),
+                    filterResults.getString("Title"),
+                    filterResults.getString("Description"),
+                    filterResults.getString("Location"),
+                    filterResults.getString("Contact_Name"),
+                    filterResults.getString("Type"),
+                    filterResults.getTimestamp("Start").toLocalDateTime(),
+                    filterResults.getTimestamp("End").toLocalDateTime(),
+                    filterResults.getInt("Customer_ID"),
+                    filterResults.getInt("User_ID"));
+            filterByMonthList.add(appointments);
+        }
+        return filterByMonthList;
+    }
+
+    /** Filters the appointments table by month
+     @return Returns the loaded list of monthly appointments*/
+    public ObservableList<Appointments> filterByWeek() throws SQLException {
+        Month currentMonth = LocalDateTime.now().getMonth();
+        String month = currentMonth.toString();
+        int monthId = monthSelectionToID(month);
+        System.out.println(monthSelectionToID(month));
+
+        Statement weeklyAppointments = JDBC.getConnection().createStatement();
+        String filterByWeekSql = "SELECT * " +
+                "FROM appointments " +
+                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
+                "WHERE DAY(Start) = DAY(CURRENT_DATE()) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
+                "OR DAY(Start) = DAY(CURRENT_DATE() + 1) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
+                "OR DAY(Start) = DAY(CURRENT_DATE() + 2) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
+                "OR DAY(Start) = DAY(CURRENT_DATE() + 3) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
+                "OR DAY(Start) = DAY(CURRENT_DATE() + 4) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
+                "OR DAY(Start) = DAY(CURRENT_DATE() + 5) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
+                "OR DAY(Start) = DAY(CURRENT_DATE() + 6) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
+                "OR DAY(Start) = DAY(CURRENT_DATE() + 7) AND YEAR(Start) = YEAR(CURRENT_DATE())";
+
+        ResultSet filterResults = weeklyAppointments.executeQuery(filterByWeekSql);
+
+        while(filterResults.next()) {
+            Appointments appointments = new Appointments(
+                    filterResults.getInt("Appointment_ID"),
+                    filterResults.getString("Title"),
+                    filterResults.getString("Description"),
+                    filterResults.getString("Location"),
+                    filterResults.getString("Contact_Name"),
+                    filterResults.getString("Type"),
+                    filterResults.getTimestamp("Start").toLocalDateTime(),
+                    filterResults.getTimestamp("End").toLocalDateTime(),
+                    filterResults.getInt("Customer_ID"),
+                    filterResults.getInt("User_ID"));
+            filterByWeekList.add(appointments);
+        }
+        return filterByWeekList;
+    }
+
 }
+
+
+
+
+
+
+//    public ObservableList<Appointments> getContactsSchedule() throws SQLException {
+//        String contactName = contactCombo.getSelectionModel().getSelectedItem();
+//
+//        Statement statement = JDBC.getConnection().createStatement();
+//        String appointmentInfoSQL = "SELECT appointments.*, contacts.* " +
+//                "FROM appointments " +
+//                "INNER JOIN contacts " +
+//                "ON appointments.Contact_ID = contacts.Contact_ID " +
+//                "WHERE Contact_Name='" + contactName + "'";
+//
+//        ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
+//
+//        while(appointmentResults.next()) {
+//            Appointments appointments = new Appointments(appointmentResults.getInt("Appointment_ID"),
+//                    appointmentResults.getString("Title"),
+//                    appointmentResults.getString("Description"),
+//                    appointmentResults.getString("Location"),
+//                    appointmentResults.getString("Contact_Name"),
+//                    appointmentResults.getString("Type"),
+//                    appointmentResults.getTimestamp("Start").toLocalDateTime(),
+//                    appointmentResults.getTimestamp("End").toLocalDateTime(),
+//                    appointmentResults.getInt("Customer_ID"),
+//                    appointmentResults.getInt("User_ID"));
+//            contactAppointmentSchedule.add(appointments);
+//        }
+//        return contactAppointmentSchedule;
+//    }
+
+
+
+//
+//
+//    public void searchAppointmentsByMonthAndType(int monthId, String type) throws SQLException {
+//
+//        Statement appointmentStatement = JDBC.getConnection().createStatement();
+//        String searchByMonthAndType = "SELECT COUNT(Appointment_ID) AS Count FROM appointments WHERE month(Start)=" + monthId + " AND Type='" + type + "'";
+//        ResultSet appointmentCount = appointmentStatement.executeQuery(searchByMonthAndType);
+//
+//        while(appointmentCount.next()) {
+//            totalNumberByMonthAndType.setText(String.valueOf(appointmentCount.getInt("Count")));
+//        }
+//    }
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
