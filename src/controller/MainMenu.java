@@ -81,6 +81,7 @@ public class MainMenu implements Initializable {
         System.exit(0);
     }
 
+    /** Initializes the appointment reminder*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //In here is where we will call the method to display an alert for 15 min appointment
@@ -93,20 +94,23 @@ public class MainMenu implements Initializable {
 
     /** Displays an alert to the user if there is an appointment that starts in the next 15 minutes.*/
     public void getsAppointmentsIn15MinutesLocal() throws SQLException {
-        LocalDateTime start = LocalDateTime.now().plusMinutes(15);
-        LocalDateTime end = LocalDateTime.now().plusMinutes(45);
-        Timestamp starter = Timestamp.valueOf(start);
-        Timestamp ender = Timestamp.valueOf(end);
-        displayAppointmentReminder(starter, ender);
+        LocalDateTime localStart = LocalDateTime.now().plusMinutes(15);
+        LocalDateTime localEnd = LocalDateTime.now().plusMinutes(45);
+        Timestamp start = Timestamp.valueOf(localStart);
+        Timestamp end = Timestamp.valueOf(localEnd);
+        displayAppointmentReminder(start, end);
     }
 
-    public void displayAppointmentReminder(Timestamp starter, Timestamp ender) throws SQLException {
+    /** Queries the database to check for appointments that are 15 minutes ahead of now for the start, and 45 minutes ahead for the end.
+     @param start 15 minutes ahead of the current time
+     @param end 45 minutes ahead of current time*/
+    public void displayAppointmentReminder(Timestamp start, Timestamp end) throws SQLException {
         Statement appointmentWithin15Minutes = JDBC.getConnection().createStatement();
         String checkForAppointments = "SELECT * " +
-                "FROM appointments " +
-                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
-                "WHERE Start >= DATE_SUB('" + starter + "', INTERVAL 15 MINUTE) " +
-                "AND End <= DATE_ADD('" + ender + "', INTERVAL 45 MINUTE)";
+                                "FROM appointments " +
+                                "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
+                                "WHERE Start >= DATE_SUB('" + start + "', INTERVAL 15 MINUTE) " +
+                                "AND End <= DATE_ADD('" + end + "', INTERVAL 45 MINUTE)";
         ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
 
         if(appointmentResults.next())  {

@@ -27,7 +27,6 @@ import java.util.ResourceBundle;
 
 public class AllReports implements Initializable {
 
-    //FXML Variables
     /** Wait on this */
     public Label filterReportsBttn;
     /** Main meny Button*/
@@ -43,56 +42,56 @@ public class AllReports implements Initializable {
     /** Save Button*/
     public ComboBox<String> customerComboBox;
     /** Save Button*/
-    public TextField apptsPerCustomerTextFld;
-    /** Save Button*/
     public Button appointmentCountSearchBttn;
-    /** Save Button*/
-    public Button scheduleBttn;
     /** Save Button*/
     public ComboBox<String> contactCombo;
     /** Save Button*/
     public int contactId;
-    /** Save Button*/
+    /** Appointment Id table column*/
     public TableColumn<Appointments, Integer> appointmentIdTblCol;
-
+    /** Title table column*/
     public TableColumn<Appointments, String> titleTblCol;
-
+    /** User Id table column*/
     public TableColumn<Appointments, Integer> userIdTblCol;
-
+    /** Customer Id table column*/
     public TableColumn<Appointments, Integer> customerIdTblCol;
-
+    /** Ending time table column*/
     public TableColumn<Appointments, LocalDateTime> endTblCol;
-
+    /** Starting time table column*/
     public TableColumn<Appointments, LocalDateTime> startTblCol;
-
+    /** Contact name table column*/
     public TableColumn<Appointments, String> contactTblCol;
-
+    /** Type table column*/
     public TableColumn<Appointments, String> typeTblCol;
-
+    /** Location table column*/
     public TableColumn<Appointments, String> locationTblCol;
-
+    /** Description table column*/
     public TableColumn<Appointments, String> descriptionTblCol;
-
+    /** Total number of appointments by month and type label*/
     public Label totalNumberByMonthAndType;
-
+    /** Total number of appointment for each selected customer label*/
     public Label totalAppointmentsByCustomer;
 
-
+    /** Observable List for types of meetings*/
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
-
+    /** Observable List for months*/
     private ObservableList<String> monthList = FXCollections.observableArrayList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
-                                                                            "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
+                                                                                     "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
+    /** Observable List for all customers*/
     private ObservableList<String> customerList = FXCollections.observableArrayList();
-
+    /** Observable List for all contacts*/
     private ObservableList<String> contactList = FXCollections.observableArrayList();
-
+    /** Observable List for populating the table view by contact name*/
     private ObservableList<Appointments> contactAppointmentSchedule = FXCollections.observableArrayList();
 
-
-    //Variables
+    /** Scene variable*/
     Parent scene;
+    /** Stage variable*/
     Stage stage;
 
+    /** Changed the screen to desired screen
+     @param actionEvent The action event
+     @param resourcesString The link to the desired screen */
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resource Example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -101,21 +100,14 @@ public class AllReports implements Initializable {
         stage.show();
     }
 
+    /** Takes the user to the main menu
+     @param actionEvent Main menu button*/
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
     }
 
-    //WE DONT NEED THESE?
-//    public void onActionMonthCombo(ActionEvent actionEvent) {
-//        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
-//        monthSelectionToID(selectedMonth);
-//    }
-//
-//    public void onActionTypeCombo(ActionEvent actionEvent) {
-//        String type = typeCombo.getSelectionModel().getSelectedItem();
-//        //uhh matching?
-//    }
-
+    /** Queries database for count of all selected customers appointments
+     @param actionEvent Combo box selection*/
     public void onActionCustomerComboBox(ActionEvent actionEvent) throws SQLException {
 
         String customerName = customerComboBox.getSelectionModel().getSelectedItem();
@@ -130,6 +122,7 @@ public class AllReports implements Initializable {
         }
     }
 
+    /** Initializes the combo boxes of the page*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -143,6 +136,7 @@ public class AllReports implements Initializable {
 
     }
 
+    /** Loads the contacts list and sets that to the combo box*/
     public void loadContactList() throws SQLException {
         Statement loadContactStatement = JDBC.getConnection().createStatement();
         String loadContactNameSQL = "SELECT * FROM contacts";
@@ -154,6 +148,7 @@ public class AllReports implements Initializable {
         }
     }
 
+    /** Loads the customers list and sets that to the combo box*/
     public void loadCustomersList() throws SQLException {
 
         Statement loadCustomersStatement = JDBC.getConnection().createStatement();
@@ -166,6 +161,7 @@ public class AllReports implements Initializable {
         }
     }
 
+    /** Gets the month Id from the month selected in the combo box*/
     public int monthSelectionToID(String selectedMonth) {
         int monthId;
         switch(selectedMonth){
@@ -238,16 +234,17 @@ public class AllReports implements Initializable {
         }
     }
 
-    /** Populates the contactAppointmentsSchedule list with all appointments matching selected contact name.*/
+    /** Populates the contactAppointmentsSchedule list with all appointments matching selected contact name.
+     @return List of selected contact appointments*/
     public ObservableList<Appointments> getContactsSchedule() throws SQLException {
         String contactName = contactCombo.getSelectionModel().getSelectedItem();
 
         Statement statement = JDBC.getConnection().createStatement();
         String appointmentInfoSQL = "SELECT appointments.*, contacts.* " +
-                "FROM appointments " +
-                "INNER JOIN contacts " +
-                "ON appointments.Contact_ID = contacts.Contact_ID " +
-                "WHERE Contact_Name='" + contactName + "'";
+                                "FROM appointments " +
+                                "INNER JOIN contacts " +
+                                "ON appointments.Contact_ID = contacts.Contact_ID " +
+                                "WHERE Contact_Name='" + contactName + "'";
 
         ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
 
@@ -267,15 +264,15 @@ public class AllReports implements Initializable {
         return contactAppointmentSchedule;
 
     }
+
+    //NEEDED??????????????
     public void getContactID() throws SQLException {
         String contactName = contactCombo.getSelectionModel().getSelectedItem();
 
-        //query to get the contact id
         Statement st = JDBC.getConnection().createStatement();
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
         ResultSet resultSet = st.executeQuery(sql);
 
-        //set the contact id to the matching name in the DB
         while(resultSet.next()){
             contactId = resultSet.getInt("Contact_ID");
         }
@@ -302,6 +299,5 @@ public class AllReports implements Initializable {
         endTblCol.setCellValueFactory(new PropertyValueFactory<>("end"));
         customerIdTblCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         userIdTblCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
-
     }
 }
