@@ -24,8 +24,8 @@
             <Font name="System Bold" size="12.0" />
          </font></Label>
       <Button fx:id="mainMenuBttn" layoutX="767.0" layoutY="515.0" mnemonicParsing="false" onAction="#onActionMainMenu" text="Main Menu" />
-      <ComboBox fx:id="monthCombo" layoutX="98.0" layoutY="115.0" onAction="#onActionMonthCombo" prefHeight="25.0" prefWidth="178.0" promptText="Please select a month" />
-      <ComboBox fx:id="typeCombo" layoutX="372.0" layoutY="115.0" onAction="#onActionTypeCombo" prefHeight="25.0" prefWidth="195.0" promptText="Please select a type" />
+      <ComboBox fx:id="monthCombo" layoutX="98.0" layoutY="115.0" prefHeight="25.0" prefWidth="178.0" promptText="Please select a month" />
+      <ComboBox fx:id="typeCombo" layoutX="372.0" layoutY="115.0" prefHeight="25.0" prefWidth="195.0" promptText="Please select a type" />
       <Label layoutX="43.0" layoutY="169.0" prefHeight="17.0" prefWidth="246.0" text="Number of appointments by month and type:" />
       <TableView fx:id="scheduleOfEachContactTblView" layoutX="5.0" layoutY="241.0" prefHeight="215.0" prefWidth="864.0">
         <columns>
@@ -42,7 +42,6 @@
         </columns>
       </TableView>
       <ComboBox fx:id="customerComboBox" layoutX="121.0" layoutY="506.0" onAction="#onActionCustomerComboBox" prefHeight="25.0" prefWidth="211.0" promptText="Please select a Customer" />
-      <TextField fx:id="apptsPerCustomerTextFld" disable="true" layoutX="500.0" layoutY="507.0" prefHeight="25.0" prefWidth="52.0" />
       <Label layoutX="43.0" layoutY="119.0" text="Month:">
          <font>
             <Font name="System Bold" size="12.0" />
@@ -66,6 +65,11 @@
       <Button fx:id="appointmentCountSearchBttn" layoutX="622.0" layoutY="115.0" mnemonicParsing="false" onAction="#onActionSearchNumberOfAppointments" text="Search" />
       <ComboBox fx:id="contactCombo" layoutX="184.0" layoutY="207.0" onAction="#onActionContactAppointmentTable" prefHeight="25.0" prefWidth="169.0" promptText="Please select a contact" />
       <Label fx:id="totalNumberByMonthAndType" layoutX="299.0" layoutY="165.0" prefHeight="25.0" prefWidth="19.0">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="totalAppointmentsByCustomer" layoutX="501.0" layoutY="507.0" prefHeight="25.0" prefWidth="19.0">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

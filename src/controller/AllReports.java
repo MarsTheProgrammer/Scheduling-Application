@@ -75,6 +75,8 @@ public class AllReports implements Initializable {
 
     public Label totalNumberByMonthAndType;
 
+    public Label totalAppointmentsByCustomer;
+
 
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
 
@@ -91,8 +93,6 @@ public class AllReports implements Initializable {
     Parent scene;
     Stage stage;
 
-    //Created this to remove code redundancy
-
     public void buttonChanging(ActionEvent actionEvent, String resourcesString) throws IOException {
         //Resource Example: "/view/mainMenu.fxml"
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -101,22 +101,20 @@ public class AllReports implements Initializable {
         stage.show();
     }
 
-
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
         buttonChanging(actionEvent, "/view/mainMenu.fxml");
     }
 
-    public void onActionMonthCombo(ActionEvent actionEvent) {
-        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
-        monthSelectionToID(selectedMonth);
-        //We need to get the middle digit?
-        //We need to parse the middle digit out of the date
-    }
-
-    public void onActionTypeCombo(ActionEvent actionEvent) {
-        String type = typeCombo.getSelectionModel().getSelectedItem();
-        //uhh matching?
-    }
+    //WE DONT NEED THESE?
+//    public void onActionMonthCombo(ActionEvent actionEvent) {
+//        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
+//        monthSelectionToID(selectedMonth);
+//    }
+//
+//    public void onActionTypeCombo(ActionEvent actionEvent) {
+//        String type = typeCombo.getSelectionModel().getSelectedItem();
+//        //uhh matching?
+//    }
 
     public void onActionCustomerComboBox(ActionEvent actionEvent) throws SQLException {
 
@@ -128,7 +126,7 @@ public class AllReports implements Initializable {
                                 "WHERE Customer_Name='" + customerName + "'";
         ResultSet rs = getCustomerCount.executeQuery(customerCountSQL);
         while(rs.next()) {
-            apptsPerCustomerTextFld.setText(rs.getString("Total"));
+            totalAppointmentsByCustomer.setText(rs.getString("Total"));
         }
     }
 
