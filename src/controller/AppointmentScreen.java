@@ -234,7 +234,6 @@ public class AppointmentScreen implements Initializable {
         Month currentMonth = LocalDateTime.now().getMonth();
         String month = currentMonth.toString();
         int monthId = monthSelectionToID(month);
-        System.out.println(monthSelectionToID(month));
 
         Statement monthlyAppointments = JDBC.getConnection().createStatement();
         String filterByMonthSql =
@@ -265,13 +264,10 @@ public class AppointmentScreen implements Initializable {
     /** Filters the appointments table by month
      @return Returns the loaded list of monthly appointments*/
     public ObservableList<Appointments> filterByWeek() throws SQLException {
-        Month currentMonth = LocalDateTime.now().getMonth();
-        String month = currentMonth.toString();
-        int monthId = monthSelectionToID(month);
-        System.out.println(monthSelectionToID(month));
 
         Statement weeklyAppointments = JDBC.getConnection().createStatement();
-        String filterByWeekSql = "SELECT * " +
+        String filterByWeekSql =
+                "SELECT * " +
                 "FROM appointments " +
                 "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
                 "WHERE DAY(Start) = DAY(CURRENT_DATE()) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +

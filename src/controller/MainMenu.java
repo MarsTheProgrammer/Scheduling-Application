@@ -84,7 +84,6 @@ public class MainMenu implements Initializable {
     /** Initializes the appointment reminder*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //In here is where we will call the method to display an alert for 15 min appointment
         try {
             getsAppointmentsIn15MinutesLocal();
         } catch (SQLException e) {
@@ -106,11 +105,13 @@ public class MainMenu implements Initializable {
      @param end 45 minutes ahead of current time*/
     public void displayAppointmentReminder(Timestamp start, Timestamp end) throws SQLException {
         Statement appointmentWithin15Minutes = JDBC.getConnection().createStatement();
-        String checkForAppointments = "SELECT * " +
+        String checkForAppointments =
+                                "SELECT * " +
                                 "FROM appointments " +
                                 "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
-                                "WHERE Start >= DATE_SUB('" + start + "', INTERVAL 15 MINUTE) " +
+                                "WHERE Start >= DATE_ADD('" + start + "', INTERVAL 15 MINUTE) " +
                                 "AND End <= DATE_ADD('" + end + "', INTERVAL 45 MINUTE)";
+
         ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery(checkForAppointments);
 
         if(appointmentResults.next())  {
