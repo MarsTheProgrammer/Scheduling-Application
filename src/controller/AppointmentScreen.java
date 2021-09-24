@@ -220,10 +220,14 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void onActionFilerByMonth(ActionEvent actionEvent) throws SQLException {
+        filterByMonthList.clear();
+        filterByWeek().clear();
         appointmentTblView.setItems(filterByMonth());
     }
 
     public void onActionFilterByWeek(ActionEvent actionEvent) throws SQLException {
+        filterByMonthList.clear();
+        filterByWeek().clear();
         appointmentTblView.setItems(filterByWeek());
     }
 
@@ -304,55 +308,6 @@ public class AppointmentScreen implements Initializable {
 }
 
 
-
-
-
-
-//    public ObservableList<Appointments> getContactsSchedule() throws SQLException {
-//        String contactName = contactCombo.getSelectionModel().getSelectedItem();
-//
-//        Statement statement = JDBC.getConnection().createStatement();
-//        String appointmentInfoSQL = "SELECT appointments.*, contacts.* " +
-//                "FROM appointments " +
-//                "INNER JOIN contacts " +
-//                "ON appointments.Contact_ID = contacts.Contact_ID " +
-//                "WHERE Contact_Name='" + contactName + "'";
-//
-//        ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
-//
-//        while(appointmentResults.next()) {
-//            Appointments appointments = new Appointments(appointmentResults.getInt("Appointment_ID"),
-//                    appointmentResults.getString("Title"),
-//                    appointmentResults.getString("Description"),
-//                    appointmentResults.getString("Location"),
-//                    appointmentResults.getString("Contact_Name"),
-//                    appointmentResults.getString("Type"),
-//                    appointmentResults.getTimestamp("Start").toLocalDateTime(),
-//                    appointmentResults.getTimestamp("End").toLocalDateTime(),
-//                    appointmentResults.getInt("Customer_ID"),
-//                    appointmentResults.getInt("User_ID"));
-//            contactAppointmentSchedule.add(appointments);
-//        }
-//        return contactAppointmentSchedule;
-//    }
-
-
-
-//
-//
-//    public void searchAppointmentsByMonthAndType(int monthId, String type) throws SQLException {
-//
-//        Statement appointmentStatement = JDBC.getConnection().createStatement();
-//        String searchByMonthAndType = "SELECT COUNT(Appointment_ID) AS Count FROM appointments WHERE month(Start)=" + monthId + " AND Type='" + type + "'";
-//        ResultSet appointmentCount = appointmentStatement.executeQuery(searchByMonthAndType);
-//
-//        while(appointmentCount.next()) {
-//            totalNumberByMonthAndType.setText(String.valueOf(appointmentCount.getInt("Count")));
-//        }
-//    }
-//
-//
-//
 
 
 
