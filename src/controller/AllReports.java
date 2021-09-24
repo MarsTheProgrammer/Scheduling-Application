@@ -204,7 +204,6 @@ public class AllReports implements Initializable {
             default:
                 monthId = 1;
         }
-        System.out.println(monthId);
         return monthId;
     }
 
@@ -224,8 +223,6 @@ public class AllReports implements Initializable {
         int monthId = monthSelectionToID(selectedMonth);
         String type = typeCombo.getSelectionModel().getSelectedItem();
         searchAppointmentsByMonthAndType(monthId, type);
-
-
     }
 
     /** Populates the contactAppointmentsSchedule list with all appointments matching selected contact name.*/
