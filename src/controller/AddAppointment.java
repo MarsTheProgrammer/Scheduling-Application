@@ -10,8 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Alerts;
-import model.Customer;
-import model.User;
 import util.DataBaseQueries;
 import util.JDBC;
 import util.TimeManager;
@@ -20,12 +18,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 public class AddAppointment implements Initializable {
 
@@ -80,9 +74,11 @@ public class AddAppointment implements Initializable {
     /** Observable List for types customers*/
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
 
-    //Variables
+    /** Scene variable*/
     Parent scene;
+    /** Stage variable*/
     Stage stage;
+
 
     /** Loads the combo boxes with time, customers, users, and contacts.
      @param url URL
@@ -90,7 +86,6 @@ public class AddAppointment implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        //Loads the time combo boxes
         TimeManager startTime = new TimeManager();
         startTimeComboBox.setItems(startTime.generateTimeList());
         startTimeComboBox.getSelectionModel().selectFirst();
@@ -104,40 +99,36 @@ public class AddAppointment implements Initializable {
 
         typeComboBox.setItems(typeList);
 
-        //Populates combo boxes from DB
         try {
-            //Populates the existing customers combo box
-            Statement st = JDBC.getConnection().createStatement();
+            Statement populateExistingCustomers = JDBC.getConnection().createStatement();
             String sqlStatement = "SELECT * FROM customers";
-            ResultSet result = st.executeQuery(sqlStatement);
+            ResultSet result = populateExistingCustomers.executeQuery(sqlStatement);
 
             while(result.next()) {
                 existingCustList.add(result.getString("Customer_Name"));
                 existingCustomerComboBox.setItems(existingCustList);
             }
-            st.close();
+            populateExistingCustomers.close();
 
-            //This populates the contact name combo box
-            Statement contactStatement = JDBC.getConnection().createStatement();
+            Statement populateContactStatement = JDBC.getConnection().createStatement();
             String sqlContactStatement = "SELECT * FROM contacts";
-            ResultSet contactResult = contactStatement.executeQuery(sqlContactStatement);
+            ResultSet contactResult = populateContactStatement.executeQuery(sqlContactStatement);
 
             while(contactResult.next()) {
                 contactNameList.add(contactResult.getString("Contact_Name"));
                 contactComboBox.setItems(contactNameList);
             }
-            contactStatement.close();
+            populateContactStatement.close();
 
-            //This will populate the User ID combo box
-            Statement userIdStatement = JDBC.getConnection().createStatement();
+            Statement populateUserIdStatement = JDBC.getConnection().createStatement();
             String sqlUserIdStatement = "SELECT * FROM users";
-            ResultSet userIdResult = userIdStatement.executeQuery(sqlUserIdStatement);
+            ResultSet userIdResult = populateUserIdStatement.executeQuery(sqlUserIdStatement);
 
             while(userIdResult.next()) {
                 userIdList.add(userIdResult.getInt("User_ID"));
                 userIdCombo.setItems(userIdList);
             }
-            userIdStatement.close();
+            populateUserIdStatement.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -147,7 +138,6 @@ public class AddAppointment implements Initializable {
     /** Goes back to the appointments screen
      @param actionEvent Handles the event of the button being pressed*/
     public void onActionBack(ActionEvent actionEvent) throws IOException {
-
         Alert alertForBack = new Alert(Alert.AlertType.CONFIRMATION);
         alertForBack.setTitle("Cancel");
         alertForBack.setHeaderText("Are You Sure You Want To Go Back?");
@@ -162,7 +152,6 @@ public class AddAppointment implements Initializable {
     /** Goes back to the main menu screen
      @param actionEvent Handles the event of the button being pressed*/
     public void onActionMainMenu(ActionEvent actionEvent) throws IOException {
-
         Alert alertForMainMenu = new Alert(Alert.AlertType.CONFIRMATION);
         alertForMainMenu.setTitle("Cancel");
         alertForMainMenu.setHeaderText("Are You Sure You Want To Go the Main Menu?");
@@ -182,9 +171,8 @@ public class AddAppointment implements Initializable {
         boolean endBeforeStart = end.before(start);
         boolean endEqualsStart = end.equals(start);
 
-        //These are for checking to make sure the time is within business hours
-        Timestamp startingHours = Timestamp.valueOf(dateDatePicker.getValue() + " 08:00:00");
-        Timestamp endingHours = Timestamp.valueOf(dateDatePicker.getValue() + " 22:00:00");
+        Timestamp startingBusinessHours = Timestamp.valueOf(dateDatePicker.getValue() + " 08:00:00");
+        Timestamp endingBusinessHours = Timestamp.valueOf(dateDatePicker.getValue() + " 22:00:00");
 
         LocalTime localTimeOfStart = startTimeComboBox.getSelectionModel().getSelectedItem();
         LocalTime localTimeEnd = endTimeComboBox.getSelectionModel().getSelectedItem();
@@ -193,7 +181,7 @@ public class AddAppointment implements Initializable {
         Timestamp startLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
         Timestamp endLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeEnd));
 
-        if(startLocal.before(startingHours) || endLocal.after(endingHours)) {
+        if(startLocal.before(startingBusinessHours) || endLocal.after(endingBusinessHours)) {
             Alerts.alertDisplays(29);
             return false;
         }
@@ -314,6 +302,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the description field is empty
      @param desc The text in the description*/
     public boolean descriptionNotNull(String desc) {
@@ -323,6 +312,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the type combo box is empty
      @param type The text in the type*/
     public boolean typeNotNull(String type) {
@@ -332,6 +322,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the location field is empty
      @param location The text in the location*/
     public boolean locationNotNull(String location) {
@@ -341,6 +332,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the start combo box is empty
      @param start The timestamp of the start combo box*/
     public boolean startNotNull(Timestamp start) {
@@ -350,6 +342,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the end combo box is empty
      @param end The timestamp of the end combo box*/
     public boolean endNotNull(Timestamp end) {
@@ -359,6 +352,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the date picker is empty
      @param date The local date of the date picker*/
     public boolean dateNotNull(LocalDate date) {
@@ -368,6 +362,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the customerId field is empty
      @param customerId The text in the customerId*/
     public boolean customerNotNull(int customerId) {
@@ -377,6 +372,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the userId field is empty
      @param userId The text in the userId*/
     public boolean userIdNotNull(int userId) {
@@ -386,6 +382,7 @@ public class AddAppointment implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the contact combo box is empty
      @param contact The text in the contact combo box*/
     public boolean contactNotNull(int contact) {

@@ -27,7 +27,6 @@ import java.util.ResourceBundle;
 
 public class AppointmentScreen implements Initializable {
 
-
     /** Main menu Button*/
     public Button mainMenuBttn;
     /** Appointments table viel*/
@@ -69,11 +68,10 @@ public class AppointmentScreen implements Initializable {
     private ObservableList<Appointments> filterByMonthList = FXCollections.observableArrayList();
     /** Observable List for all appointments By Current Week*/
     private ObservableList<Appointments> filterByWeekList = FXCollections.observableArrayList();
-
-    //Variables
+    /** Selected appointment*/
+    public static Appointments highlightedAppointment;
     Parent scene;
     Stage stage;
-     public static Appointments highlightedAppointment;
 
     /** Getter for highlighted appointment*/
     public static Appointments getHighlightedAppointment() {
@@ -148,11 +146,9 @@ public class AppointmentScreen implements Initializable {
                         "Appointment ID was " +  highlightedAppointment.getAppointmentId(),
                         "It was a " + highlightedAppointment.getType() + " meeting with " + highlightedAppointment.getContactName());
 
-
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
             }
         }
-
     }
 
     /** Goes to the modify screen
@@ -169,7 +165,6 @@ public class AppointmentScreen implements Initializable {
         } else {
             buttonChanging(actionEvent, "/view/modifyAppointment.fxml");
         }
-
     }
 
     /** Gets the month Id from the current month*/
@@ -216,12 +211,16 @@ public class AppointmentScreen implements Initializable {
         return monthId;
     }
 
+    /** Filters the appointment table by current month
+     @param actionEvent Radio button selection*/
     public void onActionFilerByMonth(ActionEvent actionEvent) throws SQLException {
         filterByMonthList.clear();
         filterByWeek().clear();
         appointmentTblView.setItems(filterByMonth());
     }
 
+    /** Filters the appointment table by current week
+     @param actionEvent Radio button selection*/
     public void onActionFilterByWeek(ActionEvent actionEvent) throws SQLException {
         filterByMonthList.clear();
         filterByWeek().clear();

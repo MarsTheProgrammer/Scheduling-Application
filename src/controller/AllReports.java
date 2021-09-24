@@ -20,9 +20,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ResourceBundle;
 
 public class AllReports implements Initializable {
@@ -74,15 +72,15 @@ public class AllReports implements Initializable {
 
     /** Observable List for types of meetings*/
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
-    /** Observable List for months*/
-    private ObservableList<String> monthList = FXCollections.observableArrayList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
-                                                                                     "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
     /** Observable List for all customers*/
     private ObservableList<String> customerList = FXCollections.observableArrayList();
     /** Observable List for all contacts*/
     private ObservableList<String> contactList = FXCollections.observableArrayList();
     /** Observable List for populating the table view by contact name*/
     private ObservableList<Appointments> contactAppointmentSchedule = FXCollections.observableArrayList();
+    /** Observable List for months*/
+    private ObservableList<String> monthList = FXCollections.observableArrayList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
+            "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
 
     /** Scene variable*/
     Parent scene;
@@ -264,19 +262,19 @@ public class AllReports implements Initializable {
         return contactAppointmentSchedule;
     }
 
-    //NEEDED??????????????
-    public void getContactID() throws SQLException {
-        String contactName = contactCombo.getSelectionModel().getSelectedItem();
-
-        Statement st = JDBC.getConnection().createStatement();
-        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
-        ResultSet resultSet = st.executeQuery(sql);
-
-        while(resultSet.next()){
-            contactId = resultSet.getInt("Contact_ID");
-        }
-        st.close();
-    }
+//    //NEEDED??????????????
+//    public void getContactID() throws SQLException {
+//        String contactName = contactCombo.getSelectionModel().getSelectedItem();
+//
+//        Statement st = JDBC.getConnection().createStatement();
+//        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name='" + contactName + "'";
+//        ResultSet resultSet = st.executeQuery(sql);
+//
+//        while(resultSet.next()){
+//            contactId = resultSet.getInt("Contact_ID");
+//        }
+//        st.close();
+//    }
 
     /** Populates the contact schedule table
      @param actionEvent Handles combo box selection*/

@@ -48,11 +48,13 @@ public class CustomersTable implements Initializable {
     public Button deleteBtnn;
     /** Main menu button*/
     public Button mainMenuBttn;
-
-    //Variables
-    Parent scene;
-    Stage stage;
+    /** Selected customer*/
     private static Customer highlightedCustomer;
+
+    /** Scene variable*/
+    Parent scene;
+    /** Stage variable*/
+    Stage stage;
 
     /** Getter for the highlighted customer.*/
     public static Customer getHighlightedCustomer() {
@@ -79,15 +81,10 @@ public class CustomersTable implements Initializable {
     /** Changes to the modify customer screen.
      @param actionEvent Handles button press. */
     public void onActionModify(ActionEvent actionEvent) throws IOException {
-
-        //Grabs highlighted customer and pushes to modify table
         highlightedCustomer = customersTblView.getSelectionModel().getSelectedItem();
 
         if(highlightedCustomer == null) {
-            Alert alertForModify = new Alert(Alert.AlertType.ERROR);
-            alertForModify.setHeaderText("No customer highlighted");
-            alertForModify.setContentText("Please select a customer to modify");
-            alertForModify.showAndWait();
+            Alerts.errorAlert( "ERROR", "No customer highlighted", "Please select a customer to modify");
         } else {
             buttonChanging(actionEvent, "/view/modifyCustomer.fxml");
         }
@@ -99,7 +96,8 @@ public class CustomersTable implements Initializable {
     public static int getCustomerApptCount(int customerID) throws SQLException {
 
         Statement customerApptCount = JDBC.getConnection().createStatement();
-        String modifySQL = "SELECT COUNT(Appointment_ID) AS Count " +
+        String modifySQL =
+                "SELECT COUNT(Appointment_ID) AS Count " +
                 "FROM appointments " +
                 "INNER JOIN customers ON customers.Customer_ID = appointments.Customer_ID " +
                 "WHERE customers.Customer_ID=" + customerID;
@@ -123,22 +121,17 @@ public class CustomersTable implements Initializable {
         if(highlightedCustomer == null) {
             Alerts.alertDisplays(9);
         } else if(getCustomerApptCount(highlightedCustomer.getCustomerID()) == 0){
-
             Alert alertForDelete = new Alert(Alert.AlertType.CONFIRMATION);
             alertForDelete.setHeaderText("Are you sure you want to delete this customer?");
             alertForDelete.setContentText("Deleting the customer will remove them and their appointments");
             Optional<ButtonType> deleteResult = alertForDelete.showAndWait();
 
             if(deleteResult.isPresent() && deleteResult.get() == ButtonType.OK) {
-
                 DataBaseQueries.deleteFromCustomersTable(highlightedCustomer.getCustomerID());
-
                 Alerts.alertDisplays(11);
-
                 buttonChanging(actionEvent, "/view/CustomersTable.fxml");
             }
         }
-
     }
 
     /** Changes to the main menu customer screen.
@@ -150,8 +143,6 @@ public class CustomersTable implements Initializable {
     /** Populates the customer table view. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        //added this clear in order to make sure no duplicates are present in CustomerTableView
         try {
             Customer.getGetAllCustomers().clear();
             customersTblView.setItems(Customer.getGetAllCustomers());

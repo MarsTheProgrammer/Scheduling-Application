@@ -23,7 +23,6 @@ import java.util.ResourceBundle;
 
 public class AddCustomer implements Initializable {
 
-    //FXML variables
     /** Save Button*/
     public Button saveCustomerBttn;
     /** Cancel Button*/
@@ -45,14 +44,16 @@ public class AddCustomer implements Initializable {
     /** Division ID From selected city variable*/
     public int divisionIDFromCity;
 
-    //Variables
-    Parent scene;
-    Stage stage;
-
     /** Observable List for all cities*/
     ObservableList<String> citiesList = FXCollections.observableArrayList();
     /** Observable List for all countries*/
     ObservableList<String> countriesList = FXCollections.observableArrayList("U.S", "Canada", "UK");
+
+    /** Scene variable*/
+    Parent scene;
+    /** Stage variable*/
+    Stage stage;
+
 
     /** Changed the screen to desired screen
      @param actionEvent The action event
@@ -139,21 +140,16 @@ public class AddCustomer implements Initializable {
         String customerCity = cityComboBox.getSelectionModel().getSelectedItem();
         String customerCountry = countryComboBox.getSelectionModel().getSelectedItem();
 
-        //If all fields are filled and selected, add the customer to the customers list.
         if (nameNotNull(customerName) && addressNotNull(customerAddress) && postalCodeNotNull(customerPostalCode) && phoneNotNull(customerPhoneNumber) && countryNotNull(customerCountry) && cityNotNull(customerCity)) {
 
-            //Customer_ID is auto incremented
             DataBaseQueries.insertIntoCustomersTable(customerName, customerAddress,customerPhoneNumber, customerPostalCode, DataProvider.divisionID);
-
 
             // WHY DO I HAVE THIS HERE?
             //Customer customer = new Customer(customerID, customerName, customerAddress, customerCity, customerPostalCode, customerPhoneNumber, customerCountry);
             //Customer.allCustomersList.add(customer);
 
-            //Displays an informative box telling user the customer was saved
             Alerts.alertDisplays(6);
 
-            //Goes back to the customer table screen
             buttonChanging(actionEvent, "/view/customersTable.fxml");
         }
     }
@@ -164,7 +160,6 @@ public class AddCustomer implements Initializable {
         countryComboBox.setItems(countriesList);
     }
 
-    //When a country is select, it will update the city combo box
     public void onActionCityComboBox(ActionEvent actionEvent) throws SQLException {
         String citySelected = cityComboBox.getSelectionModel().getSelectedItem();
 
@@ -176,7 +171,6 @@ public class AddCustomer implements Initializable {
     /** This gets all the cities of a given division ID
      @param comboBoxSelection Combo box selection.*/
     public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
-
         Statement state = JDBC.getConnection().createStatement();
         String getAllCitiesDivisionIDSQL = "SELECT Division_ID FROM first_level_divisions WHERE Division='" + comboBoxSelection + "'";
         ResultSet result = state.executeQuery(getAllCitiesDivisionIDSQL);
@@ -195,6 +189,7 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the address field is empty
      @param address The text in the address*/
     public boolean addressNotNull(String address) {
@@ -204,6 +199,7 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the postalCode field is empty
      @param postalCode The text in the postalCode*/
     public boolean postalCodeNotNull(String postalCode) {
@@ -213,6 +209,7 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the phone field is empty
      @param phone The text in the phone*/
     public boolean phoneNotNull(String phone) {
@@ -222,6 +219,7 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the country combo box is empty
      @param country The text in the country combo box*/
     public boolean countryNotNull(String country) {
@@ -231,6 +229,7 @@ public class AddCustomer implements Initializable {
         }
         return true;
     }
+
     /**Throws error if the city combo box is empty
      @param city The text in the city combo box*/
     public boolean cityNotNull(String city) {

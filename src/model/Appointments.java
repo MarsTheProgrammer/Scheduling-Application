@@ -7,7 +7,6 @@ import util.JDBC;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Appointments {
@@ -32,7 +31,6 @@ public class Appointments {
     private int userId;
     /** Contact Name*/
     private String contactName;
-
     /** Observable List of all appointments*/
     public static ObservableList<Appointments> allAppointmentsList = FXCollections.observableArrayList();
     /** Observable List of selected contact names*/
@@ -40,7 +38,6 @@ public class Appointments {
 
     /**Basic constructor*/
     public Appointments() {}
-
 
     /** Appointment constructor
      @param title
@@ -74,9 +71,7 @@ public class Appointments {
     }
 
     /** Setter for appointment Id*/
-    public void setAppointmentId(int appointmentId) {
-        this.appointmentId = appointmentId;
-    }
+    public void setAppointmentId(int appointmentId) {this.appointmentId = appointmentId;}
 
     /** Getter for title
      @return title*/
@@ -172,9 +167,7 @@ public class Appointments {
     public static ObservableList<Appointments> getGetAllAppointments() throws SQLException {
 
         Statement statement = JDBC.getConnection().createStatement();
-
         String appointmentInfoSQL = "SELECT appointments.*, contacts.* FROM appointments INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID";
-
         ResultSet appointmentResults = statement.executeQuery(appointmentInfoSQL);
 
         while(appointmentResults.next()) {

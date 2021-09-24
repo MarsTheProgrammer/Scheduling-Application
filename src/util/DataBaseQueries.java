@@ -1,8 +1,6 @@
 package util;
 
-import javafx.scene.control.Alert;
 import model.Alerts;
-
 import java.sql.*;
 
 public class DataBaseQueries {
@@ -15,7 +13,6 @@ public class DataBaseQueries {
      @param postalCode postalCode */
     public static int insertIntoCustomersTable(String customerName, String address, String Phone, String postalCode, int divisionID) throws SQLException {
         String sql = "INSERT INTO customers (Customer_Name, Address, Phone, Postal_Code, Division_ID) VALUES(?,?,?,?,?)";
-
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
         ps.setString(1, customerName);
@@ -40,7 +37,6 @@ public class DataBaseQueries {
     public static int updateToCustomersTable(int customerID, String customerName, String address, String postalCode, String Phone, int divisionID) throws SQLException {
 
         String modifySQL = "UPDATE customers SET Customer_Name=?, Address=?, Phone=?, Postal_Code=?, Division_ID=? WHERE Customer_ID=?";
-
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(modifySQL);
 
         preparedStatement.setInt(6, customerID);
@@ -64,30 +60,15 @@ public class DataBaseQueries {
     public static int deleteFromCustomersTable(int customerID) throws SQLException {
 
         String modifySQL = "DELETE FROM customers WHERE Customer_ID = ?";
-
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(modifySQL);
+
         preparedStatement.setInt(1, customerID);
+
         int rowsDeleted = preparedStatement.executeUpdate();
 
         preparedStatement.close();
         return rowsDeleted;
     }
-
-//    public static void getCustomerApptCount(int customerID) throws SQLException {
-//
-//        Statement customerApptCount = JDBC.getConnection().createStatement();
-//        String modifySQL = "SELECT COUNT(Appointment_ID) AS Count " +
-//                "FROM appointments " +
-//                "INNER JOIN customers ON customers.Customer_ID = appointments.Customer_ID " +
-//                "WHERE customers.Customer_ID=" + customerID;
-//
-//        ResultSet apptCount = customerApptCount.executeQuery(modifySQL);
-//
-//        if(apptCount.next() && apptCount.getInt("Appointment_ID") > 0) {
-//
-//        }
-//
-//    }
 
     /** Delete appointment from the database
      @param appointmentId customerID*/
@@ -151,7 +132,8 @@ public class DataBaseQueries {
                                         Timestamp start, Timestamp end, int customerId, int userId, int contactId) throws SQLException {
 
         String updateApptSQL = "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, " +
-                                "Customer_ID=?, User_ID=?, Contact_ID=? WHERE Appointment_ID=?";
+                                    "Customer_ID=?, User_ID=?, Contact_ID=? " +
+                                "WHERE Appointment_ID=?";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(updateApptSQL);
 

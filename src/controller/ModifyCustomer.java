@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
 import util.DataBaseQueries;
-
 import util.DataProvider;
 import util.JDBC;
 
@@ -26,7 +25,6 @@ import java.util.ResourceBundle;
 
 public class ModifyCustomer implements Initializable {
 
-    //FXML Variables
     /** Save button*/
     public Button saveCustomerBttn;
     /** Cancel button*/
@@ -45,27 +43,26 @@ public class ModifyCustomer implements Initializable {
     public ComboBox<String> countryComboBox;
     /** Customer id text field*/
     public TextField customerIdTextFld;
+    /** Division ID*/
+    public int divisionIDFromCity;
     /** Observable List of cities*/
     ObservableList<String> citiesList = FXCollections.observableArrayList();
     /** Observable List of countries*/
     ObservableList<String> countriesList = FXCollections.observableArrayList("U.S", "Canada", "UK");
-
-
-    //Variables
-    Parent scene;
-    Stage stage;
+    /** Selected customer*/
     Customer highlightedCustomer;
-    public int divisionIDFromCity;
+
+    /** Scene variable*/
+    Parent scene;
+    /** Stage variable*/
+    Stage stage;
 
     /** Populates the countries combo box and fills in the fields from the highlighted customer.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        //Populate the country combo box
         countryComboBox.setItems(countriesList);
-        highlightedCustomer = CustomersTable.getHighlightedCustomer();//grabs the highlighted customer
+        highlightedCustomer = CustomersTable.getHighlightedCustomer();
 
-        //Sets the text field values based on highlighted customer
         customerIdTextFld.setText(String.valueOf(highlightedCustomer.getCustomerID()));
         nameTxtFld.setText(highlightedCustomer.getCustomerName());
         addressTxtFld.setText(highlightedCustomer.getAddress());
@@ -89,14 +86,12 @@ public class ModifyCustomer implements Initializable {
     /** Saves the customer to the database
      @param actionEvent The action event */
     public void onActionSaveCustomer(ActionEvent actionEvent) throws IOException, SQLException {
-
         String customerName = nameTxtFld.getText();
         String customerAddress = addressTxtFld.getText();
         String customerPostalCode = postalCodeTxtFld.getText();
         String customerPhone = phoneTxtFld.getText();
 
         DataBaseQueries.updateToCustomersTable(highlightedCustomer.getCustomerID(), customerName, customerAddress, customerPostalCode, customerPhone, DataProvider.divisionID);
-
         buttonChanging(actionEvent, "/view/customersTable.fxml");
 
     }
@@ -104,7 +99,6 @@ public class ModifyCustomer implements Initializable {
     /** Cancels the modify of the customer and takes them back to the appointments screen.
      @param actionEvent The action event */
     public void onActionCancel(ActionEvent actionEvent)  throws IOException {
-
         Alert alertForCancel = new Alert(Alert.AlertType.CONFIRMATION);
         alertForCancel.setTitle("Cancel");
         alertForCancel.setHeaderText("Are you sure you want to cancel?");
@@ -126,7 +120,6 @@ public class ModifyCustomer implements Initializable {
     /** Gets the division id from the database and selected division
      @param comboBoxSelection combo box selection */
     public void getAllCitiesDivisionID(String comboBoxSelection) throws SQLException {
-
         Statement state = JDBC.getConnection().createStatement();
         String getAllCitiesDivisionIDSQL = "SELECT Division_ID FROM first_level_divisions WHERE Division='" + comboBoxSelection + "'";
         ResultSet result = state.executeQuery(getAllCitiesDivisionIDSQL);
@@ -139,7 +132,6 @@ public class ModifyCustomer implements Initializable {
     /** Filters the city combo box based on the country combo box selection,
      @param actionEvent Handles the action event */
     public void onActionComboBox(ActionEvent actionEvent) throws SQLException {
-
         String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
 
         if(countrySelected.equals("U.S")) {

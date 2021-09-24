@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -28,8 +27,6 @@ import model.User;
 
 public class Controller implements Initializable {
 
-    //FXML Variables
-
     /** Username text field*/
     public TextField usernameTxtField;
     /** Password text field*/
@@ -41,46 +38,34 @@ public class Controller implements Initializable {
     /** Exit button*/
     public Button exitBttn;
 
-    //Variables
+    /** Scene variable*/
     Parent scene;
+    /** Stage variable*/
     Stage stage;
 
     /** Log the user in if user and pass match information in the database
      All login attempts are tracked to the C195LoginAttempts text file
      @param actionEvent Handles the event of the button being pressed*/
     public void onActionLogin(ActionEvent actionEvent) throws IOException, SQLException {
-
-        //Commenting this out now to save time
-
         String username = usernameTxtField.getText();
         String password = passwordTxtField.getText();
         User.username = username;
 
+        getUsername(username);
+        getPassword(password);
 
-//        getUsername(username);
-//        getPassword(password);
-//
-//        if (getUsername(username) && getPassword(password)) {
-//            //This should log all log in attempts
-//            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
-//
-//            getUserIdFromUsername(username);
-//
-//            //Go to the main menu
-//            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-//            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
-//            stage.setScene(new Scene(scene));
-//            stage.show();
-//        } else {
-//            //This should log all log in attempts
-//            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
-//            Alert alert = new Alert((Alert.AlertType.ERROR));
-//            alert.setTitle("Invalid Credentials");
-//            alert.setHeaderText("Incorrect username and/or password");
-//            alert.setContentText("Please enter a valid username and password");
-//            alert.showAndWait();
-//        }
-        //Go to the main menu
+        if (getUsername(username) && getPassword(password)) {
+            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
+            getUserIdFromUsername(username);
+
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } else {
+            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
+            Alerts.errorAlert("Invalid Credentials", "Incorrect username and/or password", "Please enter a valid username and password");
+        }
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
             stage.setScene(new Scene(scene));
@@ -90,12 +75,10 @@ public class Controller implements Initializable {
     /** Gets the passwords from the database and checks it with inserted password
      @param password Password entered at login*/
     private boolean getPassword(String password) throws SQLException {
-
         Statement statement = JDBC.getConnection().createStatement();
         String sqlPassword = "SELECT Password FROM users WHERE Password ='" + password + "'";
         ResultSet results = statement.executeQuery(sqlPassword);
 
-        //Gets the password from the results
         while(results.next()) {
             if(results.getString("Password").equals(password)) {
                 return true;
@@ -108,12 +91,10 @@ public class Controller implements Initializable {
     /** Gets the username from the database and checks it with inserted username
      @param username username entered at login*/
     private boolean getUsername(String username) throws SQLException {
-
         Statement statement = JDBC.getConnection().createStatement();
         String sqlUsername = "SELECT User_Name FROM users WHERE User_Name ='" + username + "'";
         ResultSet results = statement.executeQuery(sqlUsername);
 
-        //Gets the username from the results
         while(results.next()) {
             if(results.getString("User_Name").equals(username)) {
                 return true;
@@ -126,12 +107,10 @@ public class Controller implements Initializable {
     /** Gets the User id from the username in the database
      @param username username entered at login*/
     public static int getUserIdFromUsername(String username) throws SQLException {
-
         Statement statement = JDBC.getConnection().createStatement();
         String sqlUsername = "SELECT User_ID, User_Name FROM users WHERE User_Name ='" + username + "'";
         ResultSet results = statement.executeQuery(sqlUsername);
 
-        //Gets the username from the results
         while(results.next()) {
             if(results.getString("User_Name").equals(username)) {
                 System.out.println(results.getInt("User_ID"));
@@ -145,7 +124,6 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         ZoneId zone = ZoneId.systemDefault();
         zoneID.setText(zone.toString());
         //We need to add the zone label to auto to whatever language the OS has selected and change the language

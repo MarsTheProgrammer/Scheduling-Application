@@ -4,7 +4,6 @@ import javafx.scene.control.Alert;
 
 public class Alerts {
 
-
     /** Displays an error alert
      @param title Title of the error
      @param context Context of the error
@@ -16,6 +15,7 @@ public class Alerts {
         error.setContentText(context);
         error.showAndWait();
     }
+
     /** Displays an informative alert
      @param title Title of the information
      @param context Context of the information
@@ -28,6 +28,8 @@ public class Alerts {
         error.showAndWait();
     }
 
+    /** Displays various alerts.
+     @param alertType Alert type*/
     public static void alertDisplays(int alertType) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Alert alertForSave = new Alert(Alert.AlertType.INFORMATION);
@@ -201,8 +203,6 @@ public class Alerts {
                 alert.setContentText("Appointment must be within business hours.");
                 alert.showAndWait();
                 break;
-
-
         }
     }
 }

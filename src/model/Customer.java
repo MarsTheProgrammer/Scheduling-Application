@@ -11,7 +11,6 @@ import java.sql.Statement;
 
 public class Customer {
 
-    //Class variables
     /** Customer ID*/
     private int customerID;
     /** Customer Name*/
@@ -51,74 +50,87 @@ public class Customer {
     public int getCustomerID() {
         return customerID;
     }
+
     /** Setter for customer id*/
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
     }
+
     /** Getter for customer Name
      @return customer Name*/
     public String getCustomerName() {
         return customerName;
     }
+
     /** Setter for customerN ame*/
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
+
     /** Getter for address
      @return address*/
     public String getAddress() {
         return address;
     }
+
     /** Setter for address*/
     public void setAddress(String address) {
         this.address = address;
     }
+
     /** Getter for city
      @return city*/
     public String getCity() {
         return city;
     }
+
     /** Setter for city*/
     public void setCity(String city) {
         this.city = city;
     }
+
     /** Getter for Postal Code
      @return Postal Code*/
     public String getPostalCode() {
         return postalCode;
     }
+
     /** Setter for Postal Code*/
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
+
     /** Getter for Phone number
      @return Phone number*/
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
     /** Setter for Phone number*/
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     /** Getter for country
      @return country*/
     public String getCountry() {
         return country;
     }
+
     /** Setter for country*/
     public void setCountry(String country) {
         this.country = country;
     }
+
     /** Getter for all customers from the database
      @return allCustomersList*/
     public static ObservableList<Customer> getGetAllCustomers() throws SQLException {
 
         Statement statement = JDBC.getConnection().createStatement();
-
         String customerInfoSQL = "SELECT customers.Customer_ID, customers.Customer_Name, customers.Address, customers.Postal_Code, customers.Phone, countries.Country, first_level_divisions.*" +
-                                    "FROM customers " +
-                                    "INNER JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID " +
-                                    "INNER JOIN countries ON first_level_divisions.COUNTRY_ID = countries.Country_ID";
+                                "FROM customers " +
+                                "INNER JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID " +
+                                "INNER JOIN countries ON first_level_divisions.COUNTRY_ID = countries.Country_ID";
 
         ResultSet customerInfoResults = statement.executeQuery(customerInfoSQL);
 

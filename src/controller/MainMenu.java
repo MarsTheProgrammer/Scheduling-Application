@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import model.Alerts;
 import util.JDBC;
 
-import javax.xml.transform.Result;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
@@ -19,7 +18,6 @@ import java.util.ResourceBundle;
 
 public class MainMenu implements Initializable {
 
-    //FXML Variables
     /** Customers Button */
     public Button customersBttn;
 
@@ -35,11 +33,8 @@ public class MainMenu implements Initializable {
     /** Exit Button */
     public Button exitBttn;
 
-    //Variables
     Parent scene;
     Stage stage;
-
-
 
     /** Changed the screen to desired screen
      @param actionEvent The action event
@@ -127,5 +122,4 @@ public class MainMenu implements Initializable {
             Alerts.informationAlert("No Appointments", "No appointments in the next 15 minutes","");
         }
     }
-
 }

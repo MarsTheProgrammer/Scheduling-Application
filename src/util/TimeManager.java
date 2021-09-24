@@ -9,6 +9,7 @@ public class TimeManager {
 
     /** ObservableList for appointment times.*/
     private ObservableList<LocalTime> appointmentTimeList = FXCollections.observableArrayList();
+
     /** Generates all the times for the time combo boxes on the add and modify appointments screen
      @return appointmentTimeList*/
     public ObservableList<LocalTime> generateTimeList() {
