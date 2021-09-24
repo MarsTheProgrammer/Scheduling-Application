@@ -224,15 +224,18 @@ public class AllReports implements Initializable {
         }
     }
 
-    /** Enabled by the search button
+    /** Enabled by the search button to search for appointments by month and type.
      @param actionEvent Handles the button being pressed*/
     public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) throws SQLException {
-        String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
-        int monthId = monthSelectionToID(selectedMonth);
-        String type = typeCombo.getSelectionModel().getSelectedItem();
-        if(selectedMonth.equals(null) || type.equals(null)) {
-            Alerts.errorAlert("Month or Type Empty", "Please fill in the Month and Type combo box.", "");
+
+        if(monthCombo.getSelectionModel().getSelectedItem() == null) {
+            Alerts.errorAlert("Month Empty", "Please fill in the Month combo box.", "");
+        } else if(typeCombo.getSelectionModel().getSelectedItem() == null) {
+            Alerts.errorAlert("Type Empty", "Please fill in the Type combo box.", "");
         } else {
+            String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
+            int monthId = monthSelectionToID(selectedMonth);
+            String type = typeCombo.getSelectionModel().getSelectedItem();
             searchAppointmentsByMonthAndType(monthId, type);
         }
     }
