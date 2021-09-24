@@ -64,6 +64,7 @@ public class AppointmentScreen implements Initializable {
     public TableColumn<Appointments, Integer> customerIdTblCol;
     /** User id table column*/
     public TableColumn<Appointments, Integer> userIdTblCol;
+    public Button defaultButton;
     /** Observable List for all appointments By Current Month*/
     private ObservableList<Appointments> filterByMonthList = FXCollections.observableArrayList();
     /** Observable List for all appointments By Current Week*/
@@ -305,6 +306,15 @@ public class AppointmentScreen implements Initializable {
         return filterByWeekList;
     }
 
+    /** Goes to the Appointment screen
+     @param actionEvent The action event */
+    public void onActionAppointments(ActionEvent actionEvent) throws IOException {
+        buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
+    }
+
+    public void onActionDefaultTable(ActionEvent actionEvent) throws IOException {
+        onActionAppointments(actionEvent);
+    }
 }
 
 
