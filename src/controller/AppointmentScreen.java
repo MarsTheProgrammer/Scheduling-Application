@@ -133,7 +133,7 @@ public class AppointmentScreen implements Initializable {
         Appointments highlightedAppointment = appointmentTblView.getSelectionModel().getSelectedItem();
 
         if(highlightedAppointment == null) {
-            Alerts.alertDisplays(9);//need to make this the correct one
+            Alerts.alertDisplays(9);
         } else {
             Alert alertForDelete = new Alert(Alert.AlertType.CONFIRMATION);
             alertForDelete.setHeaderText("Are you sure you want to delete this appointment?");
@@ -144,14 +144,10 @@ public class AppointmentScreen implements Initializable {
 
                 DataBaseQueries.deleteFromAppointmentsTable(highlightedAppointment.getAppointmentId());
 
-                Alerts.informationAlert("Appointment Cancelled", "Appointment ID was " +
-                                        highlightedAppointment.getAppointmentId(), "It was a " +
-                                        highlightedAppointment.getType() + " meeting");
-//                Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
-//                deleteConfirmation.setTitle("Appointment Cancelled");
-//                deleteConfirmation.setHeaderText("Appointment ID was " + highlightedAppointment.getAppointmentId());
-//                deleteConfirmation.setContentText("It was a " + highlightedAppointment.getType() + " meeting");
-//                deleteConfirmation.showAndWait();
+                Alerts.informationAlert("Appointment Cancelled",
+                        "Appointment ID was " +  highlightedAppointment.getAppointmentId(),
+                        "It was a " + highlightedAppointment.getType() + " meeting with " + highlightedAppointment.getContactName());
+
 
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
             }
