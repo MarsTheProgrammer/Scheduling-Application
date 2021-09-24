@@ -1,14 +1,19 @@
 # C195_QAM1_MarshallChristian
 
-Title: Scheduling Programing
-Purpose: Schedule appointments for various customers
-Author: Marshall Christian
+Title: 
+    Scheduling Programing
+Purpose: 
+    Schedule appointments for various customers
+Author: 
+    Marshall Christian
 Contact Information: 
-  Name: Marshall Christian
-  Email: marstheprogrammer@gmail.com
-  Phone: 913-231-8665
-Application version: 1.0
-Date: 9-24-2021
+    Name: Marshall Christian
+    Email: marstheprogrammer@gmail.com
+    Phone: 913-231-8665
+Application version: 
+    1.0
+Date: 
+    9-24-2021
 IDE:   
     IntelliJ IDEA 2021.1.1 (Community Edition)
     Build #IC-211.7142.45, built on April 30, 2021
