@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Alerts;
 import model.Appointments;
 import util.JDBC;
 
@@ -229,7 +230,11 @@ public class AllReports implements Initializable {
         String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
         int monthId = monthSelectionToID(selectedMonth);
         String type = typeCombo.getSelectionModel().getSelectedItem();
-        searchAppointmentsByMonthAndType(monthId, type);
+        if(selectedMonth.equals(null) || type.equals(null)) {
+            Alerts.errorAlert("Month or Type Empty", "Please fill in the Month and Type combo box.", "");
+        } else {
+            searchAppointmentsByMonthAndType(monthId, type);
+        }
     }
 
     /** Populates the contactAppointmentsSchedule list with all appointments matching selected contact name.*/
