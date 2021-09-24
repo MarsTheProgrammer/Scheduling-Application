@@ -74,8 +74,8 @@ public class AllReports implements Initializable {
 
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
 
-    private ObservableList<String> monthList = FXCollections.observableArrayList("January", "February", "March", "April", "May", "June", "July",
-                                                                            "August", "September", "October", "November", "December");
+    private ObservableList<String> monthList = FXCollections.observableArrayList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
+                                                                            "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER");
     private ObservableList<String> customerList = FXCollections.observableArrayList();
 
     private ObservableList<String> contactList = FXCollections.observableArrayList();
@@ -103,7 +103,7 @@ public class AllReports implements Initializable {
     }
 
     public void onActionMonthCombo(ActionEvent actionEvent) {
-        String month = monthCombo.getSelectionModel().getSelectedItem();
+        monthSelectionToID();
         //We need to get the middle digit?
         //We need to parse the middle digit out of the date
     }
@@ -163,45 +163,48 @@ public class AllReports implements Initializable {
         }
     }
 
-    public int monthSelectionToID(int monthId) {
+    public int monthSelectionToID() {
+        int monthId;
         String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
         switch(selectedMonth){
-            case "January":
-                monthId = 1;
-                break;
-            case "February":
+//            case "JANUARY":
+//                monthId = 1;
+//                break;
+            case "FEBRUARY":
                 monthId = 2;
                 break;
-            case "March":
+            case "MARCH":
                 monthId = 3;
                 break;
-            case "April":
+            case "APRIL":
                 monthId = 4;
                 break;
-            case "May":
+            case "MAY":
                 monthId = 5;
                 break;
-            case "June":
+            case "JUNE":
                 monthId = 6;
                 break;
-            case "July":
+            case "JULY":
                 monthId = 7;
                 break;
-            case "August":
+            case "AUGUST":
                 monthId = 8;
                 break;
-            case "September":
+            case "SEPTEMBER":
                 monthId = 9;
                 break;
-            case "October":
+            case "OCTOBER":
                 monthId = 10;
                 break;
-            case "November":
+            case "NOVEMBER":
                 monthId = 11;
                 break;
-            case "December":
+            case "DECEMBER":
                 monthId = 12;
                 break;
+            default:
+                monthId = 1;
         }
         return monthId;
     }
