@@ -72,6 +72,8 @@ public class AllReports implements Initializable {
 
     public TableColumn<Appointments, String> descriptionTblCol;
 
+    public Label totalNumberByMonthAndType;
+
 
     private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
 
@@ -207,6 +209,9 @@ public class AllReports implements Initializable {
         return monthId;
     }
 
+    /** Queries the database for all appointments by month and type.
+     @param type Type of appointment.
+     @param monthId ID of the month selected.*/
     public void searchAppointmentsByMonthAndType(int monthId, String type) throws SQLException {
 
         Statement appointmentStatement = JDBC.getConnection().createStatement();
@@ -214,10 +219,12 @@ public class AllReports implements Initializable {
         ResultSet appointmentCount = appointmentStatement.executeQuery(searchByMonthAndType);
 
         while(appointmentCount.next()) {
-            numberOfApptsTextFld.setText(String.valueOf(appointmentCount.getInt("Count")));
+            totalNumberByMonthAndType.setText(String.valueOf(appointmentCount.getInt("Count")));
         }
     }
 
+    /** Enabled by the search button
+     @param actionEvent Handles the button being pressed*/
     public void onActionSearchNumberOfAppointments(ActionEvent actionEvent) throws SQLException {
         String selectedMonth = monthCombo.getSelectionModel().getSelectedItem();
         int monthId = monthSelectionToID(selectedMonth);
