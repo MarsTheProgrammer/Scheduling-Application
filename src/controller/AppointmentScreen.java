@@ -90,7 +90,8 @@ public class AppointmentScreen implements Initializable {
         stage.show();
     }
 
-    /** Populates the appointments table*/
+    /** Populates the appointments table.
+     Lambda expression is used to populate the contact name in the appointments table.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -100,12 +101,11 @@ public class AppointmentScreen implements Initializable {
             throwables.printStackTrace();
         }
 
-        contactTblCol.setCellValueFactory(appointment -> new SimpleStringProperty(appointment.getValue().getContactName()));
         appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         titleTblCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationTblCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-//        contactTblCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+        contactTblCol.setCellValueFactory(appointment -> new SimpleStringProperty(appointment.getValue().getContactName()));
         typeTblCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         startTblCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         endTblCol.setCellValueFactory(new PropertyValueFactory<>("end"));

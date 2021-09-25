@@ -76,12 +76,7 @@ public class Controller implements Initializable {
         } else {
             LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
             Alerts.errorAlert(titleForLogin, headerForLogin, contextForLogin);
-
         }
-//            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-//            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
-//            stage.setScene(new Scene(scene));
-//            stage.show();
     }
 
     /** Gets the passwords from the database and checks it with inserted password
@@ -130,7 +125,6 @@ public class Controller implements Initializable {
             }
         }
         statement.close();
-        Alerts.alertDisplays(12);
         Alerts.errorAlert(titleForUserID, headerForUserID, contextForUserID);
         return -1;
     }

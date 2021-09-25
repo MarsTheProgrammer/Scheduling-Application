@@ -4,13 +4,15 @@ import javafx.scene.control.Alert;
 
 public class Alerts {
 
-    /** Displays an error alert
+    /** Displays an error alert.
+     Lambda here is used to set the title of the displayed error
      @param title Title of the error
      @param context Context of the error
      @param header  header of the error*/
     public static void errorAlert(String title, String header, String context) {
         Alert error = new Alert(Alert.AlertType.ERROR);
-        error.setTitle(title);
+        final Runnable runnable = () -> error.setTitle(title);
+        runnable.run();
         error.setHeaderText(header);
         error.setContentText(context);
         error.showAndWait();
