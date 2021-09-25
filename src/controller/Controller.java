@@ -140,18 +140,24 @@ public class Controller implements Initializable {
         ZoneId zone = ZoneId.systemDefault();
         zoneID.setText(zone.toString());
 
-        Locale locale = Locale.FRANCE;
-//        Locale locale = Locale.getDefault();
+//        Locale locale = Locale.FRANCE;
+        Locale locale = Locale.getDefault();
         ResourceBundle rsBundle = ResourceBundle.getBundle("LanguageBundles/mchristian", locale);
 
         if(locale.getLanguage().equals("fr")) {
-
             this.usernameTxtField.setPromptText(rsBundle.getString("usernameFieldPromptText"));
             this.passwordTxtField.setPromptText(rsBundle.getString("passwordFieldPromptText"));
             this.usernameLabel.setText(rsBundle.getString("username"));
             this.passwordLabel.setText(rsBundle.getString("password"));
             this.loginButton.setText(rsBundle.getString("loginButtonText"));
             this.exitBttn.setText(rsBundle.getString("exitBttnText"));
+            titleForUserID = rsBundle.getString("titleForUserID");
+            headerForUserID = rsBundle.getString("headerForUserID");
+            contextForUserID = rsBundle.getString("contextForUserID");
+            titleForLogin = rsBundle.getString("titleForLogin");
+            headerForLogin = rsBundle.getString("headerForLogin");
+            contextForLogin = rsBundle.getString("contextForLogin");
+        } else {
             titleForUserID = rsBundle.getString("titleForUserID");
             headerForUserID = rsBundle.getString("headerForUserID");
             contextForUserID = rsBundle.getString("contextForUserID");

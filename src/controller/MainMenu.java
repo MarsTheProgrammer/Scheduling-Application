@@ -119,7 +119,7 @@ public class MainMenu implements Initializable {
                         " and is a " + appointmentResults.getString("Type") + " meeting. It starts at " +
                         appointmentResults.getTimestamp("Start").toLocalDateTime() + "."));
             } else {
-            Alerts.informationAlert("No Appointments", "No appointments in the next 15 minutes","");
+            Alerts.informationAlert("Appointment Reminder", "No appointments in the next 15 minutes","");
         }
     }
 }
