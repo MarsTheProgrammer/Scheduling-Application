@@ -12,17 +12,17 @@ import javafx.stage.Stage;
 import model.Alerts;
 
 import util.JDBC;
-import util.LoginAttemptTracker;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.ZoneId;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import model.User;
-
-
+import util.LoginAttemptTracker;
 
 
 public class Controller implements Initializable {
@@ -37,6 +37,10 @@ public class Controller implements Initializable {
     public Label zoneID;
     /** Exit button*/
     public Button exitBttn;
+    public Label usernameLabel;
+    public Label passwordLabel;
+
+
 
     /** Scene variable*/
     Parent scene;
@@ -51,21 +55,21 @@ public class Controller implements Initializable {
         String password = passwordTxtField.getText();
         User.username = username;
 
-//        getUsername(username);
-//        getPassword(password);
-//
-//        if (getUsername(username) && getPassword(password)) {
-//            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
-//            getUserIdFromUsername(username);
-//
-//            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-//            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
-//            stage.setScene(new Scene(scene));
-//            stage.show();
-//        } else {
-//            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
-//            Alerts.errorAlert("Invalid Credentials", "Incorrect username and/or password", "Please enter a valid username and password");
-//        }
+        getUsername(username);
+        getPassword(password);
+
+        if (getUsername(username) && getPassword(password)) {
+            LoginAttemptTracker.logAttempt(username, true, "You are now logged in.");
+            getUserIdFromUsername(username);
+
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } else {
+            LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
+            Alerts.errorAlert("Invalid Credentials", "Incorrect username and/or password", "Please enter a valid username and password");
+        }
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
             stage.setScene(new Scene(scene));
@@ -126,8 +130,29 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ZoneId zone = ZoneId.systemDefault();
         zoneID.setText(zone.toString());
+
+        //Locale userLocale;
+        Locale locale = Locale.FRANCE;
+//        Locale locale = Locale.getDefault();
+        ResourceBundle rsBundle = ResourceBundle.getBundle("LanguageBundles/mchristian", locale);
+
+        this.usernameTxtField.setPromptText(rsBundle.getString("usernameFieldPromptText"));
+        this.passwordTxtField.setPromptText(rsBundle.getString("passwordFieldPromptText"));
+        this.usernameLabel.setText(rsBundle.getString("username"));
+        this.passwordLabel.setText(rsBundle.getString("password"));
+        this.loginButton.setText(rsBundle.getString("loginButtonText"));
+        this.exitBttn.setText(rsBundle.getString("exitBttnText"));
+
         //We need to add the zone label to auto to whatever language the OS has selected and change the language
         //this will include getting a resource bundle and local?
+
+
+//
+//# lblErrorAlert = Nom d'utilisateur ou mot de passe incorrect
+//
+//# We should all the title, header, and context error here for the french version
+
+
     }
 
     /** Exits the program when the exit button is pressed
