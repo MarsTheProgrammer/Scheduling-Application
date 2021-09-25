@@ -40,6 +40,13 @@ public class Controller implements Initializable {
     public Label usernameLabel;
     public Label passwordLabel;
 
+    public static String titleForUserID;
+    public static String headerForUserID;
+    public static String contextForUserID;
+
+    public static String titleForLogin;
+    public static String headerForLogin;
+    public static String contextForLogin;
 
 
     /** Scene variable*/
@@ -68,12 +75,13 @@ public class Controller implements Initializable {
             stage.show();
         } else {
             LoginAttemptTracker.logAttempt(username, false, "Login failed, please try again.");
-            Alerts.errorAlert("Invalid Credentials", "Incorrect username and/or password", "Please enter a valid username and password");
+            Alerts.errorAlert(titleForLogin, headerForLogin, contextForLogin);
+
         }
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
+//            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+//            scene = FXMLLoader.load(getClass().getResource("/view/mainMenu.fxml"));
+//            stage.setScene(new Scene(scene));
+//            stage.show();
     }
 
     /** Gets the passwords from the database and checks it with inserted password
@@ -123,6 +131,7 @@ public class Controller implements Initializable {
         }
         statement.close();
         Alerts.alertDisplays(12);
+        Alerts.errorAlert(titleForUserID, headerForUserID, contextForUserID);
         return -1;
     }
 
@@ -131,17 +140,25 @@ public class Controller implements Initializable {
         ZoneId zone = ZoneId.systemDefault();
         zoneID.setText(zone.toString());
 
-        //Locale userLocale;
         Locale locale = Locale.FRANCE;
 //        Locale locale = Locale.getDefault();
         ResourceBundle rsBundle = ResourceBundle.getBundle("LanguageBundles/mchristian", locale);
 
-        this.usernameTxtField.setPromptText(rsBundle.getString("usernameFieldPromptText"));
-        this.passwordTxtField.setPromptText(rsBundle.getString("passwordFieldPromptText"));
-        this.usernameLabel.setText(rsBundle.getString("username"));
-        this.passwordLabel.setText(rsBundle.getString("password"));
-        this.loginButton.setText(rsBundle.getString("loginButtonText"));
-        this.exitBttn.setText(rsBundle.getString("exitBttnText"));
+        if(locale.getLanguage().equals("fr")) {
+
+            this.usernameTxtField.setPromptText(rsBundle.getString("usernameFieldPromptText"));
+            this.passwordTxtField.setPromptText(rsBundle.getString("passwordFieldPromptText"));
+            this.usernameLabel.setText(rsBundle.getString("username"));
+            this.passwordLabel.setText(rsBundle.getString("password"));
+            this.loginButton.setText(rsBundle.getString("loginButtonText"));
+            this.exitBttn.setText(rsBundle.getString("exitBttnText"));
+            titleForUserID = rsBundle.getString("titleForUserID");
+            headerForUserID = rsBundle.getString("headerForUserID");
+            contextForUserID = rsBundle.getString("contextForUserID");
+            titleForLogin = rsBundle.getString("titleForLogin");
+            headerForLogin = rsBundle.getString("headerForLogin");
+            contextForLogin = rsBundle.getString("contextForLogin");
+        }
 
         //We need to add the zone label to auto to whatever language the OS has selected and change the language
         //this will include getting a resource bundle and local?
