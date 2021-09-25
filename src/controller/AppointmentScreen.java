@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -99,11 +100,12 @@ public class AppointmentScreen implements Initializable {
             throwables.printStackTrace();
         }
 
+        contactTblCol.setCellValueFactory(appointment -> new SimpleStringProperty(appointment.getValue().getContactName()));
         appointmentIdTblCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         titleTblCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionTblCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationTblCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        contactTblCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+//        contactTblCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         typeTblCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         startTblCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         endTblCol.setCellValueFactory(new PropertyValueFactory<>("end"));
