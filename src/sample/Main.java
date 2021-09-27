@@ -9,6 +9,8 @@ import util.JDBC;
 
 import java.sql.SQLException;
 
+/** @author Marshall Christian*/
+
 public class Main extends Application {
 
     /** Sets the main stage*/
