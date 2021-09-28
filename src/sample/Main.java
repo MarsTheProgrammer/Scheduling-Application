@@ -6,8 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import util.JDBC;
-
 import java.sql.SQLException;
+
 
 public class Main extends Application {
 
@@ -19,7 +19,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
-    /** Starts the program with JDBC connection and entry point for progrom*/
+    /** Starts the program with JDBC connection and entry point for program*/
     public static void main(String[] args) throws SQLException {
         JDBC.startConnection();
         launch(args);

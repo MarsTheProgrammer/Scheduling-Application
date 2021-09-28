@@ -17,10 +17,7 @@ import util.TimeManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.*;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -135,9 +132,11 @@ public class ModifyAppointment implements Initializable {
             Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, start));
             Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
+            boolean outsideBusinessHours = TimeManager.isOutsideBusinessHours(date, start, end, ZoneId.systemDefault());
+
             if(titleNotNull(titleInfo) && descriptionNotNull(descInfo) && typeNotNull(typeInfo) && locationNotNull(locationInfo) && startNotNull(startTimestamp) &&
                     endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) &&
-                    contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
+                    contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp) && !outsideBusinessHours) {
 
                 Alerts.alertDisplays(23);
                 DataBaseQueries.updateAppointment(appointmentId, titleInfo, descInfo, locationInfo, typeInfo,
@@ -146,6 +145,7 @@ public class ModifyAppointment implements Initializable {
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
             }
         } catch(Exception e) {
+            System.out.println(e.getMessage());
             if(customerIdTextFld.getText() == null) {
                 Alerts.alertDisplays(20);
             } else if(userIdCombo.getSelectionModel().getSelectedItem() == null) {
@@ -268,28 +268,15 @@ public class ModifyAppointment implements Initializable {
         boolean endBeforeStart = end.before(start);
         boolean endEqualsStart = end.equals(start);
 
-        Timestamp startingBusinessHours = Timestamp.valueOf(dateDatePicker.getValue() + " 08:00:00");
-        Timestamp endingBusinessHours = Timestamp.valueOf(dateDatePicker.getValue() + " 22:00:00");
-
-        LocalTime localTimeOfStart = startTimeComboBox.getSelectionModel().getSelectedItem();
-        LocalTime localTimeEnd = endTimeComboBox.getSelectionModel().getSelectedItem();
-
-        ZonedDateTime.of(dateDatePicker.getValue(), localTimeOfStart, ZoneId.of("America/New_York"));
-        Timestamp startLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
-        Timestamp endLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeEnd));
-
-        if(startLocal.before(startingBusinessHours) || endLocal.after(endingBusinessHours)) {
-            Alerts.alertDisplays(29);
-            return false;
-        }
+        //Chain errors
         if(endBeforeStart) {
             Alerts.alertDisplays(24);
             return false;
-        }
-        if(endEqualsStart) {
+        } else if(endEqualsStart) {
             Alerts.alertDisplays(25);
             return false;
         }
+
         try {
             Statement validAppointmentStatement = JDBC.getConnection().createStatement();
             String validApptSQL =

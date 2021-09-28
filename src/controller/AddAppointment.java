@@ -120,11 +120,14 @@ public class AddAppointment implements Initializable {
             }
             populateContactStatement.close();
 
+            userIdList.clear();
+
             Statement populateUserIdStatement = JDBC.getConnection().createStatement();
             String sqlUserIdStatement = "SELECT * FROM users";
             ResultSet userIdResult = populateUserIdStatement.executeQuery(sqlUserIdStatement);
 
             while(userIdResult.next()) {
+
                 userIdList.add(userIdResult.getInt("User_ID"));
                 userIdCombo.setItems(userIdList);
             }
@@ -171,31 +174,22 @@ public class AddAppointment implements Initializable {
         boolean endBeforeStart = end.before(start);
         boolean endEqualsStart = end.equals(start);
 
-        Timestamp startingBusinessHours = Timestamp.valueOf(dateDatePicker.getValue() + " 08:00:00");
-        Timestamp endingBusinessHours = Timestamp.valueOf(dateDatePicker.getValue() + " 22:00:00");
-
-        LocalTime localTimeOfStart = startTimeComboBox.getSelectionModel().getSelectedItem();
-        LocalTime localTimeEnd = endTimeComboBox.getSelectionModel().getSelectedItem();
-
-        ZonedDateTime.of(dateDatePicker.getValue(), localTimeOfStart, ZoneId.of("America/New_York"));
-        Timestamp startLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeOfStart));
-        Timestamp endLocal = Timestamp.valueOf(LocalDateTime.of(dateDatePicker.getValue(), localTimeEnd));
-
-        if(startLocal.before(startingBusinessHours) || endLocal.after(endingBusinessHours)) {
-            Alerts.alertDisplays(29);
-            return false;
-        }
         if(endBeforeStart) {
             Alerts.alertDisplays(24);
             return false;
-        }
-        if(endEqualsStart) {
+        } else if(endEqualsStart) {
             Alerts.alertDisplays(25);
             return false;
         }
         try {
             Statement validAppointmentStatement = JDBC.getConnection().createStatement();
-            String validApptSQL = "SELECT * FROM appointments WHERE ('" + start + "' BETWEEN Start AND End OR '" + end + "' BETWEEN Start and End OR '" + start + "' > Start AND '" + end + "' < end)";
+            String validApptSQL =
+                    "SELECT * " +
+                    "FROM appointments " +
+                            "WHERE ('" + start + "' BETWEEN Start AND End " +
+                            "OR '" + end + "' BETWEEN Start and End " +
+                            "OR '" + start + "' > Start AND '" + end + "' < end)";
+
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
             if(checkApptValidation.next()) {
@@ -226,9 +220,11 @@ public class AddAppointment implements Initializable {
             Timestamp startTimestamp = Timestamp.valueOf(LocalDateTime.of(date, start));
             Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.of(date, end));
 
+            boolean outsideBusinessHours = TimeManager.isOutsideBusinessHours(date, start, end, ZoneId.systemDefault());
+
             if (titleNotNull(titleInfo) && descriptionNotNull(descInfo) && typeNotNull(typeInfo) && locationNotNull(locationInfo) && startNotNull(startTimestamp) &&
                     endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) &&
-                    contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp)) {
+                    contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp) && !outsideBusinessHours) {
 
                 Alerts.alertDisplays(23);
                 DataBaseQueries.insertAppointment(titleInfo, descInfo, locationInfo, typeInfo, startTimestamp, endTimestamp, custID, userID, contactInfo);
