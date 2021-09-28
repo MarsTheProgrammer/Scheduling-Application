@@ -97,8 +97,8 @@ public class MainMenu implements Initializable {
     }
 
     /** Queries the database to check for appointments that are 15 minutes ahead of now for the start, and 45 minutes ahead for the end.
-     @param now 15 minutes ahead of the current time
-     @param end 45 minutes ahead of current time*/
+     @param now now of the current time
+     @param end 15 minutes ahead of current time*/
     public void displayAppointmentReminder(Timestamp now, Timestamp end) throws SQLException {
 
         PreparedStatement appointmentWithin15Minutes = JDBC.getConnection().prepareStatement(
@@ -111,6 +111,7 @@ public class MainMenu implements Initializable {
         appointmentWithin15Minutes.setTimestamp(2, end);
 
         ResultSet appointmentResults = appointmentWithin15Minutes.executeQuery();
+
         if(appointmentResults.next())  {
             Alerts.informationAlert("Appointment Reminder",
                     ("Appointment ID = "+ appointmentResults.getInt(("Appointment_ID")) + " is within 15 minutes") ,

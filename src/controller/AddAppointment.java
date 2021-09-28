@@ -186,9 +186,7 @@ public class AddAppointment implements Initializable {
             String validApptSQL =
                     "SELECT * " +
                     "FROM appointments " +
-                            "WHERE ('" + start + "' BETWEEN Start AND End " +
-                            "OR '" + end + "' BETWEEN Start and End " +
-                            "OR '" + start + "' > Start AND '" + end + "' < end)";
+                    "WHERE '" + start + "' BETWEEN Start AND End";
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
