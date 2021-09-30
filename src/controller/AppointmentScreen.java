@@ -266,19 +266,16 @@ public class AppointmentScreen implements Initializable {
      @return Returns the loaded list of monthly appointments*/
     public ObservableList<Appointments> filterByWeek() throws SQLException {
 
+        //Corrected the appointments to show 7 days including the current day
+
         Statement weeklyAppointments = JDBC.getConnection().createStatement();
         String filterByWeekSql =
                 "SELECT * " +
                 "FROM appointments " +
                 "INNER JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID " +
-                "WHERE DAY(Start) = DAY(CURRENT_DATE()) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
-                "OR DAY(Start) = DAY(CURRENT_DATE() + 1) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
-                "OR DAY(Start) = DAY(CURRENT_DATE() + 2) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
-                "OR DAY(Start) = DAY(CURRENT_DATE() + 3) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
-                "OR DAY(Start) = DAY(CURRENT_DATE() + 4) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
-                "OR DAY(Start) = DAY(CURRENT_DATE() + 5) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
-                "OR DAY(Start) = DAY(CURRENT_DATE() + 6) AND YEAR(Start) = YEAR(CURRENT_DATE()) " +
-                "OR DAY(Start) = DAY(CURRENT_DATE() + 7) AND YEAR(Start) = YEAR(CURRENT_DATE())";
+                "WHERE DATE(Start) = DATE(NOW()) " +
+                "OR Start >= NOW() " +
+                "AND  Start < DATE_ADD(CURRENT_DATE(), interval 7 day)";
 
         ResultSet filterResults = weeklyAppointments.executeQuery(filterByWeekSql);
 

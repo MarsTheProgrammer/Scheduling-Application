@@ -86,6 +86,11 @@ public class AddAppointment implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        //This fixes the duplicate customers and contacts from attempt 2
+        existingCustList.clear();
+        contactNameList.clear();
+        userIdList.clear();
+
         TimeManager startTime = new TimeManager();
         startTimeComboBox.setItems(startTime.generateTimeList());
         startTimeComboBox.getSelectionModel().selectFirst();
@@ -183,10 +188,12 @@ public class AddAppointment implements Initializable {
         }
         try {
             Statement validAppointmentStatement = JDBC.getConnection().createStatement();
+
             String validApptSQL =
                     "SELECT * " +
                     "FROM appointments " +
-                    "WHERE '" + start + "' BETWEEN Start AND End";
+                    "WHERE ('" + start + "' BETWEEN Start AND End " +
+                    "OR '" + end + "' BETWEEN Start AND End)";
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 

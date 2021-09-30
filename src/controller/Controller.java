@@ -120,7 +120,7 @@ public class Controller implements Initializable {
 
         while(results.next()) {
             if(results.getString("User_Name").equals(username)) {
-                System.out.println(results.getInt("User_ID"));
+                //System.out.println(results.getInt("User_ID"));
                 return results.getInt("User_ID");
             }
         }

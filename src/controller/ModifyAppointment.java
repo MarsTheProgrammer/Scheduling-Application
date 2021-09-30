@@ -278,13 +278,16 @@ public class ModifyAppointment implements Initializable {
         }
         try {
             Statement validAppointmentStatement = JDBC.getConnection().createStatement();
+
             String validApptSQL =
                     "SELECT * " +
                     "FROM appointments " +
-                    "WHERE '" + start + "' BETWEEN Start AND End " +
+                    "WHERE ('" + start + "' BETWEEN Start AND End " +
+                    "OR '" + end + "' BETWEEN Start AND End) " +
                     "AND Appointment_ID !=" + appointmentTxtFld.getText();
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
+
             if(checkApptValidation.next()) {
                 Alerts.alertDisplays(26);
                 return false;
