@@ -212,6 +212,10 @@ public class ModifyAppointment implements Initializable {
         endTimeComboBox.setItems(endTimeList);
         typeComboBox.setItems(typeList);
 
+        existingCustList.clear();
+        contactNameList.clear();
+        userIdList.clear();
+
         try {
             Statement st = JDBC.getConnection().createStatement();
             String sql = "SELECT * FROM customers WHERE Customer_ID=" + highlightedAppointment.getCustomerId();
