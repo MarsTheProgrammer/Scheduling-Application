@@ -282,24 +282,12 @@ public class ModifyAppointment implements Initializable {
         }
         ZonedDateTime startZDT = ZonedDateTime.of(start.toLocalDateTime(), ZoneId.systemDefault());
         ZonedDateTime endZDT = ZonedDateTime.of(end.toLocalDateTime(), ZoneId.systemDefault());
-//
-//        System.out.println("Start time selected in system time zone: " + start);
-//        System.out.println("End time selected in system time zone: " + end);
 
         ZonedDateTime utcStartZDT = ZonedDateTime.ofInstant(startZDT.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime utcEndZDT = ZonedDateTime.ofInstant(endZDT.toInstant(), ZoneId.of("UTC"));
-//
-//        System.out.println("start : " + utcStartZDT);
-//        System.out.println("end : " + utcEndZDT);
 
         Timestamp startUTC = Timestamp.valueOf(utcStartZDT.toLocalDateTime());
         Timestamp endUTC = Timestamp.valueOf(utcEndZDT.toLocalDateTime());
-//
-//        System.out.println("start in utc: " + startUTC);
-//        System.out.println("end in utc: " + endUTC);
-//        System.out.println(appointmentTxtFld.getText());
-
-
 
         try {
             Statement validAppointmentStatement = JDBC.getConnection().createStatement();
@@ -311,7 +299,6 @@ public class ModifyAppointment implements Initializable {
                     "OR '" + endUTC + "' BETWEEN Start AND End) " +
                     "AND Appointment_ID !=" + appointmentTxtFld.getText();
 
-            System.out.println(validApptSQL);
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
             if(checkApptValidation.next()) {
