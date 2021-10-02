@@ -186,14 +186,26 @@ public class AddAppointment implements Initializable {
             Alerts.alertDisplays(25);
             return false;
         }
+
+        ZonedDateTime startZDT = ZonedDateTime.of(start.toLocalDateTime(), ZoneId.systemDefault());
+        ZonedDateTime endZDT = ZonedDateTime.of(end.toLocalDateTime(), ZoneId.systemDefault());
+
+        ZonedDateTime utcStartZDT = ZonedDateTime.ofInstant(startZDT.toInstant(), ZoneId.of("UTC"));
+        ZonedDateTime utcEndZDT = ZonedDateTime.ofInstant(endZDT.toInstant(), ZoneId.of("UTC"));
+
+        Timestamp startUTC = Timestamp.valueOf(utcStartZDT.toLocalDateTime());
+        Timestamp endUTC = Timestamp.valueOf(utcEndZDT.toLocalDateTime());
+
         try {
             Statement validAppointmentStatement = JDBC.getConnection().createStatement();
 
             String validApptSQL =
                     "SELECT * " +
                     "FROM appointments " +
-                    "WHERE ('" + start + "' BETWEEN Start AND End " +
-                    "OR '" + end + "' BETWEEN Start AND End)";
+                    "WHERE ('" + startUTC + "' BETWEEN Start AND End " +
+                    "OR '" + endUTC + "' BETWEEN Start AND End)";
+
+            System.out.println(validApptSQL);
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
