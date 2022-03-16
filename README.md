@@ -3,7 +3,7 @@
 ### Author: Marshall Christian
 ### Contact Information: 
     Name: Marshall Christian
-    Email: marstheprogrammer@gmail.com
+    Email: marshallechristian@gmail
     Phone: 913-231-8665
 ### Application version: 1.0
 ### Date: 9-24-2021
