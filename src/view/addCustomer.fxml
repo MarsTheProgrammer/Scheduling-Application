@@ -36,7 +36,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <Label text="City:" GridPane.rowIndex="4">
+            <Label text="State:" GridPane.rowIndex="4">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
@@ -56,7 +56,7 @@
             <TextField fx:id="addressTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="postalCodeTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="phoneTxtFld" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <ComboBox fx:id="cityComboBox" onAction="#onActionCityComboBox" prefWidth="150.0" promptText="Select a City" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="cityComboBox" onAction="#onActionCityComboBox" prefWidth="150.0" promptText="Select a State" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Customer ID:">
                <font>
                   <Font name="System Bold" size="12.0" />

@@ -201,11 +201,9 @@ public class AddAppointment implements Initializable {
 
             String validApptSQL =
                     "SELECT * " +
-                    "FROM appointments " +
-                    "WHERE ('" + startUTC + "' BETWEEN Start AND End " +
-                    "OR '" + endUTC + "' BETWEEN Start AND End)";
-
-            System.out.println(validApptSQL);
+                    "FROM scheduleapp.appointments " +
+                    "WHERE ('" + startZDT + "' BETWEEN Start AND End " +
+                    "OR '" + endZDT + "' BETWEEN Start AND End)";
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
 
@@ -243,8 +241,8 @@ public class AddAppointment implements Initializable {
                     endNotNull(endTimestamp) && dateNotNull(date) && customerNotNull(custID) &&
                     contactNotNull(contactId) && userIdNotNull(userID) && isValidAppointment(startTimestamp, endTimestamp) && !outsideBusinessHours) {
 
-                Alerts.alertDisplays(23);
                 DataBaseQueries.insertAppointment(titleInfo, descInfo, locationInfo, typeInfo, startTimestamp, endTimestamp, custID, userID, contactInfo);
+                Alerts.alertDisplays(23);
                 buttonChanging(actionEvent, "/view/appointmentScreen.fxml");
             }
 

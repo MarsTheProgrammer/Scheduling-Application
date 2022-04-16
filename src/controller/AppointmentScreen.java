@@ -209,7 +209,6 @@ public class AppointmentScreen implements Initializable {
             default:
                 monthId = 1;
         }
-        System.out.println(monthId);
         return monthId;
     }
 
