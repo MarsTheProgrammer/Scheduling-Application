@@ -72,7 +72,7 @@ public class AddAppointment implements Initializable {
     /** Observable List for users customers*/
     public static ObservableList<Integer> userIdList = FXCollections.observableArrayList();
     /** Observable List for types customers*/
-    private ObservableList<String> typeList = FXCollections.observableArrayList("Meet and Greet", "Conference", "Planning Session");
+    private ObservableList<String> typeList = FXCollections.observableArrayList("Diversity Day", "Conference", "Sales Meeting");
 
     /** Scene variable*/
     Parent scene;

@@ -143,13 +143,7 @@ public class AddCustomer implements Initializable {
         if (nameNotNull(customerName) && addressNotNull(customerAddress) && postalCodeNotNull(customerPostalCode) && phoneNotNull(customerPhoneNumber) && countryNotNull(customerCountry) && cityNotNull(customerCity)) {
 
             DataBaseQueries.insertIntoCustomersTable(customerName, customerAddress,customerPhoneNumber, customerPostalCode, DataProvider.divisionID);
-
-            // WHY DO I HAVE THIS HERE?
-            //Customer customer = new Customer(customerID, customerName, customerAddress, customerCity, customerPostalCode, customerPhoneNumber, customerCountry);
-            //Customer.allCustomersList.add(customer);
-
             Alerts.alertDisplays(6);
-
             buttonChanging(actionEvent, "/view/customersTable.fxml");
         }
     }

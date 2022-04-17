@@ -36,7 +36,7 @@
             <Label fx:id="passwordLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="3.0" layoutY="162.0" prefHeight="25.0" prefWidth="195.0" text="Password:" textAlignment="RIGHT" />
             <Label layoutX="439.0" layoutY="12.0" text="Zone:" />
             <Label fx:id="zoneID" layoutX="477.0" layoutY="12.0" text="USA" />
-            <Button fx:id="loginButton" layoutX="454.0" layoutY="276.0" mnemonicParsing="false" onAction="#onActionLogin" prefHeight="25.0" prefWidth="53.0" text="Login" />
+            <Button fx:id="loginButton" defaultButton="true" layoutX="454.0" layoutY="276.0" mnemonicParsing="false" onAction="#onActionLogin" prefHeight="25.0" prefWidth="53.0" text="Login" />
             <Button fx:id="exitBttn" layoutX="537.0" layoutY="276.0" mnemonicParsing="false" onAction="#onActionExit" text="Exit" />
          </children>
       </Pane>

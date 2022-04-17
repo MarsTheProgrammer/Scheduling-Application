@@ -295,8 +295,8 @@ public class ModifyAppointment implements Initializable {
             String validApptSQL =
                     "SELECT * " +
                     "FROM appointments " +
-                    "WHERE ('" + startUTC + "' BETWEEN Start AND End " +
-                    "OR '" + endUTC + "' BETWEEN Start AND End) " +
+                    "WHERE ('" + startZDT + "' BETWEEN Start AND End " +
+                    "OR '" + endZDT + "' BETWEEN Start AND End) " +
                     "AND Appointment_ID !=" + appointmentTxtFld.getText();
 
             ResultSet checkApptValidation = validAppointmentStatement.executeQuery(validApptSQL);
